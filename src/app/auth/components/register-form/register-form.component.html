@@ -9,7 +9,14 @@
         <input name="name" type="text" pInputText id="name" formControlName="name" class="w-full" />
         <label for="name">Nombre</label>
       </p-floatlabel>
+
     </p-inputgroup>
+
+    <div class="w-full p-2">
+      @if (name?.invalid && (name?.dirty || name?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('name') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
@@ -23,6 +30,12 @@
         <label for="surname">Apellido</label>
       </p-floatlabel>
     </p-inputgroup>
+
+    <div class="w-full p-2">
+      @if (surname?.invalid && (surname?.dirty || surname?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('surname') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
@@ -36,6 +49,12 @@
         <label for="email">Email</label>
       </p-floatlabel>
     </p-inputgroup>
+
+    <div class="w-full p-2">
+      @if (email?.invalid && (email?.dirty || email?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('email') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
@@ -49,6 +68,12 @@
         <label for="username">Nombre de usuario</label>
       </p-floatlabel>
     </p-inputgroup>
+
+    <div class="w-full p-2">
+      @if (username?.invalid && (username?.dirty || username?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('username') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-12">
@@ -68,6 +93,12 @@
           (click)="togglePasswordVisibility()" />
       </p-inputgroup-addon>
     </p-inputgroup>
+
+    <div class="w-full p-2">
+      @if (password?.invalid && (password?.dirty || password?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-12">
@@ -87,6 +118,12 @@
           (click)="toggleConfirmPasswordVisibility()" />
       </p-inputgroup-addon>
     </p-inputgroup>
+
+    <div class="w-full p-2">
+      @if (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('confirmPassword') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
@@ -95,6 +132,12 @@
         [showIcon]="true" [showOnFocus]="true" />
       <label for="birthdate">Fecha de nacimiento</label>
     </p-floatlabel>
+
+    <div class="w-full p-2">
+      @if (birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthdate') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
@@ -107,12 +150,24 @@
     <div class="flex justify-end">
       <small id="username-help">{{descriptionTextArea.value.length}}/500</small>
     </div>
+
+    <div class="w-full p-2">
+      @if (description?.invalid && (description?.dirty || description?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
     <label for="profile-picture">Subir imagen de perfil:</label>
     <input accept="image/*" type="file" pInputText name="profile-picture" id="profile-picture"
       formControlName="profilePicture" class="w-full" />
+
+    <div class="w-full p-2">
+      @if (profilePicture?.invalid && (profilePicture?.dirty || profilePicture?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('profilePicture') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="flex justify-center my-6">

@@ -6,6 +6,9 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+
+import { FormErrorService } from '../../services/form-error.service';
 
 @Component({
   selector: 'sn-login-form',
@@ -16,20 +19,22 @@ import { InputTextModule } from 'primeng/inputtext';
     InputGroupAddonModule,
     InputGroupModule,
     InputTextModule,
+    MessageModule,
   ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css',
 })
 export class LoginFormComponent {
   private formBuilder = inject(FormBuilder);
+  private formErrorService = inject(FormErrorService);
   public loginForm = this.formBuilder.group({
-    emailOrUsername: ['', [Validators.required]],
+    emailOrUsername: ['', [Validators.required, Validators.minLength(3)]],
     password: [
       '',
       [
         Validators.required,
         Validators.minLength(8),
-        // TODO: Add custom password validation
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/),
       ],
     ],
   });
@@ -39,6 +44,18 @@ export class LoginFormComponent {
       this.loginForm.invalid && (this.loginForm.dirty || this.loginForm.touched)
     );
   });
+
+  public get emailOrUsername() {
+    return this.loginForm.get('emailOrUsername');
+  }
+
+  public get password() {
+    return this.loginForm.get('password');
+  }
+
+  public getErrorMessage(controlName: string): string | void {
+    return this.formErrorService.getErrorMessage(controlName, this.loginForm);
+  }
 
   public togglePasswordVisibility() {
     this.passwordVisible.update((visible) => !visible);

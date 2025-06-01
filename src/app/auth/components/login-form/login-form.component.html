@@ -10,6 +10,10 @@
         <label for="emailOrUsername">Nombre de usuario o mail</label>
       </p-floatlabel>
     </p-inputgroup>
+
+    @if (emailOrUsername?.invalid && (emailOrUsername?.dirty || emailOrUsername?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('emailOrUsername') }}</p-message>
+    }
   </div>
 
   <div class="mx-auto w-full max-w-md my-12">
@@ -25,6 +29,10 @@
           (click)="togglePasswordVisibility()" />
       </p-inputgroup-addon>
     </p-inputgroup>
+
+    @if (password?.invalid && (password?.dirty || password?.touched)) {
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
+    }
   </div>
 
   <div class="flex justify-center my-6">

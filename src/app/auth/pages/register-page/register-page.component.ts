@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 
@@ -18,6 +19,7 @@ import { FooterLinkText } from '../../interfaces/footer-link-text';
     FormFooterComponent,
     FormHeaderComponent,
     RegisterFormComponent,
+    RouterModule,
   ],
   templateUrl: './register-page.component.html',
   styleUrl: './register-page.component.css',
