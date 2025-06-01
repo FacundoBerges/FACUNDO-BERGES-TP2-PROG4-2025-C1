@@ -1,1 +1,14 @@
-<p>login-page works!</p>
+<sn-form>
+  <sn-form-header>
+    <h1 class="m-2 mb-4">¡Bienvenido de vuelta!</h1>
+  </sn-form-header>
+
+  <sn-form-body>
+    <sn-login-form class="my-4" />
+  </sn-form-body>
+
+  <sn-form-footer>
+    <span class="py-3">¿No tienes una cuenta?</span>
+    <p-button [tabindex]="0" tabindex="-1" [label]="footerLink().text" [link]="true" routerLink="/register"></p-button>
+  </sn-form-footer>
+</sn-form>
