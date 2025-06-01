@@ -1,4 +1,7 @@
-import { ApplicationConfig, provideExperimentalZonelessChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 
@@ -12,12 +15,18 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideExperimentalZonelessChangeDetection(),
     provideRouter(routes),
-    providePrimeNG({ 
+    providePrimeNG({
+      ripple: true,
       inputVariant: 'filled',
-      ripple: true, 
-      theme: { 
-        preset: Aura 
-      } 
-    })
-  ]
+      theme: {
+        preset: Aura,
+        options: {
+          cssLayer: {
+            name: 'primeng',
+            order: 'theme, base, primeng, utilities',
+          },
+        },
+      },
+    }),
+  ],
 };
