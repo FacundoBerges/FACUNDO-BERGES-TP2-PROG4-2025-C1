@@ -26,7 +26,7 @@ import { FooterLinkText } from '../../interfaces/footer-link-text';
 })
 export class RegisterPageComponent {
   public footerLink = signal<FooterLinkText>({
-    text: 'Ingresá',
+    text: 'Ingresa',
     url: '/auth/login',
   });
 }
