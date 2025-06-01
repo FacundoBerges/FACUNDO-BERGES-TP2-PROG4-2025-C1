@@ -1,1 +1,14 @@
-<p>register-page works!</p>
+<sn-form>
+  <sn-form-header>
+    <h1 class="m-2 mb-4">Crea una cuenta</h1>
+  </sn-form-header>
+
+  <sn-form-body>
+    <sn-register-form class="my-4" />
+  </sn-form-body>
+
+  <sn-form-footer>
+    <span class="py-3">¿Ya tienes una cuenta?</span>
+    <p-button [tabindex]="0" tabindex="-1" [label]="footerLink().text" [link]="true" routerLink="/login" />
+  </sn-form-footer>
+</sn-form>

@@ -1,0 +1,122 @@
+<form [formGroup]="registerForm">
+  <div class="mx-auto w-full max-w-md my-10">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="text-primary pi pi-user"></i>
+      </p-inputgroup-addon>
+
+      <p-floatlabel variant="over">
+        <input name="name" type="text" pInputText id="name" formControlName="name" class="w-full" />
+        <label for="name">Nombre</label>
+      </p-floatlabel>
+    </p-inputgroup>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-10">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="text-primary pi pi-id-card"></i>
+      </p-inputgroup-addon>
+
+      <p-floatlabel variant="over">
+        <input name="surname" type="text" pInputText id="surname" formControlName="surname" class="w-full" />
+        <label for="surname">Apellido</label>
+      </p-floatlabel>
+    </p-inputgroup>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-10">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="text-primary pi pi-envelope"></i>
+      </p-inputgroup-addon>
+
+      <p-floatlabel variant="over">
+        <input name="email" type="email" pInputText id="email" formControlName="email" class="w-full" />
+        <label for="email">Email</label>
+      </p-floatlabel>
+    </p-inputgroup>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-10">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="text-primary pi pi-at"></i>
+      </p-inputgroup-addon>
+
+      <p-floatlabel variant="over">
+        <input name="username" type="text" pInputText id="username" formControlName="username" class="w-full" />
+        <label for="username">Nombre de usuario</label>
+      </p-floatlabel>
+    </p-inputgroup>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-12">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="text-primary pi pi-key"></i>
+      </p-inputgroup-addon>
+
+      <p-floatlabel variant="over">
+        <input [type]="passwordVisible() ? 'text' : 'password'" pInputText id="password" formControlName="password"
+          class="w-full" />
+        <label for="password">Contraseña</label>
+      </p-floatlabel>
+
+      <p-inputgroup-addon>
+        <p-button [icon]="passwordVisible() ? 'pi pi-eye' : 'pi pi-eye-slash'" severity="primary" variant="text"
+          (click)="togglePasswordVisibility()" />
+      </p-inputgroup-addon>
+    </p-inputgroup>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-12">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="text-primary pi pi-asterisk"></i>
+      </p-inputgroup-addon>
+
+      <p-floatlabel variant="over">
+        <input [type]="confirmPasswordVisible() ? 'text' : 'password'" pInputText name="confirm-password"
+          id="confirm-password" formControlName="confirmPassword" class="w-full" />
+        <label for="confirm-password">Repetir contraseña</label>
+      </p-floatlabel>
+
+      <p-inputgroup-addon>
+        <p-button [icon]="confirmPasswordVisible() ? 'pi pi-eye' : 'pi pi-eye-slash'" severity="primary" variant="text"
+          (click)="toggleConfirmPasswordVisibility()" />
+      </p-inputgroup-addon>
+    </p-inputgroup>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-10">
+    <p-floatlabel>
+      <p-datepicker styleClass="w-full" inputId="birthdate" formControlName="birthdate" dateFormat="dd/mm/yy"
+        [showIcon]="true" [showOnFocus]="true" />
+      <label for="birthdate">Fecha de nacimiento</label>
+    </p-floatlabel>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-10">
+    <p-floatlabel>
+      <label for="description">Descripción</label>
+      <textarea #descriptionTextArea pTextarea name="description" id="description" rows="5" [autoResize]="true"
+        [maxLength]="500" class="w-full"></textarea>
+    </p-floatlabel>
+
+    <div class="flex justify-end">
+      <small id="username-help">{{descriptionTextArea.value.length}}/500</small>
+    </div>
+  </div>
+
+  <div class="mx-auto w-full max-w-md my-10">
+    <label for="profile-picture">Subir imagen de perfil:</label>
+    <input accept="image/*" type="file" pInputText name="profile-picture" id="profile-picture"
+      formControlName="profilePicture" class="w-full" />
+  </div>
+
+  <div class="flex justify-center my-6">
+    <p-button tabindex="-1" [tabindex]="0" label="Crear cuenta" type="submit" severity="primary"
+      [disabled]="registerForm.invalid" (click)="onSubmit()" />
+  </div>
+</form>
