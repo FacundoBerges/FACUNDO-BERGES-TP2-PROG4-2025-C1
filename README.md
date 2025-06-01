@@ -43,14 +43,14 @@ Deberá contar con los siguientes puntos:
 - ❌ Deploy en hosting
 - ❌ Navegación entre componentes. Sin límites de accesibilidad.
 - ✅ Implementar un favicon propio.
-- ❌ Componente login:
-  - ❌ Debe poseer un formulario con validaciones y mensajes acordes.
+- ✅ Componente login:
+  - ✅ Debe poseer un formulario con validaciones y mensajes acordes.
   - ✅ Puede ser por correo o por nombre de usuario, pero cualquiera que sea elegido debe ser único en la base de datos.
-  - ❌ La contraseña debe poseer al menos 8 caracteres, una mayúscula y un número.
+  - ✅ La contraseña debe poseer al menos 8 caracteres, una mayúscula y un número.
 - ❌ Componente Registro:
-  - ❌ Debe poseer un formulario con validaciones y mensajes acordes.
+  - ✅ Debe poseer un formulario con validaciones y mensajes acordes.
   - ✅ Debe poseer los campos: nombre, apellido, correo, nombre de usuario, contraseña, repetir contraseña, fecha de nacimiento, descripción breve.
-  - ❌ Debe poseer un campo de tipo file para la imagen de perfil.
+  - ✅ Debe poseer un campo de tipo file para la imagen de perfil.
   - ❌ Los usuarios deben poseer un atributo perfil. Por defecto poseen el perfil “usuario” pero se puede modificar para que su perfil sea “administrador”.
 
 ---
