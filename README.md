@@ -34,11 +34,11 @@ Deberá contar con los siguientes puntos:
 
 #### Backend:
 
-- ❌ Creación del proyecto back - NestJS.
-- ❌ Creación de módulos:
-  - ❌ Publicaciones
-  - ❌ Autenticación
-  - ❌ Usuarios
+- ✅ Creación del proyecto back - NestJS.
+- ✅ Creación de módulos:
+  - ✅ Publicaciones
+  - ✅ Autenticación
+  - ✅ Usuarios
 - ❌ Módulo Autenticación:
   - ❌ Ruta registro:
     - ❌ Por POST: debe recibir todos los datos de un usuario, validarlos y guardarlo en la base de datos.
