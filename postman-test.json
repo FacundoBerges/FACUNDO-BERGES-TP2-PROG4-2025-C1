@@ -1,0 +1,329 @@
+{
+  "info": {
+    "name": "Lotus - API Red Social",
+    "_postman_id": "12345678-1234-1234-1234-123456789012",
+    "description": "Colección para probar la API de la Red Social",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Autenticación",
+      "item": [
+        {
+          "name": "Registro de Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Juan\",\n    \"surname\": \"Pérez\",\n    \"email\": \"juan.perez@example.com\",\n    \"username\": \"juanperez\",\n    \"password\": \"Password123\",\n    \"bio\": \"Desarrollador de software apasionado por las nuevas tecnologías\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "register"]
+            },
+            "description": "Crea un nuevo usuario y devuelve un token JWT"
+          },
+          "response": []
+        },
+        {
+          "name": "Registro de Administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Admin\",\n    \"surname\": \"Sistema\",\n    \"email\": \"admin@example.com\",\n    \"username\": \"adminuser\",\n    \"password\": \"Admin123\",\n    \"profile\": \"admin\",\n    \"bio\": \"Administrador del sistema\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "register"]
+            },
+            "description": "Crea un usuario administrador"
+          },
+          "response": []
+        },
+        {
+          "name": "Inicio de Sesión (con email)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"emailOrUsername\": \"juan.perez@example.com\",\n    \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "login"]
+            },
+            "description": "Inicia sesión usando email y devuelve un token JWT"
+          },
+          "response": []
+        },
+        {
+          "name": "Inicio de Sesión (con username)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"emailOrUsername\": \"juanperez\",\n    \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "login"]
+            },
+            "description": "Inicia sesión usando nombre de usuario y devuelve un token JWT"
+          },
+          "response": []
+        },
+        {
+          "name": "Inicio de Sesión (credenciales inválidas)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"emailOrUsername\": \"juanperez\",\n    \"password\": \"ContraseñaIncorrecta\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "login"]
+            },
+            "description": "Intenta iniciar sesión con credenciales incorrectas (debe devolver error)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Crear Usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"María\",\n    \"surname\": \"García\",\n    \"email\": \"maria.garcia@example.com\",\n    \"username\": \"mariagarcia\",\n    \"password\": \"Password123\",\n    \"bio\": \"Diseñadora gráfica especializada en interfaces de usuario\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["users"]
+            },
+            "description": "Crea un nuevo usuario directamente a través del endpoint de usuarios"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Usuario con Campos Inválidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"A\",\n    \"surname\": \"B\",\n    \"email\": \"invalidemail\",\n    \"username\": \"us\",\n    \"password\": \"short\",\n    \"bio\": \"\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["users"]
+            },
+            "description": "Intenta crear un usuario con campos que no cumplen las validaciones"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Usuario con Email Duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Juan\",\n    \"surname\": \"Duplicado\",\n    \"email\": \"juan.perez@example.com\",\n    \"username\": \"juanduplicado\",\n    \"password\": \"Password123\",\n    \"bio\": \"Este usuario tiene un email duplicado\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["users"]
+            },
+            "description": "Intenta crear un usuario con un email que ya existe (debe devolver error)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Aplicación",
+      "item": [
+        {
+          "name": "Ruta Principal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000"
+            },
+            "description": "Verifica que el servidor esté funcionando"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Listar Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/posts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["posts"]
+            },
+            "description": "Obtiene todos los posts"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Post por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/posts/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["posts", "1"]
+            },
+            "description": "Obtiene un post específico por su ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Mi primer post\",\n    \"content\": \"Este es el contenido de mi primer post en la red social\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/posts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["posts"]
+            },
+            "description": "Crea un nuevo post (requiere autenticación)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": "TuTokenJWTAquí",
+      "type": "string"
+    }
+  ]
+}
