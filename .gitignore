@@ -1,11 +1,11 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-/build
+**/dist
+**/tmp
+**/out-tsc
+**/bazel-out
+**/build
 
 # Node
 **/node_modules
@@ -14,7 +14,7 @@ yarn-error.log
 
 # IDEs and editors
 .idea/
-/.idea
+**/.idea
 .project
 .classpath
 .c9/
@@ -31,11 +31,11 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+**/.angular/cache
 .sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
+**/connect.lock
+**/coverage
+**/libpeerconnection.log
 testem.log
 /typings
 
@@ -53,8 +53,8 @@ yarn-error.log*
 lerna-debug.log*
 
 # Tests
-/coverage
-/.nyc_output
+**/coverage
+**/.nyc_output
 
 # dotenv environment variable files
 .env
@@ -75,3 +75,6 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Upload directory
+**/public/uploads/
