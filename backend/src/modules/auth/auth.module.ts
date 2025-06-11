@@ -1,6 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, NotAcceptableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 import { UsersModule } from '../users/users.module';
 
@@ -23,6 +25,33 @@ import { AuthController } from './auth.controller';
             typ: 'JWT',
             alg: 'HS256',
           },
+        },
+      }),
+    }),
+    MulterModule.register({
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.toLowerCase().startsWith('image/')) {
+          callback(
+            new NotAcceptableException('Sólo se permiten imágenes'),
+            false,
+          );
+          return;
+        }
+
+        callback(null, true);
+      },
+      limits: {
+        fileSize: 10 * 1024 * 1024,
+        files: 1,
+      },
+      storage: diskStorage({
+        destination(req, file, callback) {
+          callback(null, `./public/uploads/img/users`);
+        },
+        filename(req, file, callback) {
+          const now = Date.now();
+          const filename = `${now}-${file.originalname}`;
+          callback(null, filename);
         },
       }),
     }),

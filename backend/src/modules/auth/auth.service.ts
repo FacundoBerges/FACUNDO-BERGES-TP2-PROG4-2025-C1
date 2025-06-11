@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -20,7 +19,17 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  public async signUp(createUserDto: CreateUserDto): Promise<JwtResponseDto> {
+  public async signUp(
+    createUserDto: CreateUserDto,
+    profilePicture?: Express.Multer.File,
+  ): Promise<JwtResponseDto> {
+    if (
+      profilePicture &&
+      profilePicture.destination &&
+      profilePicture.filename
+    ) {
+      createUserDto.userProfilePictureUrl = `${profilePicture.destination}/${profilePicture.filename}`;
+    }
     const user = await this.usersService.create(createUserDto);
 
     if (!user) {
@@ -28,9 +37,6 @@ export class AuthService {
         'Error al crear el usuario. Por favor, inténtalo de nuevo.',
       );
     }
-
-    console.info('User created successfully:');
-    console.table(user);
 
     const payload: JwtPayload = this.generateJwtPayload(
       user.username,
@@ -57,7 +63,7 @@ export class AuthService {
     );
 
     if (!isValidPassword)
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new BadRequestException('Credenciales inválidas');
 
     const payload: JwtPayload = this.generateJwtPayload(
       user.username,

@@ -1,7 +1,17 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { uploadImagePipe } from '../users/pipes/upload-image.pipe';
 import { UserLoginDataDto } from './dto/login-user.dto';
 
 @Controller('auth')
@@ -9,8 +19,19 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  signUpUser(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signUp(createUserDto);
+  @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(
+    FileInterceptor('profilePicture', {
+      dest: './public/uploads/img/users',
+      limits: { fileSize: 2 * 1024 * 1024 },
+    }),
+  )
+  signUpUser(
+    @Body() createUserDto: CreateUserDto,
+    @UploadedFile(uploadImagePipe)
+    profilePicture: Express.Multer.File,
+  ) {
+    return this.authService.signUp(createUserDto, profilePicture);
   }
 
   @Post('login')
