@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { join } from 'path';
 
 import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
@@ -11,6 +13,9 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot({ cache: true, envFilePath: '.env', isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGO_URI!),
     AuthModule,
