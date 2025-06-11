@@ -78,3 +78,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Upload directory
 **/public/uploads/
+
+**/environment.ts
+**/environment.development.ts
