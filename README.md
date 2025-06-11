@@ -60,11 +60,11 @@ Deberá contar con los siguientes puntos:
     -   ✅ Publicaciones
     -   ✅ Autenticación
     -   ✅ Usuarios
--   ❌ Módulo Autenticación:
-    -   ❌ Ruta registro:
+-   ✅ Módulo Autenticación:
+    -   ✅ Ruta registro:
         -   ✅ Por POST: debe recibir todos los datos de un usuario, validarlos y guardarlo en la base de datos.
         -   ✅ La contraseña debe quedar encriptada.
-        -   ❌ Debe recibir la imagen de perfil, guardarla apropiadamente y guardar la URL en la base de datos.
+        -   ✅ Debe recibir la imagen de perfil, guardarla apropiadamente y guardar la URL en la base de datos.
     -   ✅ Ruta login:
         -   ✅ Por POST: debe recibir el usuario / correo y contraseña sin encriptar.
         -   ✅ Debe encriptar la contraseña recibida para confirmar el login.
