@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, ObjectId } from 'mongoose';
 
 import { Profile } from '../interfaces/profile.type';
 
@@ -7,6 +7,8 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({})
 export class User {
+  _id?: ObjectId;
+
   @Prop({ required: true, trim: true, maxlength: 50, minlength: 2 })
   name: string;
 
@@ -26,13 +28,15 @@ export class User {
   @Prop({
     required: true,
     trim: true,
+    lowercase: true,
     unique: true,
-    maxlength: 50,
     minlength: 3,
+    maxlength: 50,
+    match: /^[a-zA-Z0-9_.-]+$/,
   })
   username: string;
 
-  @Prop({ required: true, trim: true, minlength: 8 })
+  @Prop({ required: true, trim: true })
   hashedPassword: string;
 
   @Prop({ required: true, default: Date.now })
@@ -41,8 +45,17 @@ export class User {
   @Prop({ required: true, default: true })
   isActive: boolean;
 
-  @Prop({ required: true, default: 'user', type: String })
+  @Prop({
+    required: true,
+    trim: true,
+    lowercase: true,
+    default: 'user',
+    type: String,
+  })
   profile: Profile;
+
+  @Prop({ type: Date })
+  birthday: Date;
 
   @Prop({ default: null })
   profilePictureUrl?: string;

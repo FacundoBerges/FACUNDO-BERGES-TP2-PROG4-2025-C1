@@ -10,7 +10,6 @@ import {
   IsDate,
   MaxDate,
   MaxLength,
-  IsUrl,
   MinDate,
 } from 'class-validator';
 
@@ -18,12 +17,12 @@ import { Profile } from '../interfaces/profile.type';
 
 export class CreateUserDto {
   @IsString({ message: 'El nombre debe ser una cadena de texto.' })
-  @MinLength(3, { message: 'El nombre debe tener al menos 3 caracteres.' })
+  @MinLength(2, { message: 'El nombre debe tener al menos 2 caracteres.' })
   @MaxLength(50, { message: 'El nombre no puede tener más de 50 caracteres.' })
   readonly name: string;
 
   @IsString({ message: 'El apellido debe ser una cadena de texto.' })
-  @MinLength(3, { message: 'El apellido debe tener al menos 3 caracteres.' })
+  @MinLength(2, { message: 'El apellido debe tener al menos 2 caracteres.' })
   @MaxLength(50, {
     message: 'El apellido no puede tener más de 50 caracteres.',
   })
@@ -62,7 +61,7 @@ export class CreateUserDto {
   @MaxLength(128, {
     message: 'La contraseña no puede tener más de 128 caracteres.',
   })
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/, {
     message:
       'La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número.',
   })
@@ -84,18 +83,21 @@ export class CreateUserDto {
   @MaxDate(new Date(Date.now()), {
     message: 'La fecha de nacimiento no puede ser posterior a la fecha actual.',
   })
-  readonly birthdate?: Date;
+  readonly birthdate: Date;
 
   @IsOptional()
-  @IsString({ message: 'La foto de perfil debe ser una cadena de texto.' })
-  @IsUrl({}, { message: 'La foto de perfil debe ser una URL válida.' })
-  @MaxLength(2048, {
-    message: 'La URL de la foto de perfil es demasiado larga.',
+  @IsString({
+    message: 'La URL de foto de perfil debe ser una cadena de texto.',
   })
-  readonly profilePicture?: string;
+  @MaxLength(1024, {
+    message:
+      'La URL de la foto de perfil no puede tener más de 1024 caracteres.',
+  })
+  userProfilePictureUrl?: string;
 
+  @IsOptional()
   @IsString({ message: 'La biografía debe ser una cadena de texto.' })
-  @MinLength(1, { message: 'La biografía debe tener al menos 1 carácter.' })
+  // @MinLength(1, { message: 'La biografía debe tener al menos 1 carácter.' })
   @MaxLength(500, {
     message: 'La biografía no puede tener más de 500 caracteres.',
   })

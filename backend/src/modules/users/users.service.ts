@@ -46,11 +46,12 @@ export class UsersService {
       email: createUserDto.email.toLowerCase().trim(),
       username: createUserDto.username.toLowerCase().trim(),
       hashedPassword: hashedPassword,
+      birthday: createUserDto.birthdate,
+      profile: createUserDto.profile || 'user',
+      profilePictureUrl: createUserDto.userProfilePictureUrl,
+      bio: createUserDto.bio,
       createdAt: new Date(),
       isActive: true,
-      profile: createUserDto.profile || 'user',
-      profilePictureUrl: createUserDto.profilePicture,
-      bio: createUserDto.bio,
     };
 
     return this.userModel.create(newUser);
