@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { existsSync, mkdirSync } from 'fs';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  if (!existsSync('./public/uploads/img/users/'))
+    mkdirSync('./public/uploads/img/users/', { recursive: true });
 
+  const app = await NestFactory.create(AppModule);
   const validationPipe: ValidationPipe = new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
