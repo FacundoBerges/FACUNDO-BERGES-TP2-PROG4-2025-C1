@@ -3,6 +3,7 @@
         "bazel",
         "libpeerconnection",
         "mongodb",
+        "originalname",
         "pids",
         "testem"
     ]
