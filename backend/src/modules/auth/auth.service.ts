@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { Profile } from '../users/interfaces/profile.type';
+import { User } from '../users/schemas/user.schema';
 import { UserLoginDataDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtResponseDto } from './interfaces/jwt-response-dto.interface';
@@ -38,11 +38,7 @@ export class AuthService {
       );
     }
 
-    const payload: JwtPayload = this.generateJwtPayload(
-      user.username,
-      user.profile,
-      user.createdAt,
-    );
+    const payload: JwtPayload = this.generateJwtPayload(user);
     const token: string = await this.jwtService.signAsync(payload);
 
     return { accessToken: token };
@@ -65,25 +61,18 @@ export class AuthService {
     if (!isValidPassword)
       throw new BadRequestException('Credenciales inválidas');
 
-    const payload: JwtPayload = this.generateJwtPayload(
-      user.username,
-      user.profile,
-      user.createdAt,
-    );
+    const payload: JwtPayload = this.generateJwtPayload(user);
     const token: string = await this.jwtService.signAsync(payload);
 
     return { accessToken: token };
   }
 
-  private generateJwtPayload(
-    username: string,
-    profile: Profile,
-    createdAt: Date,
-  ): JwtPayload {
+  private generateJwtPayload(user: User): JwtPayload {
     return {
-      username,
-      profile,
-      joinDate: createdAt,
+      sub: user._id,
+      username: user.username,
+      profile: user.profile,
+      joinDate: user.createdAt,
     };
   }
 }
