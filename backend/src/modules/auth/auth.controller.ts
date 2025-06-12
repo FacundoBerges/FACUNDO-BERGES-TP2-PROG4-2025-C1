@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { AuthService } from './auth.service';
+import { uploadImagePipe } from '../../pipes/upload-image.pipe';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { uploadImagePipe } from '../users/pipes/upload-image.pipe';
+import { AuthService } from './auth.service';
 import { UserLoginDataDto } from './dto/login-user.dto';
 
 @Controller('auth')
