@@ -17,6 +17,8 @@ export class Post {
   @Prop({ default: null })
   imageUrl?: string;
 
+  // TODO: add array of comments
+
   @Prop({ required: true, default: Date.now })
   createdAt: Date;
 
