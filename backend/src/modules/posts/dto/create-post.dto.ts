@@ -27,7 +27,7 @@ export class CreatePostDto {
 
   @IsOptional()
   @IsString({ message: 'La URL de la imagen debe ser una cadena de texto.' })
-  readonly contentImageUrl?: string;
+  contentImageUrl?: string;
 
   @IsOptional()
   @IsBoolean({ message: 'El campo isDeleted debe ser un booleano.' })
