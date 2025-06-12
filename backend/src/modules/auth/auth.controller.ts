@@ -28,8 +28,7 @@ export class AuthController {
   )
   signUpUser(
     @Body() createUserDto: CreateUserDto,
-    @UploadedFile(uploadImagePipe)
-    profilePicture: Express.Multer.File,
+    @UploadedFile(uploadImagePipe) profilePicture: Express.Multer.File,
   ) {
     return this.authService.signUp(createUserDto, profilePicture);
   }
