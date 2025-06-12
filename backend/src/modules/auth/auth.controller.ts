@@ -23,7 +23,6 @@ export class AuthController {
   @UseInterceptors(
     FileInterceptor('profilePicture', {
       dest: './public/uploads/img/users',
-      limits: { fileSize: 2 * 1024 * 1024 },
     }),
   )
   signUpUser(
