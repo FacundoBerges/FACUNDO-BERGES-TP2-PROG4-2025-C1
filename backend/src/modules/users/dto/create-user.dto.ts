@@ -97,7 +97,6 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString({ message: 'La biografía debe ser una cadena de texto.' })
-  // @MinLength(1, { message: 'La biografía debe tener al menos 1 carácter.' })
   @MaxLength(500, {
     message: 'La biografía no puede tener más de 500 caracteres.',
   })
