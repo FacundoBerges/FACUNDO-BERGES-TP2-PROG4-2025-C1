@@ -1,11 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 import { NoContentException } from 'src/exceptions/no-content-exception.exception';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDocument, Post } from './schemas/post.schema';
 import { SortBy, OrderBy } from './interfaces/sort-by.type';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class PostsService {
@@ -15,6 +20,7 @@ export class PostsService {
   ) {}
 
   async create(
+    userData: JwtPayload,
     createPostDto: CreatePostDto,
     image?: Express.Multer.File,
   ): Promise<Post> {
@@ -27,7 +33,7 @@ export class PostsService {
       imageUrl: createPostDto.contentImageUrl,
       createdAt: new Date(),
       isDeleted: createPostDto.isDeleted || false,
-      authorId: createPostDto.authorId,
+      author: new mongoose.Types.ObjectId(userData.sub),
     };
 
     return await this.postModel.create(newPost);
@@ -53,7 +59,8 @@ export class PostsService {
       .sort(sortOptions)
       .skip(offset)
       .limit(limit)
-      .populate('authorId', 'username profilePictureUrl')
+      .populate('author', 'username profilePictureUrl')
+      .populate('likes', 'username')
       .exec();
 
     if (!posts || posts.length === 0)
@@ -68,35 +75,46 @@ export class PostsService {
     return await this.postModel.findById(id).exec();
   }
 
-  async remove(id: string): Promise<Post | null> {
+  async remove(userData: JwtPayload, id: string): Promise<void> {
     await this.validateId(id);
 
-    return this.postModel
-      .findByIdAndUpdate(id, {
-        isDeleted: true,
-      })
-      .exec();
+    const post = await this.postModel.findById(id).exec();
+
+    if (
+      post?.author.toString() === userData.sub ||
+      userData.profile === 'admin'
+    ) {
+      throw new UnauthorizedException(
+        'No tienes permiso para eliminar esta publicación.',
+      );
+    }
+
+    await post?.updateOne({ isDeleted: true }).exec();
   }
 
-  async likePost(id: string, isLike: boolean): Promise<Post | null> {
+  async likePost(
+    userData: JwtPayload,
+    id: string,
+    isLike: boolean,
+  ): Promise<Post | null> {
     await this.validateId(id);
-    const value: 1 | -1 = isLike ? 1 : -1;
+
+    const updateOptions = isLike
+      ? { $addToSet: { likes: userData.sub } }
+      : { $pull: { likes: userData.sub } };
 
     return this.postModel
-      .findByIdAndUpdate(
-        id,
-        {
-          $inc: { likesCount: value },
-        },
-        { new: true },
-      )
+      .findByIdAndUpdate(id, updateOptions, { new: true })
       .exec();
   }
 
   private async validateId(id: string): Promise<void> {
     if (!id) throw new NotFoundException('ID de publicación no proporcionado.');
 
-    const postExists = await this.postModel.exists({ _id: id });
+    const postExists = await this.postModel.exists({
+      _id: id,
+      isDeleted: false,
+    });
     if (!postExists) throw new NotFoundException('Publicación no encontrada.');
   }
 }

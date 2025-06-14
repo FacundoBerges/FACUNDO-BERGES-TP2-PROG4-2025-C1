@@ -11,6 +11,7 @@ import {
   HttpStatus,
   HttpCode,
   Query,
+  Request,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -19,6 +20,7 @@ import { uploadImagePipe } from 'src/pipes/upload-image.pipe';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { OrderBy, SortBy } from './interfaces/sort-by.type';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @Controller('posts')
 @UseGuards(AuthGuard)
@@ -33,10 +35,13 @@ export class PostsController {
     }),
   )
   create(
+    @Request() req: Express.Request,
     @Body() createPostDto: CreatePostDto,
     @UploadedFile(uploadImagePipe) image: Express.Multer.File,
   ) {
-    return this.postsService.create(createPostDto, image);
+    const user: JwtPayload = req['user'] as JwtPayload;
+
+    return this.postsService.create(user, createPostDto, image);
   }
 
   @Get()
@@ -65,21 +70,27 @@ export class PostsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(id);
+  remove(@Request() req: Express.Request, @Param('id') id: string) {
+    const user: JwtPayload = req['user'] as JwtPayload;
+
+    return this.postsService.remove(user, id);
   }
 
   //* Likes endpoints
 
   @Post(':id/like')
   @HttpCode(HttpStatus.OK)
-  likePost(@Param('id') id: string) {
-    return this.postsService.likePost(id, true);
+  likePost(@Request() req: Express.Request, @Param('id') id: string) {
+    const user: JwtPayload = req['user'] as JwtPayload;
+
+    return this.postsService.likePost(user, id, true);
   }
 
   @Post(':id/unlike')
   @HttpCode(HttpStatus.OK)
-  unlikePost(@Param('id') id: string) {
-    return this.postsService.likePost(id, false);
+  unlikePost(@Request() req: Express.Request, @Param('id') id: string) {
+    const user: JwtPayload = req['user'] as JwtPayload;
+
+    return this.postsService.likePost(user, id, false);
   }
 }
