@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -63,6 +64,14 @@ export class AuthService {
 
     const payload: JwtPayload = this.generateJwtPayload(user);
     const token: string = await this.jwtService.signAsync(payload);
+
+    return { accessToken: token };
+  }
+
+  public async refreshToken(userData: JwtPayload): Promise<JwtResponseDto> {
+    if (!userData) throw new UnauthorizedException('Usuario no autorizado.');
+
+    const token: string = await this.jwtService.signAsync({ ...userData });
 
     return { accessToken: token };
   }
