@@ -4,6 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
@@ -12,7 +13,10 @@ import { JwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   canActivate(
     context: ExecutionContext,
@@ -23,7 +27,10 @@ export class AuthGuard implements CanActivate {
     if (!token)
       throw new UnauthorizedException('No se encontró token de autorización');
 
-    const payload: JwtPayload = this.jwtService.verify(token);
+    const payload: JwtPayload = this.jwtService.verify(token, {
+      secret:
+        this.configService.get<string>('JWT_SECRET') || process.env.JWT_SECRET,
+    });
 
     if (!payload)
       throw new UnauthorizedException('Token de autorización inválido');
