@@ -17,7 +17,11 @@ export class Post {
   @Prop({ default: null })
   imageUrl?: string;
 
-  // TODO: add array of comments
+  @Prop({ type: [mongoose.Types.ObjectId], ref: 'Comment', default: [] })
+  comments?: mongoose.Types.ObjectId[];
+
+  @Prop({ type: [mongoose.Types.ObjectId], ref: 'User', default: [] })
+  likes?: mongoose.Types.ObjectId[];
 
   @Prop({ required: true, default: Date.now })
   createdAt: Date;
@@ -26,7 +30,7 @@ export class Post {
   isDeleted: boolean;
 
   @Prop({ required: true, type: mongoose.Types.ObjectId, ref: 'User' })
-  authorId: mongoose.Types.ObjectId;
+  author: mongoose.Types.ObjectId;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
