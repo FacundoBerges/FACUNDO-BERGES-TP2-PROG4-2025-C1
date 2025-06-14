@@ -51,7 +51,7 @@ Deberá contar con los siguientes puntos:
     -   ✅ Debe poseer un formulario con validaciones y mensajes acordes.
     -   ✅ Debe poseer los campos: nombre, apellido, correo, nombre de usuario, contraseña, repetir contraseña, fecha de nacimiento, descripción breve.
     -   ✅ Debe poseer un campo de tipo file para la imagen de perfil.
-    -   ❌ Los usuarios deben poseer un atributo perfil. Por defecto poseen el perfil "usuario" pero se puede modificar para que su perfil sea “administrador”.
+    -   ✅ Los usuarios deben poseer un atributo perfil. Por defecto poseen el perfil "usuario" pero se puede modificar para que su perfil sea “administrador”.
 
 #### Backend:
 
@@ -88,13 +88,13 @@ Deberá contar con los siguientes puntos:
 
 #### Backend:
 
--   ❌ Módulo publicaciones - publicaciones controller:
-    -   ❌ Debe permitir dar de alta, listar y dar de baja publicaciones (baja lógica).
-    -   ❌ Por POST: debe guardar una publicación relacionada a un usuario. Título, descripción, url de la imagen si es que tiene. La imagen debe ser guardada.
-    -   ❌ Por DELETE: baja lógica, solo realizada por el usuario que la creó o un administrador.
-    -   ❌ Por GET: debe permitir listar las últimas publicaciones. Debe poder recibir un parámetro para cambiar el ordenamiento: por fecha/ por cantidad de me gusta. Debe poder filtrar los posteos de un usuario particular. Debe poder recibir un parámetro offset y limit para paginar los resultados.
-    -   ❌ Por POST: debe permitir que un usuario le dé me gusta a la publicación que elija. Un usuario puede darle un solo me gusta a cada publicación.
-    -   ❌ Por DELETE: debe permitir eliminar un me gusta de una publicación, solo si el usuario previamente lo había realizado.
+-   ✅ Módulo publicaciones - publicaciones controller:
+    -   ✅ Debe permitir dar de alta, listar y dar de baja publicaciones (baja lógica).
+    -   ✅ Por POST: debe guardar una publicación relacionada a un usuario. Título, descripción, url de la imagen si es que tiene. La imagen debe ser guardada.
+    -   ✅ Por DELETE: baja lógica, solo realizada por el usuario que la creó o un administrador.
+    -   ✅ Por GET: debe permitir listar las últimas publicaciones. Debe poder recibir un parámetro para cambiar el ordenamiento: por fecha/ por cantidad de me gusta. Debe poder filtrar los posteos de un usuario particular. Debe poder recibir un parámetro offset y limit para paginar los resultados.
+    -   ✅ Por POST: debe permitir que un usuario le dé me gusta a la publicación que elija. Un usuario puede darle un solo me gusta a cada publicación.
+    -   ✅ Por DELETE: debe permitir eliminar un me gusta de una publicación, solo si el usuario previamente lo había realizado.
 
 ---
 
@@ -121,12 +121,12 @@ Deberá contar con los siguientes puntos:
     -   ❌ Por POST: agrega un comentario a una publicación junto con el usuario que lo realizó.
     -   ❌ Por PUT: modifica cualquier dato del comentario. La imagen anterior no se borra ni se modifica. Agrega el campo modificado: true para marcar que el comentario se modificó.
     -   ❌ Por GET: trae los comentarios de una publicación específica. Debe permitir paginar los resultados. Debe ordenar los resultados, los más recientes primero.
--   ❌ Módulo autenticación:
-    -   ❌ Rutas Login y registro: debe generar un token JWT que valide quien es el usuario (uuid/correo/nombre de usuario) y su rol (usuario o administrador).
-    -   ❌ El token debe ser devuelto en la respuesta.
-    -   ❌ El token debe vencer a los 15 minutos.
-    -   ❌ Ruta autorizar por POST: debe validar si un token es válido y no está vencido. Devuelve el status 401 si hubo algún error con el token. En caso de que el token sea válido, devolver los datos del usuario en la respuesta.
-    -   ❌ Ruta refrescar por POST: debe validar si un token es válido y no está vencido. Devuelve un nuevo token con la misma payload y un vencimiento de 15 minutos.
+-   ✅ Módulo autenticación:
+    -   ✅ Rutas Login y registro: debe generar un token JWT que valide quien es el usuario (uuid/correo/nombre de usuario) y su rol (usuario o administrador).
+    -   ✅ El token debe ser devuelto en la respuesta.
+    -   ✅ El token debe vencer a los 15 minutos.
+    -   ✅ Ruta autorizar por POST: debe validar si un token es válido y no está vencido. Devuelve el status 401 si hubo algún error con el token. En caso de que el token sea válido, devolver los datos del usuario en la respuesta.
+    -   ✅ Ruta refrescar por POST: debe validar si un token es válido y no está vencido. Devuelve un nuevo token con la misma payload y un vencimiento de 15 minutos.
 
 ---
 
