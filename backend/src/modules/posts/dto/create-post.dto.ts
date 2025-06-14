@@ -1,4 +1,4 @@
-import { Transform, Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsOptional,
@@ -6,13 +6,12 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import mongoose from 'mongoose';
 
 export class CreatePostDto {
-  @MinLength(2, { message: 'El título debe tener al menos 2 carácter.' })
   @MaxLength(100, {
     message: 'El título no puede tener más de 100 caracteres.',
   })
+  @MinLength(2, { message: 'El título debe tener al menos 2 carácter.' })
   @IsString({ message: 'El título debe ser una cadena de texto.' })
   @Transform(({ value }: { value: string }) => (value ? value.trim() : value))
   readonly title: string;
@@ -32,11 +31,4 @@ export class CreatePostDto {
   @IsOptional()
   @IsBoolean({ message: 'El campo isDeleted debe ser un booleano.' })
   readonly isDeleted?: boolean;
-
-  @Type(() => mongoose.Types.ObjectId)
-  @IsString({ message: 'El ID del autor debe ser una cadena de texto.' })
-  @Transform(({ value }: { value: string }) =>
-    value ? new mongoose.Types.ObjectId(value) : value,
-  )
-  readonly authorId: mongoose.Types.ObjectId;
 }
