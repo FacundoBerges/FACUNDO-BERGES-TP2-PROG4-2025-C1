@@ -3,9 +3,9 @@ import mongoose, { HydratedDocument } from 'mongoose';
 
 export type PostDocument = HydratedDocument<Post>;
 
-@Schema({})
+@Schema({ timestamps: true })
 export class Post {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
+  @Prop({ type: mongoose.Types.ObjectId, auto: true })
   _id?: mongoose.Types.ObjectId;
 
   @Prop({ required: true, trim: true, maxlength: 100, minlength: 2 })
@@ -17,14 +17,14 @@ export class Post {
   @Prop({ default: null })
   imageUrl?: string;
 
-  @Prop({ type: [mongoose.Types.ObjectId], ref: 'Comment', default: [] })
+  @Prop({
+    type: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+    default: [],
+  })
   comments?: mongoose.Types.ObjectId[];
 
-  @Prop({ type: [mongoose.Types.ObjectId], ref: 'User', default: [] })
+  @Prop({ type: [{ type: mongoose.Types.ObjectId, ref: 'User' }], default: [] })
   likes?: mongoose.Types.ObjectId[];
-
-  @Prop({ required: true, default: Date.now })
-  createdAt: Date;
 
   @Prop({ required: true, default: false })
   isDeleted: boolean;
