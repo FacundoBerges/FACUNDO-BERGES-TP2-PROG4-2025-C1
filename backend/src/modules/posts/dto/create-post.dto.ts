@@ -16,8 +16,8 @@ export class CreatePostDto {
   @Transform(({ value }: { value: string }) => (value ? value.trim() : value))
   readonly title: string;
 
-  @MinLength(10, {
-    message: 'La descripción debe tener al menos 10 caracteres.',
+  @MinLength(1, {
+    message: 'La descripción debe tener al menos 1 caracteres.',
   })
   @MaxLength(500, {
     message: 'La descripción no puede tener más de 500 caracteres.',
