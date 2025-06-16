@@ -5,7 +5,7 @@ import { Profile } from '../interfaces/profile.type';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({})
+@Schema({ timestamps: true })
 export class User {
   @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
   _id?: mongoose.Types.ObjectId;
@@ -39,9 +39,6 @@ export class User {
 
   @Prop({ required: true, trim: true })
   hashedPassword: string;
-
-  @Prop({ required: true, default: Date.now })
-  createdAt: Date;
 
   @Prop({ required: true, default: true })
   isActive: boolean;
