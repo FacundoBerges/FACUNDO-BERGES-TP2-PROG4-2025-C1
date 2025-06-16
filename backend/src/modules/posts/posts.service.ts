@@ -9,7 +9,7 @@ import mongoose, { Model } from 'mongoose';
 import { NoContentException } from 'src/exceptions/no-content-exception.exception';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostDocument, Post } from './schemas/post.schema';
-import { SortBy, OrderBy } from './interfaces/sort-by.type';
+import { SortOptions, SortOrder } from './interfaces/sort-by.type';
 import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class PostsService {
     userData: JwtPayload,
     createPostDto: CreatePostDto,
     image?: Express.Multer.File,
-  ): Promise<Post> {
+  ) {
     if (image && image.destination && image.filename)
       createPostDto.contentImageUrl = `${image.destination}/${image.filename}`;
 
@@ -31,7 +31,6 @@ export class PostsService {
       title: createPostDto.title,
       description: createPostDto.content,
       imageUrl: createPostDto.contentImageUrl,
-      createdAt: new Date(),
       isDeleted: createPostDto.isDeleted || false,
       author: new mongoose.Types.ObjectId(userData.sub),
     };
@@ -40,12 +39,12 @@ export class PostsService {
   }
 
   async findAll(
-    sortBy: SortBy,
-    orderBy: OrderBy,
+    sortBy: SortOptions,
+    orderBy: SortOrder,
     offset: number,
     limit: number,
     authorId?: string,
-  ): Promise<Post[]> {
+  ) {
     const orderNumber = orderBy === 'asc' ? 1 : -1;
 
     const sortOptions = {};
@@ -69,13 +68,13 @@ export class PostsService {
     return posts;
   }
 
-  async findOne(id: string): Promise<Post | null> {
+  async findOne(id: string) {
     await this.validateId(id);
 
     return await this.postModel.findById(id).exec();
   }
 
-  async remove(userData: JwtPayload, id: string): Promise<void> {
+  async remove(userData: JwtPayload, id: string) {
     await this.validateId(id);
 
     const post = await this.postModel.findById(id).exec();
@@ -92,11 +91,7 @@ export class PostsService {
     await post?.updateOne({ isDeleted: true }).exec();
   }
 
-  async likePost(
-    userData: JwtPayload,
-    id: string,
-    isLike: boolean,
-  ): Promise<Post | null> {
+  async likePost(userData: JwtPayload, id: string, isLike: boolean) {
     await this.validateId(id);
 
     const updateOptions = isLike
@@ -108,7 +103,15 @@ export class PostsService {
       .exec();
   }
 
-  private async validateId(id: string): Promise<void> {
+  async addComment(id: string, commentId: string) {
+    await this.validateId(id);
+
+    return await this.postModel
+      .findByIdAndUpdate(id, { $addToSet: { comments: commentId } })
+      .exec();
+  }
+
+  public async validateId(id: string) {
     if (!id) throw new NotFoundException('ID de publicación no proporcionado.');
 
     const postExists = await this.postModel.exists({
