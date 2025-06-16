@@ -68,8 +68,8 @@ export class CreateUserDto {
   readonly password: string;
 
   @IsOptional()
-  @IsIn(['user', 'admin'], { message: 'El perfil debe ser "user" o "admin".' })
-  readonly profile: Profile = 'user';
+  @IsIn(['user', 'admin'], { message: 'El perfil ingresado no es válido.' })
+  readonly profile?: Profile;
 
   @IsOptional()
   @IsBoolean({ message: 'isActive debe ser un valor booleano.' })
