@@ -19,7 +19,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { uploadImagePipe } from 'src/pipes/upload-image.pipe';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { OrderBy, SortBy } from './interfaces/sort-by.type';
+import { SortOrder, SortOptions } from './interfaces/sort-by.type';
 import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @Controller('posts')
@@ -47,8 +47,8 @@ export class PostsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll(
-    @Query('sortBy') sortBy: SortBy = 'createdAt',
-    @Query('orderBy') sortOrder: OrderBy = 'desc',
+    @Query('sortBy') sortBy: SortOptions = 'createdAt',
+    @Query('orderBy') sortOrder: SortOrder = 'desc',
     @Query('offset') offset: number = 0,
     @Query('limit') limit: number = 10,
     @Query('authorId') authorId?: string,
