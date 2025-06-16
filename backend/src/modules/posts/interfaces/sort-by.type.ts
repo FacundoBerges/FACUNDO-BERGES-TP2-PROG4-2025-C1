@@ -1,3 +1,3 @@
-export type SortBy = 'createdAt' | 'likesCount';
+export type SortOptions = 'createdAt' | 'likesCount';
 
-export type OrderBy = 'asc' | 'desc';
+export type SortOrder = 'asc' | 'desc';
