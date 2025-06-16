@@ -46,8 +46,12 @@ export class CommentsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    const user: JwtPayload = updateCommentDto.user as JwtPayload;
+  update(
+    @Request() req: Express.Request,
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    const user: JwtPayload = req['user'] as JwtPayload;
 
     return this.commentsService.update(user, id, updateCommentDto);
   }
