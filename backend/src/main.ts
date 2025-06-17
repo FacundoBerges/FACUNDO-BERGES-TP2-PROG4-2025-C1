@@ -1,15 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  if (!existsSync('./public/uploads/img/users/'))
-    mkdirSync('./public/uploads/img/users/', { recursive: true });
+  const publicPath = join(__dirname, '..', 'public');
+  const uploadsPath = join(publicPath, 'uploads', 'img');
+  const userUploadsPath = join(uploadsPath, 'users');
+  const postsUploadPath = join(uploadsPath, 'posts');
 
-  if (!existsSync('./public/uploads/img/posts/'))
-    mkdirSync('./public/uploads/img/posts/', { recursive: true });
+  if (!existsSync(userUploadsPath))
+    mkdirSync(userUploadsPath, { recursive: true });
+
+  if (!existsSync(postsUploadPath))
+    mkdirSync(postsUploadPath, { recursive: true });
 
   const app = await NestFactory.create(AppModule);
 
@@ -24,5 +30,7 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-bootstrap();
+bootstrap().catch((error) => {
+  console.error('Error durante el bootstrapping de la aplicación:', error);
+  process.exit(1);
+});

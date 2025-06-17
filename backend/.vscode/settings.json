@@ -5,6 +5,7 @@
         "mongodb",
         "originalname",
         "pids",
-        "testem"
+        "testem",
+        "virtuals"
     ]
 }
