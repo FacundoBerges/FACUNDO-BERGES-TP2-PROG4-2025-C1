@@ -47,9 +47,8 @@ export class AuthController {
   @UseGuards(AuthGuard)
   authorize(@Request() req: Express.Request) {
     const user = req['user'] as JwtPayload;
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { joinDate, iat, exp, ...userInfo } = user;
+    const { iat, exp, ...userInfo } = user;
 
     return { message: 'Usuario autorizado', ...userInfo };
   }

@@ -31,14 +31,8 @@ export class AuthService {
     ) {
       createUserDto.userProfilePictureUrl = `${profilePicture.destination}/${profilePicture.filename}`;
     }
+
     const user = await this.usersService.create(createUserDto);
-
-    if (!user) {
-      throw new BadRequestException(
-        'Error al crear el usuario. Por favor, inténtalo de nuevo.',
-      );
-    }
-
     const payload: JwtPayload = this.generateJwtPayload(user);
     const token: string = await this.jwtService.signAsync(payload);
 
@@ -81,7 +75,6 @@ export class AuthService {
       sub: user._id,
       username: user.username,
       profile: user.profile,
-      joinDate: user.createdAt,
     };
   }
 }
