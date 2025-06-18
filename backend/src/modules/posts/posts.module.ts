@@ -3,7 +3,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
-import { CommentsModule } from './comments/comments.module';
 import { Post, PostSchema } from './schemas/post.schema';
 import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
@@ -36,7 +35,6 @@ import { PostsController } from './posts.controller';
         },
       }),
     }),
-    CommentsModule,
   ],
   controllers: [PostsController],
   providers: [PostsService],
