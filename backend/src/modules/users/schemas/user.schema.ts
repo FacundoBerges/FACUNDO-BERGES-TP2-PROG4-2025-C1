@@ -7,7 +7,6 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ type: Types.ObjectId, auto: true })
   _id: Types.ObjectId;
 
   @Prop({ required: true, trim: true, maxlength: 50, minlength: 2 })
