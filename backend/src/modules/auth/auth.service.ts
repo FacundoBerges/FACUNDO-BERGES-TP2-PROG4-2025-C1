@@ -7,11 +7,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/schemas/user.schema';
 import { UserLoginDataDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtResponseDto } from './interfaces/jwt-response-dto.interface';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
   ) {}
 
   public async signUp(
-    createUserDto: CreateUserDto,
+    registerUserDto: RegisterUserDto,
     profilePicture?: Express.Multer.File,
   ): Promise<JwtResponseDto> {
     if (
@@ -29,10 +29,10 @@ export class AuthService {
       profilePicture.destination &&
       profilePicture.filename
     ) {
-      createUserDto.userProfilePictureUrl = `${profilePicture.destination}/${profilePicture.filename}`;
+      registerUserDto.userProfilePictureUrl = `${profilePicture.destination}/${profilePicture.filename}`;
     }
 
-    const user = await this.usersService.create(createUserDto);
+    const user = await this.usersService.create(registerUserDto);
     const payload: JwtPayload = this.generateJwtPayload(user);
     const token: string = await this.jwtService.signAsync(payload);
 

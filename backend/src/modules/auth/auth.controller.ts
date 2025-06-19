@@ -12,7 +12,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { uploadImagePipe } from '../../pipes/upload-image.pipe';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { AuthService } from './auth.service';
 import { UserLoginDataDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
@@ -31,10 +31,10 @@ export class AuthController {
     }),
   )
   signUpUser(
-    @Body() createUserDto: CreateUserDto,
+    @Body() registerUserDto: RegisterUserDto,
     @UploadedFile(uploadImagePipe) profilePicture: Express.Multer.File,
   ) {
-    return this.authService.signUp(createUserDto, profilePicture);
+    return this.authService.signUp(registerUserDto, profilePicture);
   }
 
   @Post('login')
