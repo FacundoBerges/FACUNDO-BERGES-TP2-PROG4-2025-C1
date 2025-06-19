@@ -56,12 +56,12 @@ export class CreateUserDto {
   )
   readonly username: string;
 
-  @IsString()
+  @IsString({ message: 'La contraseña debe ser una cadena de texto.' })
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
   @MaxLength(128, {
     message: 'La contraseña no puede tener más de 128 caracteres.',
   })
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/, {
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/, {
     message:
       'La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número.',
   })
@@ -73,7 +73,7 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsBoolean({ message: 'isActive debe ser un valor booleano.' })
-  readonly isActive?: boolean = true;
+  readonly isActive?: boolean;
 
   @Type(() => Date)
   @IsDate({ message: 'La fecha de nacimiento debe ser una fecha válida.' })
@@ -83,7 +83,7 @@ export class CreateUserDto {
   @MaxDate(new Date(Date.now()), {
     message: 'La fecha de nacimiento no puede ser posterior a la fecha actual.',
   })
-  readonly birthdate: Date;
+  readonly birthday: Date;
 
   @IsOptional()
   @IsString({
