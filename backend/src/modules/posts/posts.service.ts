@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -16,6 +17,8 @@ import { PostDocument, Post } from './schemas/post.schema';
 
 @Injectable()
 export class PostsService {
+  private readonly logger: Logger = new Logger(PostsService.name);
+
   constructor(
     @InjectModel(Post.name)
     private readonly postModel: Model<PostDocument>,
@@ -46,7 +49,7 @@ export class PostsService {
     offset: number,
     limit: number,
     authorId?: string,
-  ) {
+  ): Promise<PostDocument[]> {
     const orderNumber = orderBy === 'asc' ? 1 : -1;
     const sortOptions = {};
     sortOptions[sortBy] = orderNumber;
@@ -68,6 +71,7 @@ export class PostsService {
       .limit(limit)
       .populate('author', 'username profilePictureUrl')
       .populate('likes', 'username')
+      .select('-__v')
       .exec();
 
     if (!posts || posts.length === 0)
@@ -76,16 +80,16 @@ export class PostsService {
     return posts;
   }
 
-  async findOne(id: string) {
-    await this.validateId(id);
+  async findOne(id: string): Promise<PostDocument | null> {
+    const objectId = await this.validateId(id);
 
-    return await this.postModel.findById(id).exec();
+    return await this.postModel.findById(objectId).select('-__v').exec();
   }
 
-  async remove(userData: JwtPayload, id: string) {
-    await this.validateId(id);
+  async remove(userData: JwtPayload, id: string): Promise<void> {
+    const objectId = await this.validateId(id);
 
-    const post = await this.postModel.findById(id).exec();
+    const post = await this.postModel.findById(objectId).exec();
 
     if (
       post?.author.toString() !== userData.sub.toString() &&
@@ -99,39 +103,53 @@ export class PostsService {
     await post?.updateOne({ isDeleted: true }).exec();
   }
 
-  async likePost(userData: JwtPayload, id: string, isLike: boolean) {
-    await this.validateId(id);
+  async likePost(
+    userData: JwtPayload,
+    id: string,
+    isLike: boolean,
+  ): Promise<PostDocument | null> {
+    const objectId = await this.validateId(id);
 
     const updateOptions = isLike
       ? { $addToSet: { likes: userData.sub } }
       : { $pull: { likes: userData.sub } };
 
     return this.postModel
-      .findByIdAndUpdate(id, updateOptions, { new: true })
+      .findByIdAndUpdate(objectId, updateOptions, { new: true })
       .exec();
   }
 
-  public async updateCommentsCount(id: string, increment: boolean = true) {
+  public async updateCommentsCount(
+    id: string,
+    increment: boolean = true,
+  ): Promise<PostDocument | null> {
     const updateValue = increment ? 1 : -1;
-    await this.validateId(id);
+    const objectId = await this.validateId(id);
 
-    return this.postModel
+    return await this.postModel
       .findByIdAndUpdate(
-        id,
+        objectId,
         { $inc: { commentsCount: updateValue } },
         { new: true },
       )
       .exec();
   }
 
-  public async validateId(id: string) {
+  public async validateId(id: string): Promise<Types.ObjectId> {
     if (!id)
       throw new BadRequestException('ID de publicación no proporcionado.');
 
+    if (!Types.ObjectId.isValid(id))
+      throw new BadRequestException('ID de publicación inválido.');
+
+    const objectId = new Types.ObjectId(id);
+
     const postExists = await this.postModel.exists({
-      _id: id,
+      _id: objectId,
       isDeleted: false,
     });
     if (!postExists) throw new NotFoundException('Publicación no encontrada.');
+
+    return objectId;
   }
 }
