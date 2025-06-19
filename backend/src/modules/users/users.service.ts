@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { compare, hash } from 'bcryptjs';
 
 import { User, UserDocument } from './schemas/user.schema';
@@ -19,9 +19,10 @@ export class UsersService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
-  public async create(createUserDto: CreateUserDto): Promise<User> {
+  public async create(
+    createUserDto: CreateUserDto,
+  ): Promise<Omit<User, 'hashedPassword'>> {
     const hashedPassword = await hash(createUserDto.password, 10);
-
     const existingUser = await this.userModel
       .findOne({
         $or: [
@@ -38,33 +39,38 @@ export class UsersService {
     }
 
     const profileType: string = createUserDto?.profile || 'user';
-    const newUser = new this.userModel({
-      name: createUserDto.name,
-      surname: createUserDto.surname,
-      email: createUserDto.email.toLowerCase().trim(),
-      username: createUserDto.username.toLowerCase().trim(),
-      hashedPassword: hashedPassword,
-      birthday: createUserDto.birthday,
-      profile: profileType,
-      profilePictureUrl: createUserDto.userProfilePictureUrl,
-      bio: createUserDto.bio,
-      isActive: true,
-    });
 
-    return newUser.save();
+    return this.userModel
+      .create({
+        name: createUserDto.name,
+        surname: createUserDto.surname,
+        email: createUserDto.email.toLowerCase().trim(),
+        username: createUserDto.username.toLowerCase().trim(),
+        hashedPassword: hashedPassword,
+        birthday: createUserDto.birthday,
+        profile: profileType,
+        profilePictureUrl: createUserDto.userProfilePictureUrl,
+        bio: createUserDto.bio,
+        isActive: true,
+      })
+      .then((user) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { hashedPassword, ...response } = user;
+        return response;
+      });
   }
 
   public findByEmailOrUsername(emailOrUsername: string): Promise<User | null> {
     const sanitizedEmailOrUsername = emailOrUsername.toLowerCase().trim();
 
-    const userQuery = this.userModel.findOne({
-      $or: [
-        { email: sanitizedEmailOrUsername },
-        { username: sanitizedEmailOrUsername },
-      ],
-    });
-
-    return userQuery.exec();
+    return this.userModel
+      .findOne({
+        $or: [
+          { email: sanitizedEmailOrUsername },
+          { username: sanitizedEmailOrUsername },
+        ],
+      })
+      .exec();
   }
 
   public async findAll() {
@@ -88,20 +94,37 @@ export class UsersService {
     return isPasswordValid;
   }
 
-  public async changeUserStatus(id: string, disableUser = true): Promise<User> {
-    await this.validateId(id);
+  public async changeUserStatus(
+    id: string,
+    disableUser: boolean = true,
+  ): Promise<User> {
+    const objectId = await this.validateId(id);
+    const user = await this.userModel.findById(objectId).exec();
 
-    const user = await this.userModel.findById(id).exec();
+    if (disableUser && !user?.isActive)
+      throw new BadRequestException('El usuario ya está deshabilitado.');
+
+    if (!disableUser && user?.isActive)
+      throw new BadRequestException('El usuario ya está habilitado.');
 
     user!.isActive = !disableUser;
 
     return user!.save();
   }
 
-  public async validateId(id: string): Promise<void> {
+  public async validateId(id: string): Promise<Types.ObjectId> {
     if (!id) throw new BadRequestException('ID de usuario no proporcionado.');
 
-    const userExists = await this.userModel.exists({ _id: id, isActive: true });
+    if (!Types.ObjectId.isValid(id))
+      throw new BadRequestException('ID de usuario inválido.');
+
+    const objectId = new Types.ObjectId(id);
+    const userExists = await this.userModel.exists({
+      _id: objectId,
+    });
+
     if (!userExists) throw new NotFoundException('Usuario no encontrado.');
+
+    return objectId;
   }
 }
