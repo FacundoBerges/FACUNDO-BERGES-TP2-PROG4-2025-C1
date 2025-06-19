@@ -40,7 +40,7 @@ export class UsersController {
     return this.usersService.changeUserStatus(id);
   }
 
-  @Post('unblock/:id')
+  @Post(':id')
   enableUser(@Param('id') id: string) {
     return this.usersService.changeUserStatus(id, false);
   }
