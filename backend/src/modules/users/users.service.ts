@@ -1,10 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { compare, hashSync } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 
 import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
+import { NoContentException } from 'src/exceptions/no-content-exception.exception';
 
 @Injectable()
 export class UsersService {
@@ -13,17 +19,8 @@ export class UsersService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
-  public async validatePassword(
-    user: User,
-    password: string,
-  ): Promise<boolean> {
-    const isPasswordValid = await compare(password, user.hashedPassword);
-
-    return isPasswordValid;
-  }
-
   public async create(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = hashSync(createUserDto.password);
+    const hashedPassword = await hash(createUserDto.password, 10);
 
     const existingUser = await this.userModel
       .findOne({
@@ -40,21 +37,20 @@ export class UsersService {
       );
     }
 
-    const newUser: User = {
+    const newUser = new this.userModel({
       name: createUserDto.name,
       surname: createUserDto.surname,
       email: createUserDto.email.toLowerCase().trim(),
       username: createUserDto.username.toLowerCase().trim(),
       hashedPassword: hashedPassword,
-      birthday: createUserDto.birthdate,
+      birthday: createUserDto.birthday,
       profile: createUserDto.profile || 'user',
       profilePictureUrl: createUserDto.userProfilePictureUrl,
       bio: createUserDto.bio,
-      createdAt: new Date(),
       isActive: true,
-    };
+    });
 
-    return this.userModel.create(newUser);
+    return newUser.save();
   }
 
   public findByEmailOrUsername(emailOrUsername: string): Promise<User | null> {
@@ -68,5 +64,43 @@ export class UsersService {
     });
 
     return userQuery.exec();
+  }
+
+  public async findAll() {
+    const users = await this.userModel
+      .find()
+      .select('-hashedPassword -__v')
+      .exec();
+
+    if (!users || users.length === 0)
+      throw new NoContentException('No se encontraron usuarios activos.');
+
+    return users;
+  }
+
+  public async validatePassword(
+    user: User,
+    password: string,
+  ): Promise<boolean> {
+    const isPasswordValid = await compare(password, user.hashedPassword);
+
+    return isPasswordValid;
+  }
+
+  public async changeUserStatus(id: string, disableUser = true): Promise<User> {
+    await this.validateId(id);
+
+    const user = await this.userModel.findById(id).exec();
+
+    user!.isActive = !disableUser;
+
+    return user!.save();
+  }
+
+  public async validateId(id: string): Promise<void> {
+    if (!id) throw new BadRequestException('ID de usuario no proporcionado.');
+
+    const userExists = await this.userModel.exists({ _id: id, isActive: true });
+    if (!userExists) throw new NotFoundException('Usuario no encontrado.');
   }
 }
