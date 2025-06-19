@@ -6,9 +6,9 @@ export type CommentDocument = HydratedDocument<Comment>;
 @Schema({ timestamps: true })
 export class Comment {
   @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
-  _id?: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
 
-  @Prop({ type: String, required: true })
+  @Prop({ required: true, trim: true, minlength: 1, maxlength: 500 })
   content: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
@@ -17,7 +17,7 @@ export class Comment {
   @Prop({ type: mongoose.Types.ObjectId, ref: 'Post', required: true })
   post: mongoose.Types.ObjectId;
 
-  @Prop({ type: Boolean, default: false })
+  @Prop({ default: false })
   isDeleted: boolean;
 }
 
