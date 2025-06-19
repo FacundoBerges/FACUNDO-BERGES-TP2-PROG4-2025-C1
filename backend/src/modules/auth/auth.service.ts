@@ -70,7 +70,9 @@ export class AuthService {
     return { accessToken: token };
   }
 
-  private generateJwtPayload(user: User): JwtPayload {
+  private generateJwtPayload(
+    user: User | Omit<User, 'hashedPassword'>,
+  ): JwtPayload {
     return {
       sub: user._id,
       username: user.username,
