@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { Request } from 'express';
 
 import { JwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
@@ -9,6 +14,11 @@ export class AdminGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
     const user = request['user'] as JwtPayload;
 
-    return user.profile === 'admin';
+    if (user.profile !== 'admin')
+      throw new ForbiddenException(
+        'No tienes permisos para realizar esta acción.',
+      );
+
+    return true;
   }
 }
