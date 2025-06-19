@@ -7,5 +7,6 @@
         "pids",
         "testem",
         "virtuals"
-    ]
+    ],
+    "material-icon-theme.activeIconPack": "nest"
 }
