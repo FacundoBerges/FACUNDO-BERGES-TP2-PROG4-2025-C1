@@ -1,8 +1,10 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { LazyModuleLoader } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 
@@ -10,7 +12,6 @@ import { JwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
 import { Comment, CommentDocument } from './schemas/comment.schema';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { PostsService } from '../posts.service';
 import { SortOptions, SortOrder } from '../interfaces/sort-by.type';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class CommentsService {
   constructor(
     @InjectModel(Comment.name)
     private readonly commentModel: Model<CommentDocument>,
-    private readonly postsService: PostsService,
+    private readonly lazyModuleLoader: LazyModuleLoader,
   ) {}
 
   async create(
@@ -26,30 +27,33 @@ export class CommentsService {
     postId: string,
     createCommentDto: CreateCommentDto,
   ) {
+    const postsService = await this.getPostsService();
+    await postsService.validateId(postId);
+
     const newComment = await this.commentModel.create({
       content: createCommentDto.content,
       author: new mongoose.Types.ObjectId(userData.sub),
       post: new mongoose.Types.ObjectId(postId),
     });
-    const savedComment = await newComment.save();
 
-    await this.postsService.addComment(postId, savedComment._id.toString());
+    await postsService.updateCommentsCount(postId);
 
-    return savedComment;
+    return newComment;
   }
 
   async findAll(
     postId: string,
-    offset: number,
-    limit: number,
-    sortBy: SortOptions,
-    orderBy: SortOrder,
+    offset: number = 0,
+    limit: number = 10,
+    sortBy: SortOptions = 'createdAt',
+    orderBy: SortOrder = 'desc',
   ) {
-    await this.postsService.validateId(postId);
+    const postsService = await this.getPostsService();
+    await postsService.validateId(postId);
 
     return await this.commentModel
       .find({ post: new mongoose.Types.ObjectId(postId) })
-      .populate('author', 'username createdAt')
+      .populate('author', 'username profilePictureUrl')
       .sort({ [sortBy]: orderBy })
       .skip(offset)
       .limit(limit)
@@ -70,8 +74,22 @@ export class CommentsService {
     );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(id: string) {
+    await this.validateId(id);
+
+    const comment = await this.commentModel
+      .findByIdAndUpdate(
+        new mongoose.Types.ObjectId(id),
+        { isDeleted: true },
+        { new: true },
+      )
+      .exec();
+
+    if (!comment!.isDeleted)
+      throw new BadRequestException('El comentario no se pudo eliminar');
+
+    const postsService = await this.getPostsService();
+    await postsService.updateCommentsCount(comment!.post._id.toString(), false);
   }
 
   async validateCommentOwnership(userData: JwtPayload, commentId: string) {
@@ -79,7 +97,7 @@ export class CommentsService {
 
     const comment = await this.commentModel
       .findById(commentId)
-      .populate('author', 'username createdAt')
+      .select('author')
       .exec();
 
     if (comment?.author._id.toString() !== userData.sub?.toString())
@@ -95,6 +113,15 @@ export class CommentsService {
       throw new BadRequestException('El ID no es válido');
 
     if (!(await this.commentModel.exists({ _id: id, isDeleted: false })))
-      throw new BadRequestException('El comentario no existe');
+      throw new NotFoundException('El comentario no existe');
+  }
+
+  private async getPostsService() {
+    const { PostsModule } = await import('../posts.module');
+    const { PostsService } = await import('../posts.service');
+    const postModule = await this.lazyModuleLoader.load(() => PostsModule);
+    const postsService = postModule.get(PostsService);
+
+    return postsService;
   }
 }
