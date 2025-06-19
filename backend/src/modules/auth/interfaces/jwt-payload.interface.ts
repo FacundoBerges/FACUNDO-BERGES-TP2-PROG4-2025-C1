@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 
 import { Profile } from 'src/modules/users/interfaces/profile.type';
 
 export interface JwtPayload {
-  sub: mongoose.Types.ObjectId;
+  sub: Types.ObjectId;
   username: string;
   profile: Profile;
   iat?: number;
