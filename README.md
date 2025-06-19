@@ -151,13 +151,13 @@ Deberá contar con los siguientes puntos:
 
 #### Backend:
 
--   ❌ Módulo usuarios - usuarios controller:
-    -   ❌ Debe poseer la lógica para que un administrador pueda listar a los usuarios, dar de alta uno nuevo y realizar bajas y altas lógicas.
-    -   ❌ Se debe validar que el token pertenezca a un administrador.
-    -   ❌ Por GET: listado de usuarios
-    -   ❌ Por POST: alta de un nuevo usuario. Se puede definir si su perfil es administrador o usuario.
-    -   ❌ Por DELETE: permite deshabilitar a un usuario. Cuando dicho usuario quiera ingresar, deberá ser notificado que no está autorizado.
-    -   ❌ Por POST: alta lógica, rehabilita a un usuario previamente deshabilitado, permitiéndole utilizar la aplicación.
+-   ✅ Módulo usuarios - usuarios controller:
+    -   ✅ Debe poseer la lógica para que un administrador pueda listar a los usuarios, dar de alta uno nuevo y realizar bajas y altas lógicas.
+    -   ✅ Se debe validar que el token pertenezca a un administrador.
+    -   ✅ Por GET: listado de usuarios
+    -   ✅ Por POST: alta de un nuevo usuario. Se puede definir si su perfil es administrador o usuario.
+    -   ✅ Por DELETE: permite deshabilitar a un usuario. Cuando dicho usuario quiera ingresar, deberá ser notificado que no está autorizado.
+    -   ✅ Por POST: alta lógica, rehabilita a un usuario previamente deshabilitado, permitiéndole utilizar la aplicación.
 -   ❌ Módulo publicaciones - Estadísticas controller.
     -   ❌ Realizar todas las rutas necesarias por GET para que los gráficos funcionen.
     -   ❌ Se debe validar que el token pertenezca a un administrador.
