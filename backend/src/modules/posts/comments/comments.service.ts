@@ -49,14 +49,15 @@ export class CommentsService {
     orderBy: SortOrder = 'desc',
   ) {
     const postsService = await this.getPostsService();
-    await postsService.validateId(postId);
+    const postObjectId = await postsService.validateId(postId);
 
     return await this.commentModel
-      .find({ post: new mongoose.Types.ObjectId(postId) })
-      .populate('author', 'username profilePictureUrl')
+      .find({ post: postObjectId, isDeleted: false })
+      .populate('author', 'name surname username profilePictureUrl')
       .sort({ [sortBy]: orderBy })
       .skip(offset)
       .limit(limit)
+      .select('-__v -isDeleted -post')
       .exec();
   }
 
@@ -65,24 +66,21 @@ export class CommentsService {
     commentId: string,
     updateCommentDto: UpdateCommentDto,
   ) {
-    await this.validateCommentOwnership(userData, commentId);
+    const objectId = await this.validateCommentOwnership(userData, commentId);
 
-    return await this.commentModel.findByIdAndUpdate(
-      new mongoose.Types.ObjectId(commentId),
-      { content: updateCommentDto.content },
-      { new: true },
-    );
+    return await this.commentModel
+      .findByIdAndUpdate(
+        objectId,
+        { content: updateCommentDto.content },
+        { new: true },
+      )
+      .select('-__v -isDeleted');
   }
 
   async remove(id: string) {
-    await this.validateId(id);
-
+    const objectId = await this.validateId(id);
     const comment = await this.commentModel
-      .findByIdAndUpdate(
-        new mongoose.Types.ObjectId(id),
-        { isDeleted: true },
-        { new: true },
-      )
+      .findByIdAndUpdate(objectId, { isDeleted: true }, { new: true })
       .exec();
 
     if (!comment!.isDeleted)
@@ -93,10 +91,10 @@ export class CommentsService {
   }
 
   async validateCommentOwnership(userData: JwtPayload, commentId: string) {
-    await this.validateId(commentId);
+    const objectId = await this.validateId(commentId);
 
     const comment = await this.commentModel
-      .findById(commentId)
+      .findById(objectId)
       .select('author')
       .exec();
 
@@ -104,6 +102,8 @@ export class CommentsService {
       throw new UnauthorizedException(
         'No tienes permiso para actualizar este comentario.',
       );
+
+    return objectId;
   }
 
   async validateId(id: string) {
@@ -112,8 +112,11 @@ export class CommentsService {
     if (!mongoose.Types.ObjectId.isValid(id))
       throw new BadRequestException('El ID no es válido');
 
-    if (!(await this.commentModel.exists({ _id: id, isDeleted: false })))
+    const objectId = new mongoose.Types.ObjectId(id);
+    if (!(await this.commentModel.exists({ _id: objectId, isDeleted: false })))
       throw new NotFoundException('El comentario no existe');
+
+    return objectId;
   }
 
   private async getPostsService() {
