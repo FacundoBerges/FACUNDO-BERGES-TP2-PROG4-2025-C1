@@ -11,10 +11,11 @@ import {
   HttpStatus,
   HttpCode,
   Query,
-  Request,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
 
 import { AuthGuard } from 'src/guards/auth.guard';
 import { uploadImagePipe } from 'src/pipes/upload-image.pipe';
@@ -36,7 +37,7 @@ export class PostsController {
     }),
   )
   create(
-    @Request() req: Express.Request,
+    @Req() req: Request,
     @Body() createPostDto: CreatePostDto,
     @UploadedFile(uploadImagePipe) image: Express.Multer.File,
   ) {
@@ -71,7 +72,7 @@ export class PostsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Request() req: Express.Request, @Param('id') id: string) {
+  remove(@Req() req: Request, @Param('id') id: string) {
     const user: JwtPayload = req['user'] as JwtPayload;
 
     return this.postsService.remove(user, id);
@@ -81,7 +82,7 @@ export class PostsController {
 
   @Post(':id/like')
   @HttpCode(HttpStatus.OK)
-  likePost(@Request() req: Express.Request, @Param('id') id: string) {
+  likePost(@Req() req: Request, @Param('id') id: string) {
     const user: JwtPayload = req['user'] as JwtPayload;
 
     return this.postsService.likePost(user, id, true);
@@ -89,7 +90,7 @@ export class PostsController {
 
   @Post(':id/unlike')
   @HttpCode(HttpStatus.OK)
-  unlikePost(@Request() req: Express.Request, @Param('id') id: string) {
+  unlikePost(@Req() req: Request, @Param('id') id: string) {
     const user: JwtPayload = req['user'] as JwtPayload;
 
     return this.postsService.likePost(user, id, false);

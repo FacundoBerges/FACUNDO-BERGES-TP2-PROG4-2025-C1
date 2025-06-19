@@ -6,8 +6,8 @@ import {
   HttpStatus,
   UploadedFile,
   UseInterceptors,
-  Request,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -17,6 +17,7 @@ import { AuthService } from './auth.service';
 import { UserLoginDataDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -45,7 +46,7 @@ export class AuthController {
   @Post('authorize')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  authorize(@Request() req: Express.Request) {
+  authorize(@Req() req: Request) {
     const user = req['user'] as JwtPayload;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { iat, exp, ...userInfo } = user;
@@ -56,7 +57,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  refreshToken(@Request() req: Express.Request) {
+  refreshToken(@Req() req: Request) {
     const user = req['user'] as JwtPayload;
 
     return this.authService.refreshToken(user);
