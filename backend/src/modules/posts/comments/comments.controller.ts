@@ -5,11 +5,15 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  // Delete,
   UseGuards,
-  Request,
+  Req,
   Query,
+  HttpCode,
+  HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
+import { Request } from 'express';
 
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CommentsService } from './comments.service';
@@ -24,8 +28,9 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post(':id')
+  @HttpCode(HttpStatus.CREATED)
   create(
-    @Request() req: Express.Request,
+    @Req() req: Request,
     @Param('id') id: string,
     @Body() createCommentDto: CreateCommentDto,
   ) {
@@ -34,20 +39,22 @@ export class CommentsController {
     return this.commentsService.create(user, id, createCommentDto);
   }
 
-  @Get(':id')
+  @Get(':postId')
+  @HttpCode(HttpStatus.OK)
   findAll(
-    @Param('id') id: string,
-    @Query('offset') offset: number = 0,
-    @Query('limit') limit: number = 10,
-    @Query('sortBy') sortBy: SortOptions = 'createdAt',
-    @Query('orderBy') orderBy: SortOrder = 'desc',
+    @Param('postId') postId: string,
+    @Query('offset', ParseIntPipe) offset?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
+    @Query('sortBy') sortBy?: SortOptions,
+    @Query('orderBy') orderBy?: SortOrder,
   ) {
-    return this.commentsService.findAll(id, offset, limit, sortBy, orderBy);
+    return this.commentsService.findAll(postId, offset, limit, sortBy, orderBy);
   }
 
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
   update(
-    @Request() req: Express.Request,
+    @Req() req: Request,
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
   ) {
@@ -57,7 +64,8 @@ export class CommentsController {
   }
 
   // @Delete(':id')
+  // @HttpCode(HttpStatus.NO_CONTENT)
   // remove(@Param('id') id: string) {
-  //   return this.commentsService.remove(+id);
+  //   return this.commentsService.remove(id);
   // }
 }
