@@ -11,7 +11,6 @@ import {
   Query,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { Request } from 'express';
 
@@ -27,24 +26,24 @@ import { SortOrder, SortOptions } from '../interfaces/sort-by.type';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post(':id')
+  @Post(':postId')
   @HttpCode(HttpStatus.CREATED)
   create(
     @Req() req: Request,
-    @Param('id') id: string,
+    @Param('postId') postId: string,
     @Body() createCommentDto: CreateCommentDto,
   ) {
     const user: JwtPayload = req['user'] as JwtPayload;
 
-    return this.commentsService.create(user, id, createCommentDto);
+    return this.commentsService.create(user, postId, createCommentDto);
   }
 
   @Get(':postId')
   @HttpCode(HttpStatus.OK)
   findAll(
     @Param('postId') postId: string,
-    @Query('offset', ParseIntPipe) offset?: number,
-    @Query('limit', ParseIntPipe) limit?: number,
+    @Query('offset') offset?: number,
+    @Query('limit') limit?: number,
     @Query('sortBy') sortBy?: SortOptions,
     @Query('orderBy') orderBy?: SortOrder,
   ) {
