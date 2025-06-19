@@ -11,7 +11,6 @@ import {
   HttpStatus,
   HttpCode,
   Query,
-  ParseIntPipe,
   Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -51,8 +50,8 @@ export class PostsController {
   findAll(
     @Query('sortBy') sortBy: SortOptions = 'createdAt',
     @Query('orderBy') sortOrder: SortOrder = 'desc',
-    @Query('offset', ParseIntPipe) offset: number = 0,
-    @Query('limit', ParseIntPipe) limit: number = 10,
+    @Query('offset') offset: number = 0,
+    @Query('limit') limit: number = 10,
     @Query('authorId') authorId?: string,
   ) {
     return this.postsService.findAll(
