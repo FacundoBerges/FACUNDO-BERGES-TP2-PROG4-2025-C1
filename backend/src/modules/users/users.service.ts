@@ -37,6 +37,7 @@ export class UsersService {
       );
     }
 
+    const profileType: string = createUserDto?.profile || 'user';
     const newUser = new this.userModel({
       name: createUserDto.name,
       surname: createUserDto.surname,
@@ -44,7 +45,7 @@ export class UsersService {
       username: createUserDto.username.toLowerCase().trim(),
       hashedPassword: hashedPassword,
       birthday: createUserDto.birthday,
-      profile: createUserDto.profile || 'user',
+      profile: profileType,
       profilePictureUrl: createUserDto.userProfilePictureUrl,
       bio: createUserDto.bio,
       isActive: true,
