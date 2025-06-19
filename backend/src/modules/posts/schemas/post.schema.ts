@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory, Virtual } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type PostDocument = HydratedDocument<Post>;
 
@@ -9,8 +9,7 @@ export type PostDocument = HydratedDocument<Post>;
   toObject: { virtuals: true },
 })
 export class Post {
-  @Prop({ type: mongoose.Types.ObjectId, auto: true })
-  _id: mongoose.Types.ObjectId;
+  _id: Types.ObjectId;
 
   @Prop({ required: true, trim: true, maxlength: 100, minlength: 2 })
   title: string;
@@ -21,8 +20,8 @@ export class Post {
   @Prop({ default: null })
   imageUrl?: string;
 
-  @Prop({ type: [{ type: mongoose.Types.ObjectId, ref: 'User' }], default: [] })
-  likes?: mongoose.Types.ObjectId[];
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }], default: [] })
+  likes?: Types.ObjectId[];
 
   @Virtual({
     get: function (this: Post) {
@@ -37,8 +36,8 @@ export class Post {
   @Prop({ required: true, default: false })
   isDeleted: boolean;
 
-  @Prop({ required: true, type: mongoose.Types.ObjectId, ref: 'User' })
-  author: mongoose.Types.ObjectId;
+  @Prop({ required: true, type: Types.ObjectId, ref: 'User' })
+  author: Types.ObjectId;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);
