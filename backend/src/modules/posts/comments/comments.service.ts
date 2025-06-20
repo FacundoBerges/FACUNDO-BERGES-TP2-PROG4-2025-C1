@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { LazyModuleLoader } from '@nestjs/core';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 import { JwtPayload } from 'src/modules/auth/interfaces/jwt-payload.interface';
+import { SortOptions, SortOrder } from '../interfaces/sort-by.type';
 import { Comment, CommentDocument } from './schemas/comment.schema';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { SortOptions, SortOrder } from '../interfaces/sort-by.type';
 
 @Injectable()
 export class CommentsService {
@@ -28,12 +28,12 @@ export class CommentsService {
     createCommentDto: CreateCommentDto,
   ) {
     const postsService = await this.getPostsService();
-    await postsService.validateId(postId);
+    const postObjectId = await postsService.validateId(postId);
 
     const newComment = await this.commentModel.create({
       content: createCommentDto.content,
-      author: new mongoose.Types.ObjectId(userData.sub),
-      post: new mongoose.Types.ObjectId(postId),
+      author: new Types.ObjectId(userData.sub),
+      post: postObjectId,
     });
 
     await postsService.updateCommentsCount(postId);
@@ -77,22 +77,29 @@ export class CommentsService {
       .select('-__v -isDeleted');
   }
 
-  async remove(id: string) {
-    const objectId = await this.validateId(id);
-    const comment = await this.commentModel
+  async remove(userData: JwtPayload, id: string) {
+    let objectId: Types.ObjectId;
+
+    if (userData.profile !== 'admin')
+      objectId = await this.validateCommentOwnership(userData, id);
+    else objectId = await this.validateId(id);
+
+    const deletedComment = await this.commentModel
       .findByIdAndUpdate(objectId, { isDeleted: true }, { new: true })
       .exec();
 
-    if (!comment!.isDeleted)
+    if (!deletedComment!.isDeleted)
       throw new BadRequestException('El comentario no se pudo eliminar');
 
     const postsService = await this.getPostsService();
-    await postsService.updateCommentsCount(comment!.post._id.toString(), false);
+    await postsService.updateCommentsCount(
+      deletedComment!.post._id.toString(),
+      false,
+    );
   }
 
   async validateCommentOwnership(userData: JwtPayload, commentId: string) {
     const objectId = await this.validateId(commentId);
-
     const comment = await this.commentModel
       .findById(objectId)
       .select('author')
@@ -109,10 +116,10 @@ export class CommentsService {
   async validateId(id: string) {
     if (!id) throw new BadRequestException('El ID es requerido');
 
-    if (!mongoose.Types.ObjectId.isValid(id))
+    if (!Types.ObjectId.isValid(id))
       throw new BadRequestException('El ID no es válido');
 
-    const objectId = new mongoose.Types.ObjectId(id);
+    const objectId = new Types.ObjectId(id);
     if (!(await this.commentModel.exists({ _id: objectId, isDeleted: false })))
       throw new NotFoundException('El comentario no existe');
 
