@@ -1,23 +1,23 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
   HttpCode,
   HttpStatus,
-  UploadedFile,
-  UseInterceptors,
-  UseGuards,
+  Post,
   Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-
-import { uploadImagePipe } from '../../pipes/upload-image.pipe';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { AuthService } from './auth.service';
-import { UserLoginDataDto } from './dto/login-user.dto';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { AuthGuard } from 'src/guards/auth.guard';
 import { Request } from 'express';
+
+import { AuthGuard } from 'src/guards/auth.guard';
+import { uploadImagePipe } from '../../pipes/upload-image.pipe';
+import { AuthService } from './auth.service';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { UserLoginDataDto } from './dto/login-user.dto';
 
 @Controller('auth')
 export class AuthController {

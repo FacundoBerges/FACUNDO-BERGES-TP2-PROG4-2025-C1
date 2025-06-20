@@ -1,16 +1,16 @@
-import { Type, Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
-  IsString,
-  IsEmail,
-  MinLength,
-  Matches,
-  IsOptional,
-  IsIn,
   IsBoolean,
   IsDate,
+  IsEmail,
+  IsIn,
+  IsOptional,
+  IsString,
+  Matches,
   MaxDate,
   MaxLength,
   MinDate,
+  MinLength,
 } from 'class-validator';
 
 import { Profile } from '../interfaces/profile.type';
