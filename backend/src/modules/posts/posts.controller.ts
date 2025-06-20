@@ -1,31 +1,34 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
-  UseInterceptors,
-  UploadedFile,
-  HttpStatus,
+  Get,
   HttpCode,
+  HttpStatus,
+  Logger,
+  Param,
+  Post,
   Query,
   Req,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request } from 'express';
 
 import { AuthGuard } from 'src/guards/auth.guard';
 import { uploadImagePipe } from 'src/pipes/upload-image.pipe';
-import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { SortOrder, SortOptions } from './interfaces/sort-by.type';
 import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
+import { CreatePostDto } from './dto/create-post.dto';
+import { PostsService } from './posts.service';
+import { SortOrder, SortOptions } from './interfaces/sort-by.type';
 
 @Controller('posts')
 @UseGuards(AuthGuard)
 export class PostsController {
+  private readonly logger: Logger = new Logger(PostsController.name);
+
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
@@ -49,7 +52,7 @@ export class PostsController {
   @HttpCode(HttpStatus.OK)
   findAll(
     @Query('sortBy') sortBy: SortOptions = 'createdAt',
-    @Query('orderBy') sortOrder: SortOrder = 'desc',
+    @Query('sortOrder') sortOrder: SortOrder = 'desc',
     @Query('offset') offset: number = 0,
     @Query('limit') limit: number = 10,
     @Query('authorId') authorId?: string,
@@ -79,7 +82,7 @@ export class PostsController {
 
   //* Likes endpoints
 
-  @Post(':id/like')
+  @Post('like/:id')
   @HttpCode(HttpStatus.OK)
   likePost(@Req() req: Request, @Param('id') id: string) {
     const user: JwtPayload = req['user'] as JwtPayload;
@@ -87,7 +90,7 @@ export class PostsController {
     return this.postsService.likePost(user, id, true);
   }
 
-  @Post(':id/unlike')
+  @Post('unlike/:id')
   @HttpCode(HttpStatus.OK)
   unlikePost(@Req() req: Request, @Param('id') id: string) {
     const user: JwtPayload = req['user'] as JwtPayload;
