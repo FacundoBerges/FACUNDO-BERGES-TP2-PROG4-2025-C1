@@ -4,6 +4,7 @@
         "libpeerconnection",
         "mongodb",
         "originalname",
+        "paginación",
         "pids",
         "testem",
         "virtuals"
