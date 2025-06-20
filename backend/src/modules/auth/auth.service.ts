@@ -4,33 +4,38 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { LazyModuleLoader } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../users/users.service';
 import { User } from '../users/schemas/user.schema';
-import { UserLoginDataDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtResponseDto } from './interfaces/jwt-response-dto.interface';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { UserLoginDataDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly lazyModuleLoader: LazyModuleLoader,
   ) {}
 
   public async signUp(
     registerUserDto: RegisterUserDto,
     profilePicture?: Express.Multer.File,
   ): Promise<JwtResponseDto> {
-    if (
-      profilePicture &&
-      profilePicture.destination &&
-      profilePicture.filename
-    ) {
-      registerUserDto.userProfilePictureUrl = `${profilePicture.destination}/${profilePicture.filename}`;
-    }
+    const { UploadsModule } = await import('../uploads/uploads.module');
+    const { UploadsService } = await import('../uploads/uploads.service');
+    const uploadsModule = await this.lazyModuleLoader.load(() => UploadsModule);
+    const uploadsService = uploadsModule.get(UploadsService);
+
+    let imagePath: string | undefined = undefined;
+    if (profilePicture)
+      imagePath = uploadsService.buildPublicFilePath(profilePicture);
+
+    registerUserDto.userProfilePictureUrl = imagePath;
 
     const user = await this.usersService.create(registerUserDto);
     const payload: JwtPayload = this.generateJwtPayload(user);
