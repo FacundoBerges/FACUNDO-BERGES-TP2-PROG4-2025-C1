@@ -5,7 +5,7 @@ import {
   Body,
   Patch,
   Param,
-  // Delete,
+  Delete,
   UseGuards,
   Req,
   Query,
@@ -62,9 +62,11 @@ export class CommentsController {
     return this.commentsService.update(user, id, updateCommentDto);
   }
 
-  // @Delete(':id')
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // remove(@Param('id') id: string) {
-  //   return this.commentsService.remove(id);
-  // }
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Req() req: Request, @Param('id') id: string) {
+    const user = req['user'] as JwtPayload;
+
+    return this.commentsService.remove(user, id);
+  }
 }
