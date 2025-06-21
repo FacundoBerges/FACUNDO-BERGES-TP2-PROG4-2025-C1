@@ -8,7 +8,7 @@ import { FormHeaderComponent } from '../../components/shared/form/form-header/fo
 import { FormBodyComponent } from '../../components/shared/form/form-body/form-body.component';
 import { FormFooterComponent } from '../../components/shared/form/form-footer/form-footer.component';
 import { LoginFormComponent } from '../../components/login-form/login-form.component';
-import { FooterLinkText } from '../../interfaces/footer-link-text';
+import { FooterLinkText } from '../../interfaces/footer-link-text.interface';
 
 @Component({
   selector: 'sn-login-page',
