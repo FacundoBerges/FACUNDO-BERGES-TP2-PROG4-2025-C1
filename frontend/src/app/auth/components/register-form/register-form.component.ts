@@ -1,10 +1,5 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -65,10 +60,7 @@ export class RegisterFormComponent {
   );
 
   public getErrorMessage(controlName: string): string | void {
-    return this.formErrorService.getErrorMessage(
-      controlName,
-      this.registerForm
-    );
+    return this.formErrorService.getErrorMessage(controlName, this.registerForm);
   }
 
   public togglePasswordVisibility(): void {
