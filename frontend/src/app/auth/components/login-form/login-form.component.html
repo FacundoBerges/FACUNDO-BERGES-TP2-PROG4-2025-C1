@@ -11,9 +11,11 @@
       </p-floatlabel>
     </p-inputgroup>
 
-    @if (emailOrUsername?.invalid && (emailOrUsername?.dirty || emailOrUsername?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('emailOrUsername') }}</p-message>
-    }
+    <div class="w-full p-2">
+      @if (emailOrUsername?.invalid && (emailOrUsername?.dirty || emailOrUsername?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('emailOrUsername') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-12">
@@ -30,9 +32,11 @@
       </p-inputgroup-addon>
     </p-inputgroup>
 
-    @if (password?.invalid && (password?.dirty || password?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
-    }
+    <div class="w-full p-2">
+      @if (password?.invalid && (password?.dirty || password?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
+      }
+    </div>
   </div>
 
   <div class="flex justify-center my-6">
