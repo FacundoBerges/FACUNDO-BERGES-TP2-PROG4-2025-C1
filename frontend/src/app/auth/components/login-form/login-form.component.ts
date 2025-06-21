@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 
 import { FormErrorService } from '../../services/form-error.service';
+import { invalidPasswordValidator } from '../../validators/invalid-password.validator';
 
 @Component({
   selector: 'sn-login-form',
@@ -31,11 +32,7 @@ export class LoginFormComponent {
     emailOrUsername: ['', [Validators.required, Validators.minLength(3)]],
     password: [
       '',
-      [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/),
-      ],
+      [Validators.required, Validators.minLength(8), invalidPasswordValidator],
     ],
   });
   public passwordVisible = signal(false);
@@ -45,6 +42,16 @@ export class LoginFormComponent {
     );
   });
 
+  public togglePasswordVisibility() {
+    this.passwordVisible.update((visible) => !visible);
+  }
+
+  public onSubmit() {
+    // TODO: Implement login logic
+    console.log('Handle submit.');
+  }
+
+  // * Getters for form controls
   public get emailOrUsername() {
     return this.loginForm.get('emailOrUsername');
   }
@@ -55,14 +62,5 @@ export class LoginFormComponent {
 
   public getErrorMessage(controlName: string): string | void {
     return this.formErrorService.getErrorMessage(controlName, this.loginForm);
-  }
-
-  public togglePasswordVisibility() {
-    this.passwordVisible.update((visible) => !visible);
-  }
-
-  public onSubmit() {
-    // TODO: Implement login logic
-    console.log('Handle submit.');
   }
 }
