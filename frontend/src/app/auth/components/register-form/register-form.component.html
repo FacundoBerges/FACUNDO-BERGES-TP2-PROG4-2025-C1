@@ -6,10 +6,9 @@
       </p-inputgroup-addon>
 
       <p-floatlabel variant="over">
-        <input name="name" type="text" pInputText id="name" formControlName="name" class="w-full" />
+        <input name="name" type="text" pInputText id="name" autocomplete="true" formControlName="name" class="w-full" />
         <label for="name">Nombre</label>
       </p-floatlabel>
-
     </p-inputgroup>
 
     <div class="w-full p-2">
@@ -26,14 +25,15 @@
       </p-inputgroup-addon>
 
       <p-floatlabel variant="over">
-        <input name="surname" type="text" pInputText id="surname" formControlName="surname" class="w-full" />
+        <input name="surname" type="text" pInputText id="surname" autocomplete="true" formControlName="surname"
+          class="w-full" />
         <label for="surname">Apellido</label>
       </p-floatlabel>
     </p-inputgroup>
 
     <div class="w-full p-2">
       @if (surname?.invalid && (surname?.dirty || surname?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('surname') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('surname') }}</p-message>
       }
     </div>
   </div>
@@ -45,14 +45,15 @@
       </p-inputgroup-addon>
 
       <p-floatlabel variant="over">
-        <input name="email" type="email" pInputText id="email" formControlName="email" class="w-full" />
+        <input name="email" type="email" pInputText id="email" autocomplete="true" formControlName="email"
+          class="w-full" />
         <label for="email">Email</label>
       </p-floatlabel>
     </p-inputgroup>
 
     <div class="w-full p-2">
       @if (email?.invalid && (email?.dirty || email?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('email') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('email') }}</p-message>
       }
     </div>
   </div>
@@ -64,19 +65,20 @@
       </p-inputgroup-addon>
 
       <p-floatlabel variant="over">
-        <input name="username" type="text" pInputText id="username" formControlName="username" class="w-full" />
+        <input name="username" type="text" pInputText id="username" autocomplete="true" formControlName="username"
+          class="w-full" />
         <label for="username">Nombre de usuario</label>
       </p-floatlabel>
     </p-inputgroup>
 
     <div class="w-full p-2">
       @if (username?.invalid && (username?.dirty || username?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('username') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('username') }}</p-message>
       }
     </div>
   </div>
 
-  <div class="mx-auto w-full max-w-md my-12">
+  <div class="mx-auto w-full max-w-md my-10">
     <p-inputgroup>
       <p-inputgroup-addon>
         <i class="text-primary pi pi-key"></i>
@@ -96,12 +98,12 @@
 
     <div class="w-full p-2">
       @if (password?.invalid && (password?.dirty || password?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
       }
     </div>
   </div>
 
-  <div class="mx-auto w-full max-w-md my-12">
+  <div class="mx-auto w-full max-w-md my-10">
     <p-inputgroup>
       <p-inputgroup-addon>
         <i class="text-primary pi pi-asterisk"></i>
@@ -121,21 +123,23 @@
 
     <div class="w-full p-2">
       @if (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('confirmPassword') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('confirmPassword') }}</p-message>
       }
     </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
     <p-floatlabel>
-      <p-datepicker styleClass="w-full" inputId="birthdate" formControlName="birthdate" dateFormat="dd/mm/yy"
-        [showIcon]="true" [showOnFocus]="true" />
+      <p-datepicker formControlName="birthdate" dataType="string" dateFormat="dd/mm/yy" hideOnDateTimeSelect="true"
+        inputId="birthdate" keepInvalid="true" name="birthdate" readonlyInput="true" required="true"
+        selectionMode="single" showButtonBar="true" showClear="true" styleClass="w-full" [maxDate]="maxDate"
+        [minDate]="minDate" [showIcon]="true" [showOnFocus]="true" />
       <label for="birthdate">Fecha de nacimiento</label>
     </p-floatlabel>
 
     <div class="w-full p-2">
       @if (birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthdate') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthdate') }}</p-message>
       }
     </div>
   </div>
@@ -153,25 +157,36 @@
 
     <div class="w-full p-2">
       @if (description?.invalid && (description?.dirty || description?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
       }
     </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
-    <label for="profile-picture">Subir imagen de perfil:</label>
-    <input accept="image/*" type="file" pInputText name="profile-picture" id="profile-picture"
-      formControlName="profilePicture" class="w-full" />
+    <div class="flex-col md:flex-row items-center justify-between py-2">
+      <div class="flex justify-center">
+        <img class="h-16 w-16 rounded-full object-cover" [class.contrast-50]="!hasFileSelected()"
+          alt="Current profile photo" src="/assets/img/user-placeholder.png">
+      </div>
+
+      <div class="input-file-container hover:bg-surface-300 dark:hover:bg-primary-contrast rounded-3xl">
+        <label class="block">
+          <input type="file" accept="image/*" name="profile-picture" id="profile-picture"
+            class="flex flex-col w-full text-sm text-gray-500 sm:file:mr-4 md:file:mr-8 file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-600 hover:file:bg-primary-300 hover:file:text-primary-800 dark:file:bg-primary-600 dark:file:text-surface-300 dark:hover:file:bg-primary-500 dark:hover:file:text-surface-200 cursor-pointer transition-all duration-300"
+            (change)="onFileSelected($event)">
+        </label>
+      </div>
+    </div>
 
     <div class="w-full p-2">
       @if (profilePicture?.invalid && (profilePicture?.dirty || profilePicture?.touched)) {
-      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('profilePicture') }}</p-message>
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('profilePicture') }}</p-message>
       }
     </div>
   </div>
 
+
   <div class="flex justify-center my-6">
-    <p-button tabindex="-1" [tabindex]="0" label="Crear cuenta" type="submit" severity="primary"
-      [disabled]="registerForm.invalid" (click)="onSubmit()" />
+    <p-button tabindex="-1" [tabindex]="0" label="Crear cuenta" type="submit" severity="primary" (click)="onSubmit()" />
   </div>
 </form>
