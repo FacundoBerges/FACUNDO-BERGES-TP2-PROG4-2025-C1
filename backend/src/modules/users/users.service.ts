@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -14,6 +15,8 @@ import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UsersService {
+  private readonly logger: Logger = new Logger(UsersService.name);
+
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<UserDocument>,
