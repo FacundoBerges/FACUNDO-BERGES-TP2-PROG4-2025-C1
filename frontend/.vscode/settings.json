@@ -5,6 +5,7 @@
         "inputgroup",
         "inputgroupaddon",
         "inputtext",
+        "jwtoken",
         "primeicons"
     ]
 }
