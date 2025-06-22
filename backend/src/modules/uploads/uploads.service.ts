@@ -8,16 +8,6 @@ export class UploadsService {
   buildPublicFilePath(file: Express.Multer.File): string | undefined {
     if (!file || !file.destination || !file.filename) return undefined;
 
-    this.logger.debug(
-      `Building public file path for file: ${file.filename}, 
-      destination: ${file.destination},
-      originalname: ${file.originalname},
-      mimetype: ${file.mimetype}
-      ---
-      file: 
-      ${JSON.stringify(file, null, 2)}`,
-    );
-
     const destinationPathSegments = file.destination.split('public');
     const destinationPath =
       destinationPathSegments.length > 1
