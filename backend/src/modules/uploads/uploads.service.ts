@@ -10,7 +10,8 @@ export class UploadsService {
         destinationPathSegments.length > 1
           ? destinationPathSegments[1]
           : file.destination;
-      const filename = `${Date.now.toString()}-${file.filename}`;
+      const date = Date.now();
+      const filename = `${date}-${file.filename}`;
       const filePath = path.join(destinationPath, filename);
       return filePath.replace(/\\/g, '/');
     }
