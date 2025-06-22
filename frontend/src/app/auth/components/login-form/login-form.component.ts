@@ -1,5 +1,10 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, output, signal } from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -10,6 +15,7 @@ import { MessageModule } from 'primeng/message';
 
 import { FormErrorService } from '../../services/form-error.service';
 import { invalidPasswordValidator } from '../../validators/invalid-password.validator';
+import { UserCredentials } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'sn-login-form',
@@ -36,27 +42,33 @@ export class LoginFormComponent {
     ],
   });
   public passwordVisible = signal(false);
-  public invalidForm = computed(() => {
-    return (
-      this.loginForm.invalid && (this.loginForm.dirty || this.loginForm.touched)
-    );
-  });
+  public loginEvent = output<UserCredentials>();
 
-  public togglePasswordVisibility() {
+  public togglePasswordVisibility(): void {
     this.passwordVisible.update((visible) => !visible);
   }
 
   public onSubmit() {
-    // TODO: Implement login logic
-    console.log('Handle submit.');
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const userCredentials: UserCredentials = {
+      emailOrUsername: this.emailOrUsername?.value.trim(),
+      password: this.password?.value,
+    };
+
+    this.loginEvent.emit(userCredentials);
+    this.loginForm.reset();
   }
 
   // * Getters for form controls
-  public get emailOrUsername() {
+  public get emailOrUsername(): AbstractControl | null {
     return this.loginForm.get('emailOrUsername');
   }
 
-  public get password() {
+  public get password(): AbstractControl | null {
     return this.loginForm.get('password');
   }
 
