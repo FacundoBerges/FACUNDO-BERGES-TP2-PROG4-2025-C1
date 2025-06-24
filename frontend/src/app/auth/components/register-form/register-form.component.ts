@@ -1,5 +1,10 @@
 import { Component, computed, inject, output, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -10,12 +15,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 
-import { alphaOnlyValidator } from '../../validators/alpha-only.validator';
-import { invalidPasswordValidator } from '../../validators/invalid-password.validator';
-import { invalidUsernameValidator } from '../../validators/invalid-username.validator';
-import { passwordMatchValidator } from '../../validators/password-match.validator';
+import { UserRegistration } from '../../interfaces/';
 import { FormErrorService } from '../../services/form-error.service';
-import { UserRegistration } from '../../interfaces/user.interface';
+import {
+  alphaOnlyValidator,
+  invalidPasswordValidator,
+  invalidUsernameValidator,
+  passwordMatchValidator,
+} from '../../validators/';
 
 @Component({
   selector: 'sn-register-form',
@@ -45,22 +52,86 @@ export class RegisterFormComponent {
   public registerEvent = output<UserRegistration>();
   public registerForm = this.formBuilder.group(
     {
-      name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), alphaOnlyValidator]],
-      surname: ['', [ Validators.required, Validators.minLength(2), Validators.maxLength(50), alphaOnlyValidator]],
-      email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100), Validators.email]],
-      username: ['', [Validators.required, Validators.minLength(3), invalidUsernameValidator]],
-      password: ['', [Validators.required, Validators.minLength(8), invalidPasswordValidator]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(8), invalidPasswordValidator]],
-      birthdate: ['', [Validators.required]],
-      description: ['', [Validators.maxLength(500)]],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          alphaOnlyValidator,
+        ],
+      ],
+      surname: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          alphaOnlyValidator,
+        ],
+      ],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(254),
+          Validators.email,
+        ],
+      ],
+      username: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(30),
+          invalidUsernameValidator,
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(128),
+          invalidPasswordValidator,
+        ],
+      ],
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(128),
+          invalidPasswordValidator,
+        ],
+      ],
+      birthday: ['', [Validators.required]],
+      bio: ['', [Validators.maxLength(500)]],
     },
     {
       validators: [passwordMatchValidator],
     }
   );
 
+  private getIsoDate(date: string): Date {
+    const dateParts = date.trim().split('/');
+
+    if (!dateParts || dateParts.length !== 3)
+      throw new Error('Invalid date format. Expected DD/MM/YYYY.');
+
+    const day = parseInt(dateParts[0], 10),
+      monthIndex = parseInt(dateParts[1], 10) - 1,
+      year = parseInt(dateParts[2], 10);
+
+    return new Date(year, monthIndex, day);
+  }
+
   public getErrorMessage(controlName: string): string | void {
-    return this.formErrorService.getErrorMessage(controlName, this.registerForm);
+    return this.formErrorService.getErrorMessage(
+      controlName,
+      this.registerForm
+    );
   }
 
   public togglePasswordVisibility(): void {
@@ -78,24 +149,26 @@ export class RegisterFormComponent {
     this.imageFile = image;
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
     }
 
+    const ISODate = this.getIsoDate(this.birthday?.value?.trim());
     const newUser: UserRegistration = {
-      name: this.name?.value.trim(),
-      surname: this.surname?.value.trim(),
-      email: this.email?.value.trim(),
-      username: this.username?.value.trim(),
+      name: this.name?.value?.trim(),
+      surname: this.surname?.value?.trim(),
+      email: this.email?.value?.trim(),
+      username: this.username?.value?.trim(),
       password: this.password?.value,
-      birthdate: this.birthdate?.value,
-      description: this.description?.value.trim(),
+      birthday: ISODate,
+      bio: this.bio?.value?.trim(),
       profilePicture: this.imageFile,
     };
 
     this.registerEvent.emit(newUser);
+    this.registerForm.reset();
   }
 
   // * Getters for form controls
@@ -124,12 +197,12 @@ export class RegisterFormComponent {
     return this.registerForm.get('confirmPassword');
   }
 
-  public get birthdate(): AbstractControl | null {
-    return this.registerForm.get('birthdate');
+  public get birthday(): AbstractControl | null {
+    return this.registerForm.get('birthday');
   }
 
-  public get description(): AbstractControl | null {
-    return this.registerForm.get('description');
+  public get bio(): AbstractControl | null {
+    return this.registerForm.get('bio');
   }
 
   public get profilePicture(): AbstractControl | null {
