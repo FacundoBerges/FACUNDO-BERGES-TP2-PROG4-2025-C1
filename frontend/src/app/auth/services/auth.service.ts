@@ -1,6 +1,6 @@
 import { inject, Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import { UserCredentials, UserRegistration, JWToken } from '../interfaces/';
@@ -33,30 +33,25 @@ export class AuthService implements OnInit {
     );
   }
 
-  public register(user: UserRegistration): Observable<any> {
+  public register(user: UserRegistration): Observable<JWToken> {
     if (!user.profilePicture) {
-      console.warn('No profile picture provided, registering without it.');
-      console.info('Registering user with data:', user);
-      // return this.httpClient.post(`${this.baseUrl}/register`, user);
-      return of();
-    }
-    const formData = new FormData();
+      const { profilePicture, ...userWithoutPicture } = user;
 
-    formData.append('profile-picture', user.profilePicture);
+      return this.httpClient.post<JWToken>(
+        `${this.baseUrl}/register`,
+        userWithoutPicture
+      );
+    }
+
+    const formData = new FormData();
     Object.entries(user).forEach(([key, value]) => {
-      if (value && value !== 'profile-picture') formData.append(key, value);
+      formData.append(key, value);
     });
 
-    console.info('Registering user with data:', formData);
-
-    return of();
-    // return this.httpClient.post(`${this.baseUrl}/register`, formData);
+    return this.httpClient.post<JWToken>(`${this.baseUrl}/register`, formData);
   }
 
   public logout(): void {
-    console.log('Logging out...');
-
-    // TODO: Implement your logout logic here
     localStorage.removeItem('token');
     this.token = null;
   }
