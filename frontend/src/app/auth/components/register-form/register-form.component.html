@@ -130,34 +130,34 @@
 
   <div class="mx-auto w-full max-w-md my-10">
     <p-floatlabel>
-      <p-datepicker formControlName="birthdate" dataType="string" dateFormat="dd/mm/yy" hideOnDateTimeSelect="true"
-        inputId="birthdate" keepInvalid="true" name="birthdate" readonlyInput="true" required="true"
+      <p-datepicker formControlName="birthday" dataType="string" dateFormat="dd/mm/yy" hideOnDateTimeSelect="true"
+        inputId="birthday" keepInvalid="true" name="birthday" readonlyInput="true" required="true"
         selectionMode="single" showButtonBar="true" showClear="true" styleClass="w-full" [maxDate]="maxDate"
         [minDate]="minDate" [showIcon]="true" [showOnFocus]="true" />
-      <label for="birthdate">Fecha de nacimiento</label>
+      <label for="birthday">Fecha de nacimiento</label>
     </p-floatlabel>
 
     <div class="w-full p-2">
-      @if (birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthdate') }}</p-message>
+      @if (birthday?.invalid && (birthday?.dirty || birthday?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthday') }}</p-message>
       }
     </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
     <p-floatlabel>
-      <label for="description">Descripción</label>
-      <textarea #descriptionTextArea pTextarea name="description" id="description" rows="5" [autoResize]="true"
-        [maxLength]="500" class="w-full"></textarea>
+      <label for="bio">Descripción</label>
+      <textarea #bioTextArea pTextarea name="bio" id="bio" rows="5" [autoResize]="true"
+        [maxLength]="500" formControlName="bio" class="w-full"></textarea>
     </p-floatlabel>
 
     <div class="flex justify-end">
-      <small id="username-help">{{descriptionTextArea.value.length}}/500</small>
+      <small id="username-help">{{bioTextArea.value.length}}/500</small>
     </div>
 
     <div class="w-full p-2">
-      @if (description?.invalid && (description?.dirty || description?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
+      @if (bio?.invalid && (bio?.dirty || bio?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('bio') }}</p-message>
       }
     </div>
   </div>
