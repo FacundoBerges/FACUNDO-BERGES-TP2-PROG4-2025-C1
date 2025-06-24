@@ -6,7 +6,7 @@ export interface User {
   username: string;
   password?: string;
   birthday?: Date;
-  description?: string;
+  bio?: string;
   profilePictureUrl?: string;
   isActive?: boolean;
   isAdmin?: boolean;
@@ -24,8 +24,8 @@ export interface UserRegistration {
   email: string;
   username: string;
   password: string;
-  birthday?: Date;
-  description?: string;
+  birthday: Date;
+  bio?: string;
   profilePicture?: File | null;
 }
 
