@@ -202,6 +202,8 @@ export class PostsService {
 
     return this.postModel
       .findByIdAndUpdate(objectId, updateOptions, { new: true })
+      .select('-__v')
+      .populate('author', 'name surname username profilePictureUrl')
       .exec();
   }
 
