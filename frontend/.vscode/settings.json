@@ -6,6 +6,8 @@
         "inputgroupaddon",
         "inputtext",
         "jwtoken",
-        "primeicons"
-    ]
+        "primeicons",
+        "progressspinner"
+    ],
+    "material-icon-theme.activeIconPack": "angular"
 }
