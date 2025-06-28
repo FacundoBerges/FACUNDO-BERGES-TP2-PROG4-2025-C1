@@ -23,6 +23,7 @@ import {
   invalidUsernameValidator,
   passwordMatchValidator,
 } from '@auth/validators/';
+import { FileService } from '@core/services/file.service';
 
 @Component({
   selector: 'sn-register-form',
@@ -41,8 +42,9 @@ import {
   styleUrl: './register-form.component.css',
 })
 export class RegisterFormComponent {
-  private formBuilder = inject(FormBuilder);
-  public formErrorService = inject(FormErrorService);
+  private readonly formBuilder = inject(FormBuilder);
+  public readonly formErrorService = inject(FormErrorService);
+  public readonly fileService = inject(FileService);
   public readonly minDate = new Date('1900-01-01');
   public readonly maxDate = new Date();
   public imageFile: File | null = null;
@@ -143,10 +145,7 @@ export class RegisterFormComponent {
   }
 
   public onFileSelected(fileEvent: Event): void {
-    const input = fileEvent.target as HTMLInputElement;
-    const image = input.files && input.files.length > 0 ? input.files[0] : null;
-
-    this.imageFile = image;
+    this.imageFile = this.fileService.setImageFile(fileEvent);
   }
 
   public onSubmit(): void {
