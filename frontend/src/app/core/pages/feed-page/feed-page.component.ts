@@ -1,15 +1,16 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 
+import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
 
-import { Post } from '../../interfaces/post';
-import { AuthService } from '../../../auth/services/auth.service';
-import { PostService } from '../../services/post.service';
-import { PostListComponent } from '../../components/post/post-list/post-list.component';
+import { AuthService } from '@auth/services/auth.service';
+import { Post } from '@core/interfaces/post';
+import { PostService } from '@core/services/post.service';
+import { PostListComponent } from '@core/components/post/post-list/post-list.component';
 
 @Component({
   selector: 'sn-feed-page',
-  imports: [PostListComponent],
+  imports: [PostListComponent, AccordionModule],
   templateUrl: './feed-page.component.html',
   styleUrl: './feed-page.component.css',
 })
@@ -20,28 +21,37 @@ export class FeedPageComponent implements OnInit {
   public posts = signal<Post[]>([]);
 
   ngOnInit(): void {
-    this.postService.getPosts().subscribe({
-      next: (posts) => {
-        if (!posts || posts.length === 0) {
-          this.messageService.add({
-            severity: 'info',
-            summary: 'Sin posts',
-            detail: 'No hay posts disponibles en este momento.',
-          });
-          return;
-        }
+    // TODO: remove this login logic in production
+    //* This is just for testing purposes to simulate a logged-in user
+    this.authService
+      .login({ emailOrUsername: 'juanperez', password: 'Password123' })
+      .subscribe({
+        next: () => {
+          this.postService.getPosts().subscribe({
+            next: (posts) => {
+              if (!posts || posts.length === 0) {
+                this.messageService.add({
+                  severity: 'info',
+                  summary: 'Sin posts',
+                  detail: 'No hay posts disponibles en este momento.',
+                });
+                return;
+              }
 
-        this.posts.set(posts);
-      },
-      error: (error) => {
-        console.error('Error loading posts:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'No se pudieron cargar los posts. Inténtalo más tarde.',
-        });
-      },
-    });
+              this.posts.set(posts);
+            },
+            error: (error) => {
+              console.error('Error loading posts:', error);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'No se pudieron cargar los posts. Inténtalo más tarde.',
+              });
+            },
+          });
+        },
+        error: (error) => console.error('Login error:', error),
+      });
   }
 
   public onLikePost(post: Post): void {
