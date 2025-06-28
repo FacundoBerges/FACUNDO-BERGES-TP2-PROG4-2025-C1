@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
@@ -8,7 +9,6 @@ import { CreatePost, Post } from '@core/interfaces/post';
 import { PostService } from '@core/services/post.service';
 import { PostListComponent } from '@core/components/post/post-list/post-list.component';
 import { PostFormComponent } from '@core/components/post/post-form/post-form.component';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'sn-feed-page',
@@ -27,7 +27,8 @@ export class FeedPageComponent implements OnInit {
     //* This is just for testing purposes to simulate a logged-in user
     this.authService
       // .login({ emailOrUsername: 'juanperez', password: 'Password123' })
-      .login({ emailOrUsername: 'pedrolopez123.-', password: 'Password321' })
+      // .login({ emailOrUsername: 'pedrolopez123.-', password: 'Password321' })
+      .login({ emailOrUsername: 'adminuser', password: 'Admin123' })
       .subscribe({
         next: () => {
           this.postService.getPosts().subscribe({
