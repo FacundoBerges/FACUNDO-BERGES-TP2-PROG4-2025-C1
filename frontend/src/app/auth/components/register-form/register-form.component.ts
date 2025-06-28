@@ -15,14 +15,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 
-import { UserRegistration } from '../../interfaces/';
-import { FormErrorService } from '../../services/form-error.service';
+import { UserRegistration } from '@auth/interfaces/';
+import { FormErrorService } from '@auth/services/form-error.service';
 import {
   alphaOnlyValidator,
   invalidPasswordValidator,
   invalidUsernameValidator,
   passwordMatchValidator,
-} from '../../validators/';
+} from '@auth/validators/';
 
 @Component({
   selector: 'sn-register-form',

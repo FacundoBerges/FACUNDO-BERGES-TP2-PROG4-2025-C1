@@ -14,7 +14,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
-import { authTokenInterceptor } from './auth/interceptors/auth-token.interceptor';
+import { authTokenInterceptor } from '@auth/interceptors/auth-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [

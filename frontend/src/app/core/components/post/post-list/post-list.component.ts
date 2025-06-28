@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 
-import { Post } from '../../../interfaces/post';
-import { PostItemComponent } from '../post-item/post-item.component';
+import { Post } from '@core/interfaces/post';
+import { PostItemComponent } from './post-item/post-item.component';
 
 @Component({
   selector: 'sn-post-list',

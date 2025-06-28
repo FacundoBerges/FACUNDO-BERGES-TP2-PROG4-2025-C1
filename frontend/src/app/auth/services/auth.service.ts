@@ -2,14 +2,13 @@ import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '@environments/environment';
 import {
   JWToken,
-  ProfileType,
   UserCredentials,
   UserRegistration,
   UserProfile,
-} from '../interfaces/';
+} from '@auth/interfaces/';
 
 @Injectable({
   providedIn: 'root',

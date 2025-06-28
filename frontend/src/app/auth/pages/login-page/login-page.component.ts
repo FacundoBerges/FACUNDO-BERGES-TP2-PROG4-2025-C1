@@ -6,13 +6,13 @@ import { Subscription } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 
-import { AuthService } from '../../services/auth.service';
-import { FooterLinkText, UserCredentials } from '../../interfaces/';
-import { FormBodyComponent } from '../../components/shared/form/form-body/form-body.component';
-import { FormComponent } from '../../components/shared/form/form.component';
-import { FormFooterComponent } from '../../components/shared/form/form-footer/form-footer.component';
-import { FormHeaderComponent } from '../../components/shared/form/form-header/form-header.component';
-import { LoginFormComponent } from '../../components/login-form/login-form.component';
+import { AuthService } from '@auth/services/auth.service';
+import { FooterLinkText, UserCredentials } from '@auth/interfaces/';
+import { FormBodyComponent } from '@auth/components/shared/form/form-body/form-body.component';
+import { FormComponent } from '@auth/components/shared/form/form.component';
+import { FormFooterComponent } from '@auth/components/shared/form/form-footer/form-footer.component';
+import { FormHeaderComponent } from '@auth/components/shared/form/form-header/form-header.component';
+import { LoginFormComponent } from '@auth/components/login-form/login-form.component';
 
 @Component({
   selector: 'sn-login-page',

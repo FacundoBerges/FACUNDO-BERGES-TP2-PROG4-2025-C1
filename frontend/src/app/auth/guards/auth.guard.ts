@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateChildFn, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '@auth/services/auth.service';
 
 export const authGuard: CanActivateChildFn = (route, state) => {
   const router = inject(Router);

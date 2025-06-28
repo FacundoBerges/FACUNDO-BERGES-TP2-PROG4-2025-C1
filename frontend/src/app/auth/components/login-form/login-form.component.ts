@@ -13,9 +13,9 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageModule } from 'primeng/message';
 
-import { FormErrorService } from '../../services/form-error.service';
-import { invalidPasswordValidator } from '../../validators/invalid-password.validator';
-import { UserCredentials } from '../../interfaces/user.interface';
+import { UserCredentials } from '@auth/interfaces/';
+import { FormErrorService } from '@auth/services/form-error.service';
+import { invalidPasswordValidator } from '@auth/validators/';
 
 @Component({
   selector: 'sn-login-form',
