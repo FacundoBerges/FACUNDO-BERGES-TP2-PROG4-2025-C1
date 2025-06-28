@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './auth/guards/auth.guard';
+import { authGuard } from '@auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'home',
-    canActivateChild: [authGuard],
+    // canActivateChild: [authGuard], //! TODO: commented to avoid login redirect, uncomment when launching app
     children: [
       {
         path: 'feed',
