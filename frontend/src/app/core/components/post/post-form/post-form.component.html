@@ -1,0 +1,40 @@
+<form (submit)="onSubmit()" [formGroup]="createForm">
+  <div class="mx-auto w-full max-w-md">
+    <div class="mt-8 mb-6">
+      <p-floatlabel>
+        <input pInputText formControlName="title" name="title" type="text" id="title" autocomplete="false"
+          class="w-full py-2 px-4" />
+        <label for="title">Título</label>
+      </p-floatlabel>
+
+      <div class="w-full p-2">
+        @if (title?.invalid && (title?.dirty || title?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('title') }}</p-message>
+        }
+      </div>
+    </div>
+
+    <div class="my-6">
+      <p-floatlabel>
+        <label for="description">Descripción</label>
+
+        <textarea #descriptionTextArea pTextarea name="description" id="description" rows="5" [autoResize]="true"
+          [maxLength]="500" formControlName="description" class="w-full"></textarea>
+      </p-floatlabel>
+
+      <div class="flex justify-end">
+        <small id="description-help">{{descriptionTextArea.value.length}}/500</small>
+      </div>
+
+      <div class="w-full p-2">
+        @if (description?.invalid && (description?.dirty || description?.touched)) {
+        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
+        }
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <p-button type="submit" label="Publicar" severity="secondary" icon="pi pi-send"></p-button>
+    </div>
+  </div>
+</form>
