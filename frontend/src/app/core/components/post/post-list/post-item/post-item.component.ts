@@ -2,6 +2,7 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { MenuItem } from 'primeng/api';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MenuModule } from 'primeng/menu';
@@ -16,6 +17,7 @@ import { AuthService } from '@auth/services/auth.service';
   selector: 'sn-post-item',
   imports: [
     DatePipe,
+    AnimateOnScrollModule,
     ButtonModule,
     ConfirmDialogModule,
     MenuModule,
@@ -37,24 +39,18 @@ export class PostItemComponent {
       this.authService.currentUser.profile === 'admin'
     );
   });
-  public options = computed<MenuItem[]>(() =>
-    this.authService.currentUser?.sub === this.post().author._id
-      ? [
-          {
-            label: 'Opciones',
-            items: [
+  public options = computed<MenuItem[]>(() => [
+    {
+      label: 'Opciones',
+      items:
+        this.authService.currentUser?.sub === this.post().author._id
+          ? [
               { label: 'Editar', icon: 'pi pi-pencil' },
               { label: 'Eliminar', icon: 'pi pi-trash' },
-            ],
-          },
-        ]
-      : [
-          {
-            label: 'Opciones',
-            items: [{ label: 'Eliminar', icon: 'pi pi-trash' }],
-          },
-        ]
-  );
+            ]
+          : [{ label: 'Eliminar', icon: 'pi pi-trash' }],
+    },
+  ]);
 
   public get postImageUrl(): string {
     return this.post().imageUrl ? `${this.API_URL}${this.post().imageUrl}` : '';
