@@ -39,13 +39,17 @@ export class PostsService {
     if (image) imagePath = uploadsService.buildPublicFilePath(image);
 
     createPostDto.imageUrl = imagePath;
-
-    return await this.postModel.create({
+    const newPost = await this.postModel.create({
       title: createPostDto.title,
       description: createPostDto.description,
       imageUrl: createPostDto.imageUrl,
       author: new Types.ObjectId(userData.sub),
     });
+
+    return newPost.populate(
+      'author',
+      'name surname username profilePictureUrl',
+    );
   }
 
   async findAll(
