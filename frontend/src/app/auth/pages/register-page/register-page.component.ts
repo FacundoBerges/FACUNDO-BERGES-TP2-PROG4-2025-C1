@@ -48,13 +48,12 @@ export class RegisterPageComponent implements OnDestroy {
     this.$currentRegister = this.authService
       .register(userRegistration)
       .subscribe({
-        next: (resp: JWToken) => {
+        next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Registro exitoso',
             detail: 'Tu cuenta ha sido creada correctamente.',
           });
-          this.authService.saveToLocalStorage(resp.accessToken);
         },
         error: (error: HttpErrorResponse) => {
           this.messageService.add({
