@@ -1,6 +1,5 @@
-@defer (on viewport) {
-<article
-  class="post-item block m-3 p-3 rounded-lg shadow-lg bg-surface-200 dark:shadow-none dark:bg-surface-500 animate-fadeindown animate-duration-700">
+<article pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-b-20 animate-duration-1000"
+  class="post-item block m-3 p-3 rounded-lg shadow-lg bg-surface-200 dark:shadow-none dark:bg-surface-500">
   <div class="post-header flex row align-items-center justify-content-between gap-2">
     <div class="flex col justify-between gap-1 w-full">
       <div class="user-info-container flex row align-items-center gap-2">
@@ -23,7 +22,8 @@
           [style]="{ 'z-index': 1002, 'top': '58px', 'left': '100px', 'transform-origin': 'center top' }">
         </p-menu>
 
-        <p-button icon="pi pi-ellipsis-v" (onClick)="menu.toggle($event)"></p-button>
+        <p-button icon="pi pi-ellipsis-v" rounded="true" severity="secondary"
+          (onClick)="menu.toggle($event)"></p-button>
       </div>
       }
     </div>
@@ -54,9 +54,3 @@
       tooltipPosition="top" showDelay="300" hideDelay="500"></p-button>
   </div>
 </article>
-}
-@placeholder {
-<div class="h-40 flex items-center justify-center">
-  <p-progressSpinner styleClass="w-8 h-8" />
-</div>
-}
