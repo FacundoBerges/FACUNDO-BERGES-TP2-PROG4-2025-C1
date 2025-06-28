@@ -1,9 +1,12 @@
-<article class="post-item block m-3 p-3 rounded-lg shadow-lg bg-surface-200 dark:shadow-none dark:bg-surface-500">
+@defer (on viewport) {
+<article
+  class="post-item block m-3 p-3 rounded-lg shadow-lg bg-surface-200 dark:shadow-none dark:bg-surface-500 animate-fadeindown animate-duration-700">
   <div class="post-header flex row align-items-center justify-content-between gap-2">
     <div class="flex col justify-between gap-1 w-full">
       <div class="user-info-container flex row align-items-center gap-2">
-        <div class="h-12 w-12 rounded-2xl">
-          <img class="post-avatar" [src]="postAuthorImageUrl" [alt]="'Avatar de ' + post().author.name" />
+        <div class="flex items-center justify-center h-12 w-12 rounded-3xl overflow-hidden">
+          <!-- overflow-hidden border-2 border-primary-500 dark:border-primary-300 -->
+          <img class="post-avatar object-cover" [src]="postAuthorImageUrl" [alt]="'Avatar de ' + post().author.name" />
         </div>
 
         <div>
@@ -52,3 +55,9 @@
       tooltipPosition="top" showDelay="300" hideDelay="500"></p-button>
   </div>
 </article>
+}
+@placeholder {
+<div class="h-40 flex items-center justify-center">
+  <p-progressSpinner styleClass="w-8 h-8" />
+</div>
+}
