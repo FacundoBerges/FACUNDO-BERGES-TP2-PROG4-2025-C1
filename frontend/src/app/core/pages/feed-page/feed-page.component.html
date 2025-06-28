@@ -1,5 +1,5 @@
 <section>
-  <p-accordion value="1">
+  <p-accordion expandIcon="pi pi-plus" collapseIcon="pi pi-times">
     <p-accordion-panel value="0">
       <p-accordion-header>
         <span class="text-lg font-semibold">Publicar un nuevo post</span>
@@ -9,13 +9,8 @@
         <p class="text-sm text-gray-500">
           Crea un nuevo post para compartir con tus amigos!
         </p>
-        <!-- TODO: Create a form to create a new post -->
-        <!-- <sn-post-form (postCreated)="onPostCreated($event)" /> -->
 
-
-        <p class="text-sm text-gray-500">
-          <span class="text-red-500 font-semibold">¡Pronto!</span> Esta funcionalidad aún no está implementada.
-        </p>
+        <sn-post-form (submitEvent)="onCreatePost($event)" />
       </p-accordion-content>
     </p-accordion-panel>
   </p-accordion>

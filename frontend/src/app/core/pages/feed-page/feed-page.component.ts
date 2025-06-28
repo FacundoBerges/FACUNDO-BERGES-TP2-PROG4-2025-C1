@@ -4,13 +4,15 @@ import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
 
 import { AuthService } from '@auth/services/auth.service';
-import { Post } from '@core/interfaces/post';
+import { CreatePost, Post } from '@core/interfaces/post';
 import { PostService } from '@core/services/post.service';
 import { PostListComponent } from '@core/components/post/post-list/post-list.component';
+import { PostFormComponent } from '@core/components/post/post-form/post-form.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'sn-feed-page',
-  imports: [PostListComponent, AccordionModule],
+  imports: [PostListComponent, AccordionModule, PostFormComponent],
   templateUrl: './feed-page.component.html',
   styleUrl: './feed-page.component.css',
 })
@@ -24,7 +26,8 @@ export class FeedPageComponent implements OnInit {
     // TODO: remove this login logic in production
     //* This is just for testing purposes to simulate a logged-in user
     this.authService
-      .login({ emailOrUsername: 'juanperez', password: 'Password123' })
+      // .login({ emailOrUsername: 'juanperez', password: 'Password123' })
+      .login({ emailOrUsername: 'pedrolopez123.-', password: 'Password321' })
       .subscribe({
         next: () => {
           this.postService.getPosts().subscribe({
@@ -52,6 +55,29 @@ export class FeedPageComponent implements OnInit {
         },
         error: (error) => console.error('Login error:', error),
       });
+  }
+
+  public onCreatePost(post: CreatePost): void {
+    this.postService.createPost(post).subscribe({
+      next: (newPost) => {
+        this.posts.update((currentPosts) => [newPost, ...currentPosts]);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Post creado',
+          detail: 'El post se ha creado exitosamente.',
+        });
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error creating post:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            error.error.message ||
+            'No se pudo crear el post. Inténtalo más tarde.',
+        });
+      },
+    });
   }
 
   public onLikePost(post: Post): void {
