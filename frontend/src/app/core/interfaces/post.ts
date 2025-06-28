@@ -16,7 +16,7 @@ export interface Post {
 export interface CreatePost {
   title:       string;
   description: string;
-  image:       File | null;
+  image?:      File | null;
 }
 
 export interface PostAuthor {
