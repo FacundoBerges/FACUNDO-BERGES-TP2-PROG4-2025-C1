@@ -1,9 +1,15 @@
-import { inject, Injectable, OnInit } from '@angular/core';
+import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { UserCredentials, UserRegistration, JWToken } from '../interfaces/';
+import {
+  JWToken,
+  ProfileType,
+  UserCredentials,
+  UserRegistration,
+  UserProfile,
+} from '../interfaces/';
 
 @Injectable({
   providedIn: 'root',
@@ -11,36 +17,69 @@ import { UserCredentials, UserRegistration, JWToken } from '../interfaces/';
 export class AuthService implements OnInit {
   private httpClient = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/auth`;
-  private token: string | null = null;
+  private jwtToken = signal<string | null>(null);
+  private userProfile = signal<UserProfile | null>(null);
 
   ngOnInit(): void {
     this.loadFromLocalStorage();
   }
 
   private loadFromLocalStorage(): void {
-    this.token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+
+    if (token) this.jwtToken.set(token);
   }
 
-  public saveToLocalStorage(token: string): void {
-    this.token = token;
+  private saveToLocalStorage(token: string): void {
+    this.jwtToken.set(token);
     localStorage.setItem('token', token);
   }
 
+  public loadUserProfile(): Observable<UserProfile> {
+    return this.httpClient
+      .post<UserProfile>(`${this.baseUrl}/authorize`, {})
+      .pipe(
+        tap((profile: UserProfile) => {
+          this.userProfile.set(profile);
+        })
+      );
+  }
+
+  public get currentUser(): UserProfile | null {
+    return this.userProfile();
+  }
+
+  public get token(): string | null {
+    return this.jwtToken();
+  }
+
   public login(userCredentials: UserCredentials): Observable<JWToken> {
-    return this.httpClient.post<JWToken>(
-      `${this.baseUrl}/login`,
-      userCredentials
-    );
+    return this.httpClient
+      .post<JWToken>(`${this.baseUrl}/login`, userCredentials)
+      .pipe(
+        tap((response: JWToken) => {
+          this.saveToLocalStorage(response.accessToken);
+        }),
+        tap(() => {
+          this.loadUserProfile().subscribe();
+        })
+      );
   }
 
   public register(user: UserRegistration): Observable<JWToken> {
     if (!user.profilePicture) {
       const { profilePicture, ...userWithoutPicture } = user;
 
-      return this.httpClient.post<JWToken>(
-        `${this.baseUrl}/register`,
-        userWithoutPicture
-      );
+      return this.httpClient
+        .post<JWToken>(`${this.baseUrl}/register`, userWithoutPicture)
+        .pipe(
+          tap((response: JWToken) => {
+            this.saveToLocalStorage(response.accessToken);
+          }),
+          tap(() => {
+            this.loadUserProfile().subscribe();
+          })
+        );
     }
 
     const formData = new FormData();
@@ -48,19 +87,21 @@ export class AuthService implements OnInit {
       formData.append(key, value);
     });
 
-    return this.httpClient.post<JWToken>(`${this.baseUrl}/register`, formData);
+    return this.httpClient
+      .post<JWToken>(`${this.baseUrl}/register`, formData)
+      .pipe(
+        tap((response: JWToken) => {
+          this.saveToLocalStorage(response.accessToken);
+        }),
+        tap(() => {
+          this.loadUserProfile().subscribe();
+        })
+      );
   }
 
   public logout(): void {
     localStorage.removeItem('token');
-    this.token = null;
-  }
-
-  public isAuthenticated(): boolean {
-    console.log('Checking authentication status...');
-
-    // TODO: Implement authentication logic here
-    // !For now, just return true to simulate an authenticated user
-    return true;
+    this.jwtToken.set(null);
+    this.userProfile.set(null);
   }
 }
