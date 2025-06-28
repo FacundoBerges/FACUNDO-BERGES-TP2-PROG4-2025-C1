@@ -8,9 +8,9 @@ import { MenuModule } from 'primeng/menu';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
 
-import { Post } from '../../../interfaces/post';
-import { environment } from '../../../../../environments/environment';
-import { AuthService } from '../../../../auth/services/auth.service';
+import { Post } from '@core/interfaces/post';
+import { environment } from '@environments/environment';
+import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'sn-post-item',
