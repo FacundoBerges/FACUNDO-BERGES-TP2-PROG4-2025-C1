@@ -1,8 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
+import { AccordionModule } from 'primeng/accordion';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { SelectModule } from 'primeng/select';
 
 import { AuthService } from '@auth/services/auth.service';
 import { CreatePost, Post } from '@core/interfaces/post';
@@ -12,7 +14,13 @@ import { PostFormComponent } from '@core/components/post/post-form/post-form.com
 
 @Component({
   selector: 'sn-feed-page',
-  imports: [PostListComponent, AccordionModule, PostFormComponent],
+  imports: [
+    AccordionModule,
+    FloatLabelModule,
+    SelectModule,
+    PostFormComponent,
+    PostListComponent,
+  ],
   templateUrl: './feed-page.component.html',
   styleUrl: './feed-page.component.css',
 })
