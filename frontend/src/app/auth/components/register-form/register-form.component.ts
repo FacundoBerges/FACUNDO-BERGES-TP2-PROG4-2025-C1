@@ -24,6 +24,7 @@ import {
   passwordMatchValidator,
 } from '@auth/validators/';
 import { FileService } from '@core/services/file.service';
+import { FileUploadComponent } from '@core/components/file-upload/file-upload.component';
 
 @Component({
   selector: 'sn-register-form',
@@ -37,6 +38,7 @@ import { FileService } from '@core/services/file.service';
     MessageModule,
     ReactiveFormsModule,
     TextareaModule,
+    FileUploadComponent,
   ],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css',
@@ -144,8 +146,8 @@ export class RegisterFormComponent {
     this.confirmPasswordVisible.update((visible) => !visible);
   }
 
-  public onFileSelected(fileEvent: Event): void {
-    this.imageFile = this.fileService.setImageFile(fileEvent);
+  public onFileSelected(imageFile: File | null): void {
+    this.imageFile = imageFile;
   }
 
   public onSubmit(): void {
@@ -202,9 +204,5 @@ export class RegisterFormComponent {
 
   public get bio(): AbstractControl | null {
     return this.registerForm.get('bio');
-  }
-
-  public get profilePicture(): AbstractControl | null {
-    return this.registerForm.get('profilePicture');
   }
 }
