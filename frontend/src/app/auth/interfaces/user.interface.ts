@@ -1,15 +1,14 @@
 export interface User {
-  id?:                string;
+  _id?:               string;
   name:               string;
   surname:            string;
   email:              string;
   username:           string;
-  password?:          string;
   birthday?:          Date;
   bio?:               string;
   profilePictureUrl?: string;
   isActive?:          boolean;
-  isAdmin?:           boolean;
+  profile:            ProfileType;
   createdAt?:         Date;
 }
 
