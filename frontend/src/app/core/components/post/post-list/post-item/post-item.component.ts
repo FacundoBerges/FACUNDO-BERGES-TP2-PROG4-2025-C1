@@ -32,6 +32,7 @@ export class PostItemComponent {
   public readonly authService = inject(AuthService);
   public readonly likeEvent = output<Post>();
   public post = input.required<Post>();
+  public showIconOnly = input.required<boolean>();
   public showOptions = computed(() => {
     if (!this.authService.currentUser) return false;
     return (
@@ -103,18 +104,18 @@ export class PostItemComponent {
   public onPostLike(): void {
     this.likeEvent.emit(this.post());
 
-    this.post().likesCount += this.isPostLikedByUser ? -1 : 1;
+    // this.post().likesCount += this.isPostLikedByUser ? -1 : 1;
 
-    if (this.isPostLikedByUser) {
-      this.post().likes = this.post().likes.filter(
-        (like) => like._id !== this.authService.currentUser?.sub
-      );
-    } else {
-      this.post().likes.push({
-        _id: this.authService.currentUser?.sub!,
-        username: this.authService.currentUser?.username,
-      });
-    }
+    // if (this.isPostLikedByUser) {
+    //   this.post().likes = this.post().likes.filter(
+    //     (like) => like._id !== this.authService.currentUser?.sub
+    //   );
+    // } else {
+    //   this.post().likes.push({
+    //     _id: this.authService.currentUser?.sub!,
+    //     username: this.authService.currentUser?.username,
+    //   });
+    // }
   }
 
   public onPostComment(): void {

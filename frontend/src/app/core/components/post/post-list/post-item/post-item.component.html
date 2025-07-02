@@ -47,11 +47,19 @@
   </div>
 
   <div class="post-actions flex row align-items-center justify-content-between gap-2">
+    @if(showIconOnly()) {
+    <p-button [icon]="isPostLikedByUser ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'" [label]="`${post().likesCount}`"
+      (click)="onPostLike()"></p-button>
+
+    <p-button icon="pi pi-comment" [label]="`${post().commentsCount}`" (click)="onPostComment()"></p-button>
+    }
+    @else {
     <p-button [icon]="isPostLikedByUser ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'" label="Like"
       (click)="onPostLike()" [pTooltip]="likesMessage" tooltipPosition="top" showDelay="300" hideDelay="500"
       positionLeft="20"></p-button>
 
-    <p-button icon="pi pi-comment" label="Comentar" (click)="onPostComment()" [pTooltip]="commentsMessage"
+    <p-button icon="pi pi-comment" label="'Comentar'" (click)="onPostComment()" [pTooltip]="commentsMessage"
       tooltipPosition="top" showDelay="300" hideDelay="500"></p-button>
+    }
   </div>
 </article>
