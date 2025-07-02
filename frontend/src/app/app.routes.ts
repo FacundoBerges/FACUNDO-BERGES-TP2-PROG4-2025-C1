@@ -22,6 +22,22 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'post',
+        children: [
+          {
+            path: ':id',
+            loadComponent: () =>
+              import(
+                './core/pages/post-details-page/post-details-page.component'
+              ).then((c) => c.PostDetailsPageComponent),
+          },
+          {
+            path: '**',
+            redirectTo: '/home/feed',
+          },
+        ],
+      },
+      {
         path: '**',
         redirectTo: 'feed',
       },
