@@ -1,27 +1,30 @@
-<div class="comment-header mb-2 flex justify-between items-center gap-2 ">
-  <div class="comment-author-info flex justify-start items-center gap-2 ">
-    <img [src]="comment().author.profilePictureUrl ?? '/assets/img/user-placeholder.png'"
-      [alt]="'Avatar de ' + comment().author.username" class="w-8 h-8 rounded-full">
+<div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000"
+  class="comment-container">
+  <div class="comment-header mb-2 flex justify-between items-center gap-2 ">
+    <div class="comment-author-info flex justify-start items-center gap-2 ">
+      <img [src]="comment().author.profilePictureUrl ?? '/assets/img/user-placeholder.png'"
+        [alt]="'Avatar de ' + comment().author.username" class="w-8 h-8 rounded-full">
 
-    <p class="text-gray-600"><strong>&#64;{{ comment().author.username }}</strong></p>
+      <p class="text-primary-500"><strong>&#64;{{ comment().author.username }}</strong></p>
+    </div>
+
+    @if (comment().author._id === authService.currentUser?.sub) {
+    <p-menu #menu [model]="options()" [popup]="true"
+      [style]="{ 'z-index': 1002, 'top': '58px', 'left': '100px', 'transform-origin': 'center top' }">
+    </p-menu>
+
+    <p-button icon="pi pi-ellipsis-v" rounded="true" severity="secondary" (onClick)="menu.toggle($event)"></p-button>
+    }
+    <div class="comment-actions">
+
+    </div>
   </div>
 
-  @if (comment().author._id === authService.currentUser?.sub) {
-  <p-menu #menu [model]="options()" [popup]="true"
-    [style]="{ 'z-index': 1002, 'top': '58px', 'left': '100px', 'transform-origin': 'center top' }">
-  </p-menu>
-
-  <p-button icon="pi pi-ellipsis-v" rounded="true" severity="secondary" (onClick)="menu.toggle($event)"></p-button>
-  }
-  <div class="comment-actions">
-
+  <div class="comment-content my-4">
+    <p>{{ comment().content }}</p>
   </div>
-</div>
 
-<div class="comment-content my-4">
-  <p>{{ comment().content }}</p>
-</div>
-
-<div class="comment-footer flex justify-end items-center mt-2">
-  <p><small class="text-gray-400">Comentado el {{ comment().createdAt | date:'dd/MM/yy' }}</small></p>
+  <div class="comment-footer flex justify-end items-center mt-2">
+    <p><small class="text-gray-400">Comentado el {{ comment().createdAt | date:'dd/MM/yy' }}</small></p>
+  </div>
 </div>

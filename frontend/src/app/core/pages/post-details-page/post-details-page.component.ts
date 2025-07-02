@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 
-import { Comment } from '@core/interfaces/comment';
+import { AuthService } from '@auth/services/auth.service';
+import { Comment, CommentDto } from '@core/interfaces/comment';
 import { Post } from '@core/interfaces/post';
 import { PostService } from '@core/services/post.service';
 import { PostItemComponent } from '@core/components/post/post-list/post-item/post-item.component';
@@ -13,6 +14,7 @@ import { PostCommentsComponent } from '@core/components/post/post-comments/post-
   styleUrl: './post-details-page.component.css',
 })
 export class PostDetailsPageComponent implements OnInit {
+  private readonly authService = inject(AuthService);
   private readonly postService = inject(PostService);
   public post = signal<Post | null>(null);
   public comments = signal<Comment[]>([]);
@@ -77,5 +79,15 @@ export class PostDetailsPageComponent implements OnInit {
     this.post.set(fetchedPost);
     this.comments.set([...fetchedComments]);
     console.log('fetchedComments', this.comments());
+  }
+
+  public onCommentSubmit(comment: string): void {
+    if (!comment) return;
+
+    const newComment: CommentDto = {
+      content: comment,
+    };
+
+    console.log('New comment submitted:', newComment);
   }
 }
