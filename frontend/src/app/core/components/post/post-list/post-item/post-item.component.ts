@@ -2,6 +2,7 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { MenuItem } from 'primeng/api';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MenuModule } from 'primeng/menu';
@@ -16,6 +17,7 @@ import { AuthService } from '@auth/services/auth.service';
   selector: 'sn-post-item',
   imports: [
     DatePipe,
+    AnimateOnScrollModule,
     ButtonModule,
     ConfirmDialogModule,
     MenuModule,
@@ -30,6 +32,7 @@ export class PostItemComponent {
   public readonly authService = inject(AuthService);
   public readonly likeEvent = output<Post>();
   public post = input.required<Post>();
+  public showIconOnly = input.required<boolean>();
   public showOptions = computed(() => {
     if (!this.authService.currentUser) return false;
     return (
@@ -37,24 +40,18 @@ export class PostItemComponent {
       this.authService.currentUser.profile === 'admin'
     );
   });
-  public options = computed<MenuItem[]>(() =>
-    this.authService.currentUser?.sub === this.post().author._id
-      ? [
-          {
-            label: 'Opciones',
-            items: [
+  public options = computed<MenuItem[]>(() => [
+    {
+      label: 'Opciones',
+      items:
+        this.authService.currentUser?.sub === this.post().author._id
+          ? [
               { label: 'Editar', icon: 'pi pi-pencil' },
               { label: 'Eliminar', icon: 'pi pi-trash' },
-            ],
-          },
-        ]
-      : [
-          {
-            label: 'Opciones',
-            items: [{ label: 'Eliminar', icon: 'pi pi-trash' }],
-          },
-        ]
-  );
+            ]
+          : [{ label: 'Eliminar', icon: 'pi pi-trash' }],
+    },
+  ]);
 
   public get postImageUrl(): string {
     return this.post().imageUrl ? `${this.API_URL}${this.post().imageUrl}` : '';
@@ -107,18 +104,18 @@ export class PostItemComponent {
   public onPostLike(): void {
     this.likeEvent.emit(this.post());
 
-    this.post().likesCount += this.isPostLikedByUser ? -1 : 1;
+    // this.post().likesCount += this.isPostLikedByUser ? -1 : 1;
 
-    if (this.isPostLikedByUser) {
-      this.post().likes = this.post().likes.filter(
-        (like) => like._id !== this.authService.currentUser?.sub
-      );
-    } else {
-      this.post().likes.push({
-        _id: this.authService.currentUser?.sub!,
-        username: this.authService.currentUser?.username,
-      });
-    }
+    // if (this.isPostLikedByUser) {
+    //   this.post().likes = this.post().likes.filter(
+    //     (like) => like._id !== this.authService.currentUser?.sub
+    //   );
+    // } else {
+    //   this.post().likes.push({
+    //     _id: this.authService.currentUser?.sub!,
+    //     username: this.authService.currentUser?.username,
+    //   });
+    // }
   }
 
   public onPostComment(): void {

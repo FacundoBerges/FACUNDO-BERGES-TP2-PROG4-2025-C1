@@ -16,6 +16,17 @@
   </p-accordion>
 </section>
 
+<section class="mt-8 min-h-4">
+  <p-floatlabel class="w-full md:w-56" variant="on">
+    <p-select id="order-by" name="order-by" inputId="order-by" variant="outlined" placeholder="Ordenar por..."
+      [options]="[{value:'opcion1'}, {value:'opcion2'}]" optionLabel="value" optionValue="value" styleClass="w-full" />
+
+    <label for="order-by">Ordenar por:</label>
+  </p-floatlabel>
+</section>
+
 <section>
+  <h2 class="text-2xl font-bold mb-4">Posts recientes</h2>
+
   <sn-post-list [posts]="posts()" (postLikeEvent)="onLikePost($event)" />
 </section>

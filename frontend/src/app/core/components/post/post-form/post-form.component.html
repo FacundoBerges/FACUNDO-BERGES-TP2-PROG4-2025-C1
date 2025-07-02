@@ -33,6 +33,17 @@
       </div>
     </div>
 
+
+    <div class="mx-auto w-full max-w-md my-10">
+      <sn-file-upload (fileChangeEvent)="onFileSelected($event)">
+        @if (imageFile()) {
+        <div class="flex justify-center">
+          <img class="h-28 w-48 rounded object-cover" [class.contrast-50]="!hasFileSelected()" alt="Post image">
+        </div>
+        }
+      </sn-file-upload>
+    </div>
+
     <div class="flex justify-end">
       <p-button type="submit" label="Publicar" severity="secondary" icon="pi pi-send"></p-button>
     </div>

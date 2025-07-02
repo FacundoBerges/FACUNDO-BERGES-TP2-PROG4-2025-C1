@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,7 +15,7 @@ import { TextareaModule } from 'primeng/textarea';
 
 import { FormErrorService } from '@auth/services/form-error.service';
 import { CreatePost } from '@core/interfaces/post';
-import { FileService } from '@core/services/file.service';
+import { FileUploadComponent } from '@core/components/file-upload/file-upload.component';
 
 @Component({
   selector: 'sn-post-form',
@@ -27,6 +27,7 @@ import { FileService } from '@core/services/file.service';
     InputGroupAddonModule,
     MessageModule,
     TextareaModule,
+    FileUploadComponent,
   ],
   templateUrl: './post-form.component.html',
   styleUrl: './post-form.component.css',
@@ -34,8 +35,7 @@ import { FileService } from '@core/services/file.service';
 export class PostFormComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly formErrorService = inject(FormErrorService);
-  private readonly fileService = inject(FileService);
-  private imageFile: File | null = null;
+  public imageFile = signal<File | null>(null);
   public readonly submitEvent = output<CreatePost>();
   public createForm = this.formBuilder.group({
     title: [
@@ -47,13 +47,14 @@ export class PostFormComponent {
       [Validators.required, Validators.minLength(1), Validators.maxLength(500)],
     ],
   });
+  public hasFileSelected = computed(() => this.imageFile() !== null);
 
   public getErrorMessage(controlName: string): string | void {
     return this.formErrorService.getErrorMessage(controlName, this.createForm);
   }
 
-  public onFileSelected(fileEvent: Event): void {
-    this.imageFile = this.fileService.setImageFile(fileEvent);
+  public onFileSelected(imageFile: File | null): void {
+    this.imageFile.set(imageFile);
   }
 
   public onSubmit(): void {
@@ -65,7 +66,7 @@ export class PostFormComponent {
     const newPost: CreatePost = {
       title: this.title?.value?.trim(),
       description: this.description?.value?.trim(),
-      image: this.imageFile,
+      image: this.imageFile(),
     };
 
     this.submitEvent.emit(newPost);

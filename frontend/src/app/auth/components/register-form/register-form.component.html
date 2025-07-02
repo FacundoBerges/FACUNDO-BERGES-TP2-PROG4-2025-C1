@@ -13,7 +13,7 @@
 
     <div class="w-full p-2">
       @if (name?.invalid && (name?.dirty || name?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('name') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('name') }}</p-message>
       }
     </div>
   </div>
@@ -33,7 +33,7 @@
 
     <div class="w-full p-2">
       @if (surname?.invalid && (surname?.dirty || surname?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('surname') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('surname') }}</p-message>
       }
     </div>
   </div>
@@ -53,7 +53,7 @@
 
     <div class="w-full p-2">
       @if (email?.invalid && (email?.dirty || email?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('email') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('email') }}</p-message>
       }
     </div>
   </div>
@@ -73,7 +73,7 @@
 
     <div class="w-full p-2">
       @if (username?.invalid && (username?.dirty || username?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('username') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('username') }}</p-message>
       }
     </div>
   </div>
@@ -98,7 +98,7 @@
 
     <div class="w-full p-2">
       @if (password?.invalid && (password?.dirty || password?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('password') }}</p-message>
       }
     </div>
   </div>
@@ -123,7 +123,7 @@
 
     <div class="w-full p-2">
       @if (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('confirmPassword') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('confirmPassword') }}</p-message>
       }
     </div>
   </div>
@@ -139,7 +139,7 @@
 
     <div class="w-full p-2">
       @if (birthday?.invalid && (birthday?.dirty || birthday?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthday') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('birthday') }}</p-message>
       }
     </div>
   </div>
@@ -147,8 +147,8 @@
   <div class="mx-auto w-full max-w-md my-10">
     <p-floatlabel>
       <label for="bio">Descripción</label>
-      <textarea #bioTextArea pTextarea name="bio" id="bio" rows="5" [autoResize]="true"
-        [maxLength]="500" formControlName="bio" class="w-full"></textarea>
+      <textarea #bioTextArea pTextarea name="bio" id="bio" rows="5" [autoResize]="true" [maxLength]="500"
+        formControlName="bio" class="w-full"></textarea>
     </p-floatlabel>
 
     <div class="flex justify-end">
@@ -157,34 +157,19 @@
 
     <div class="w-full p-2">
       @if (bio?.invalid && (bio?.dirty || bio?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('bio') }}</p-message>
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('bio') }}</p-message>
       }
     </div>
   </div>
 
   <div class="mx-auto w-full max-w-md my-10">
-    <div class="flex-col md:flex-row items-center justify-between py-2">
+    <sn-file-upload (fileChangeEvent)="onFileSelected($event)">
       <div class="flex justify-center">
         <img class="h-16 w-16 rounded-full object-cover" [class.contrast-50]="!hasFileSelected()"
           alt="Current profile photo" src="/assets/img/user-placeholder.png">
       </div>
-
-      <div class="input-file-container hover:bg-surface-300 dark:hover:bg-primary-contrast rounded-3xl">
-        <label class="block">
-          <input type="file" accept="image/*" name="profile-picture" id="profile-picture"
-            class="flex flex-col w-full text-sm text-gray-500 sm:file:mr-4 md:file:mr-8 file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-600 hover:file:bg-primary-300 hover:file:text-primary-800 dark:file:bg-primary-600 dark:file:text-surface-300 dark:hover:file:bg-primary-500 dark:hover:file:text-surface-200 cursor-pointer transition-all duration-300"
-            (change)="onFileSelected($event)">
-        </label>
-      </div>
-    </div>
-
-    <div class="w-full p-2">
-      @if (profilePicture?.invalid && (profilePicture?.dirty || profilePicture?.touched)) {
-        <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('profilePicture') }}</p-message>
-      }
-    </div>
+    </sn-file-upload>
   </div>
-
 
   <div class="flex justify-center my-6">
     <p-button tabindex="-1" [tabindex]="0" label="Crear cuenta" type="submit" severity="primary" (click)="onSubmit()" />

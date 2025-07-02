@@ -11,6 +11,7 @@ import { PostItemComponent } from './post-item/post-item.component';
 })
 export class PostListComponent {
   public posts = input.required<Post[]>();
+  public iconsOnly = input<boolean>(false);
   public readonly postLikeEvent = output<Post>();
 
   public onLikePost(post: Post): void {

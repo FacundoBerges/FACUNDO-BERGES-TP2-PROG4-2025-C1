@@ -6,7 +6,7 @@ export interface Post {
   imageUrl?:     string | null;
   commentsCount: number;
   likesCount:    number;
-  likes:         PostLike[];
+  likes:         UserPostInteraction[];
   author:        PostAuthor;
   createdAt:     Date | string;
   updatedAt:     Date | string;
@@ -16,7 +16,7 @@ export interface Post {
 export interface CreatePost {
   title:       string;
   description: string;
-  image:       File | null;
+  image?:      File | null;
 }
 
 export interface PostAuthor {
@@ -27,10 +27,4 @@ export interface PostAuthor {
   profilePictureUrl: string | null;
 }
 
-export interface PostLike {
-  _id:                string;
-  name?:              string;
-  surname?:           string;
-  username?:          string;
-  profilePictureUrl?: string;
-}
+export interface UserPostInteraction extends PostAuthor {}

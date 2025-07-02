@@ -1,0 +1,19 @@
+<div class="flex-col md:flex-row items-center justify-between py-2">
+  <!-- ng-content to add a custom preview when using component -->
+  <ng-content #preview />
+
+  <div class="input-file-container hover:bg-surface-300 dark:hover:bg-primary-contrast rounded-3xl">
+    <label class="block">
+      <input type="file" accept="image/*" name="profile-picture" id="profile-picture"
+        class="flex flex-col w-full text-sm text-gray-500 sm:file:mr-4 md:file:mr-8 file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary-600 hover:file:bg-primary-300 hover:file:text-primary-800 dark:file:bg-primary-600 dark:file:text-surface-300 dark:hover:file:bg-primary-500 dark:hover:file:text-surface-200 cursor-pointer transition-all duration-300"
+        (change)="onFileSelected($event)">
+    </label>
+  </div>
+</div>
+
+<div class="w-full p-2">
+  @if (hasError()) {
+  <p-message severity="error" variant="simple" size="small">Tipo de archivo inválido. El archivo debe ser una
+    imagen.</p-message>
+  }
+</div>

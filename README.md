@@ -77,10 +77,10 @@ Deberá contar con los siguientes puntos:
 #### Frontend:
 
 -   ❌ Página publicaciones.
-    -   ❌ Debe mostrar el listado de publicaciones, ordenado por fecha por defecto.
+    -   ✅ Debe mostrar el listado de publicaciones, ordenado por fecha por defecto.
     -   ❌ Debe permitir cambiar el ordenamiento a por cantidad de me gusta
     -   ❌ Debe traer una cantidad limitada de publicaciones, permitiendo paginarlas.
-    -   ❌ Cada publicación debe ser un componente.
+    -   ✅ Cada publicación debe ser un componente.
     -   ❌ Se debe poder dar y quitar me gusta de una publicación siempre que sea el caso .
 -   ❌ Componente Mi Perfil:
     -   ❌ Debe mostrar todos los datos del usuario, así como su foto de perfil.
@@ -105,8 +105,8 @@ Deberá contar con los siguientes puntos:
 -   ❌ Página publicación.
     -   ❌ Debe permitir ver grande en la pantalla la publicación realizada, junto con sus respectivos comentarios.
     -   ❌ Los comentarios deben mostrarse ordenados, uno debajo del otro. En la primera carga debe llegar una cantidad de comentarios limitados, dónde sólo si el usuario presiona un botón “cargar más” se seguirán trayendo, sin dejar de mostrar los anteriores.
--   ❌ Pantalla login y registro:
-    -   ❌ Debe tomar el token que devuelve la petición indicada y guardarlo localmente en el navegador.
+-   ✅ Pantalla login y registro:
+    -   ✅ Debe tomar el token que devuelve la petición indicada y guardarlo localmente en el navegador.
 -   ❌ Página cargando:
     -   ❌ Al iniciar la aplicación, debe mostrarse una pantalla de cargando y un spinner.
     -   ❌ En este tiempo, debe validarse frente a la ruta autorizar si el token es válido. En caso de que lo sea, se redirige a la pantalla de publicaciones. En caso de que no lo sea, redirige al login.
