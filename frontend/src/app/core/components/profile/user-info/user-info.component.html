@@ -1,0 +1,39 @@
+<div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-b-20 animate-duration-1000"
+  class="user-info-container">
+  <p class="mb-2">
+    <strong>Nombre:</strong>
+    <span pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"> {{ fullName |
+      titlecase }}</span>
+  </p>
+
+  <p class="mb-2">
+    <strong>Email:</strong>
+    <span pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"> {{
+      user().email | lowercase }}</span>
+  </p>
+
+  <p class="mb-2">
+    <strong>Fecha de nacimiento:</strong>
+    <span pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"> {{
+      user().birthday | date: 'dd-MM-yyyy' }}</span>
+  </p>
+
+  <p class="mb-2">
+    <strong>Bio:</strong>
+    <span pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"> {{ user().bio
+      }}</span>
+  </p>
+
+  <p class="mb-2">
+    <strong>Activo:</strong>
+    <span pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"
+      class="text-gray-500"> {{ user().isActive ? 'Sí' : 'No' }}</span>
+  </p>
+
+  <p>
+    <strong>Activo
+      desde:</strong>
+    <span pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-8 animate-duration-1000"> {{
+      user().createdAt | date }}</span>
+  </p>
+</div>

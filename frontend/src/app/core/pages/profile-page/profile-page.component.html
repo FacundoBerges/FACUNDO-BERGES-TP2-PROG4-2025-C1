@@ -1,1 +1,30 @@
-<p>profile-page works!</p>
+<section>
+  <article class="flex flex-col justify-center items-center p-4 rounded-lg relative">
+    <div class="background bg-primary-300 w-full h-32 -mt-36 shadow-md absolute z-0"></div>
+
+    <sn-user-image [imageUrl]="user().profilePictureUrl" class="z-10" />
+
+    <div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-l-8 animate-duration-1000"
+      class="username mt-2">
+      <h4 class="text-lg font-bold">&#64;{{ user().username }}</h4>
+    </div>
+  </article>
+
+  <p-divider class="divider my-2"></p-divider>
+
+  <article class="my-4">
+    <h5 pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-l-8 animate-duration-1000"
+      class="inline-block m-2 text-center font-semibold text-gray-500 rounded-sm">Información de usuario</h5>
+
+    <sn-user-info [user]="user()" class="m-4" />
+  </article>
+
+  <p-divider class="divider my-2"></p-divider>
+
+  <article class="my-4">
+    <h5 pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-l-8 animate-duration-1000"
+      class="inline-block m-2 text-center font-semibold text-gray-500 rounded-sm">Últimos posts</h5>
+
+    <sn-post-list [posts]="posts()" [iconsOnly]="true" class="p-4" />
+  </article>
+</section>
