@@ -75,6 +75,23 @@ export class AuthService {
     return { accessToken: token };
   }
 
+  public async findOwnProfileData(
+    userData: JwtPayload,
+  ): Promise<Omit<User, 'hashedPassword'>> {
+    if (!userData) throw new UnauthorizedException('Usuario no autorizado.');
+
+    const user = await this.usersService.findByEmailOrUsername(
+      userData.username,
+    );
+
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashedPassword, ...userProfile } = user;
+
+    return userProfile;
+  }
+
   private generateJwtPayload(
     user: User | Omit<User, 'hashedPassword'>,
   ): JwtPayload {
