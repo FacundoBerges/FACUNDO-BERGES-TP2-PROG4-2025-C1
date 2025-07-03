@@ -2,7 +2,7 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -32,7 +32,9 @@ import { Post } from '@core/interfaces/post';
 export class PostItemComponent {
   private readonly API_URL = environment.apiUrl;
   public readonly authService = inject(AuthService);
+  public readonly confirmationService = inject(ConfirmationService);
   public readonly likeEvent = output<Post>();
+  public readonly onPostDeleteEvent = output<Post>();
   public post = input.required<Post>();
   public showIconOnly = input.required<boolean>();
   public showOptions = computed(() => {
@@ -49,9 +51,19 @@ export class PostItemComponent {
         this.authService.currentUser?.sub === this.post().author._id
           ? [
               { label: 'Editar', icon: 'pi pi-pencil' },
-              { label: 'Eliminar', icon: 'pi pi-trash' },
+              {
+                label: 'Eliminar',
+                icon: 'pi pi-trash',
+                command: () => this.confirmDeletePost(),
+              },
             ]
-          : [{ label: 'Eliminar', icon: 'pi pi-trash' }],
+          : [
+              {
+                label: 'Eliminar',
+                icon: 'pi pi-trash',
+                command: () => this.confirmDeletePost(),
+              },
+            ],
     },
   ]);
   public postLikedByUser = computed(() =>
@@ -113,7 +125,20 @@ export class PostItemComponent {
     this.likeEvent.emit(this.post());
   }
 
-  public onPostComment(): void {
-    console.log('Post commented:', this.post()._id);
+  private confirmDeletePost(): void {
+    this.confirmationService.confirm({
+      header: 'Confirmar eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
+      message: '¿Estás seguro de que quieres eliminar esta publicación?',
+      accept: () => {
+        this.deletePost();
+      },
+    });
+  }
+
+  private deletePost(): void {
+    this.onPostDeleteEvent.emit(this.post());
   }
 }

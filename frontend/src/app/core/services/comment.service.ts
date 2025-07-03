@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '@environments/environment';
-import { Comment } from '@core/interfaces';
-import { Pagination } from '../interfaces/pagination';
+import { Pagination, Comment } from '@core/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -41,5 +40,9 @@ export class CommentService {
       `${this.baseUrl}/${commentId}`,
       partialComment
     );
+  }
+
+  public deleteComment(commentId: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/${commentId}`);
   }
 }

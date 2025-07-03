@@ -17,6 +17,7 @@ import { CommentService } from '@core/services/comment.service';
 import { CommentItemComponent } from './comment-item/comment-item.component';
 import { CommentFormComponent } from './create-comment/comment-form.component';
 import { EditDialogComponent } from './comment-item/edit-dialog/edit-dialog.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'sn-post-comments',
@@ -31,6 +32,7 @@ import { EditDialogComponent } from './comment-item/edit-dialog/edit-dialog.comp
 })
 export class PostCommentsComponent implements OnInit, OnDestroy {
   private readonly commentService = inject(CommentService);
+  private readonly messageService = inject(MessageService);
   private addCommentEffectRef?: EffectRef;
   public comments = signal<Comment[]>([]);
   public page = signal<number>(0);
@@ -49,8 +51,14 @@ export class PostCommentsComponent implements OnInit, OnDestroy {
   constructor() {
     this.addCommentEffectRef = effect(() => {
       const newComment = this.toAddComment();
-      if (newComment && !this.comments().some((c) => c._id === newComment._id)) {
-        this.comments.update((currentComments) => [newComment, ...currentComments]);
+      if (
+        newComment &&
+        !this.comments().some((c) => c._id === newComment._id)
+      ) {
+        this.comments.update((currentComments) => [
+          newComment,
+          ...currentComments,
+        ]);
 
         this.commentAddedEvent.emit();
       }
@@ -100,6 +108,31 @@ export class PostCommentsComponent implements OnInit, OnDestroy {
     this.updateCommentInList(comment);
   }
 
+  public onCommentDelete(comment: Comment): void {
+    if (!comment) return;
+
+    this.commentService.deleteComment(comment._id).subscribe({
+      next: () => {
+        this.comments.update((currentComments) =>
+          currentComments.filter((c) => c._id !== comment._id)
+        );
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Comentario eliminado',
+          detail: 'El comentario ha sido eliminado correctamente.',
+        });
+      },
+      error: (error) => {
+        console.error('Error deleting comment:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar el comentario. Inténtalo más tarde.',
+        });
+      },
+    });
+  }
+
   public toggleEditModal(comment: Comment): void {
     if (!comment) return;
     this.editableComment.set(comment);
@@ -129,7 +162,9 @@ export class PostCommentsComponent implements OnInit, OnDestroy {
 
   public updateCommentInList(updatedComment: Comment): void {
     this.comments.update((currentComments) =>
-      currentComments.map((c) => (c._id === updatedComment._id ? updatedComment : c))
+      currentComments.map((c) =>
+        c._id === updatedComment._id ? updatedComment : c
+      )
     );
   }
 }

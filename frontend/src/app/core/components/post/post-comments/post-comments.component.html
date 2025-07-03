@@ -11,7 +11,8 @@
   <ul class="list-none py-2">
     @for (comment of comments(); track comment._id) {
     <li class="mb-4">
-      <sn-comment-item [comment]="comment" (onCommentEditEvent)="toggleEditModal(comment)" />
+      <sn-comment-item [comment]="comment" (onCommentDeleteEvent)="onCommentDelete($event)"
+        (onCommentEditEvent)="toggleEditModal(comment)" />
     </li>
     }
   </ul>

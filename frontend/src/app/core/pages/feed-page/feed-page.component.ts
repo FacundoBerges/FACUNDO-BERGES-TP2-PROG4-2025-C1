@@ -40,23 +40,7 @@ export class FeedPageComponent implements OnInit {
   ngOnInit(): void {
     this.resetStatus();
 
-    // TODO: remove this login logic in production
-    //* This is just for testing purposes to simulate a logged-in user
-    this.authService
-      .login({ emailOrUsername: 'juanperez', password: 'Password123' })
-      // .login({ emailOrUsername: 'pedrolopez123.-', password: 'Password321' })
-      // .login({ emailOrUsername: 'adminuser', password: 'Admin123' })
-      .subscribe({
-        next: () => {
-          this.incrementalPostLoad();
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Login exitoso',
-            detail: 'Has iniciado sesión correctamente.',
-          });
-        },
-        error: (error) => console.error('Login error:', error),
-      });
+    this.incrementalPostLoad();
   }
 
   private resetStatus(): void {
@@ -94,6 +78,7 @@ export class FeedPageComponent implements OnInit {
 
     this.postService.getPosts(sorting).subscribe({
       next: (posts) => {
+        this.loadingService.stopLoading();
         if (!posts || posts.length === 0) {
           this.messageService.add({
             severity: 'info',
@@ -106,6 +91,7 @@ export class FeedPageComponent implements OnInit {
         this.posts.set(posts);
       },
       error: (error) => {
+        this.loadingService.stopLoading();
         console.error('Error loading sorted posts:', error);
         this.messageService.add({
           severity: 'error',
@@ -149,6 +135,29 @@ export class FeedPageComponent implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'No se pudo dar like al post. Inténtalo más tarde.',
+        });
+      },
+    });
+  }
+
+  public onDeletePost(post: Post): void {
+    this.postService.deletePost(post._id).subscribe({
+      next: () => {
+        this.posts.update((currentPosts) =>
+          currentPosts.filter((p) => p._id !== post._id)
+        );
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Post eliminado',
+          detail: 'El post ha sido eliminado correctamente.',
+        });
+      },
+      error: (error) => {
+        console.error('Error deleting post:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo eliminar el post. Inténtalo más tarde.',
         });
       },
     });

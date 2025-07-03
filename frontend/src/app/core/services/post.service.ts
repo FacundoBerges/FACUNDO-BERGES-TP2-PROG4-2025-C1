@@ -60,6 +60,10 @@ export class PostService {
     return this.httpClient.post<Post>(this.baseUrl, formDataPost);
   }
 
+  public deletePost(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
   public likePost(id: string, isLike: boolean): Observable<Post> {
     const like: 'like' | 'unlike' = isLike ? 'like' : 'unlike';
 

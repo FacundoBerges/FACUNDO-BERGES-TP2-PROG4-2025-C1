@@ -13,8 +13,13 @@ export class PostListComponent {
   public posts = input.required<Post[]>();
   public iconsOnly = input<boolean>(false);
   public readonly postLikeEvent = output<Post>();
+  public readonly postDeleteEvent = output<Post>();
 
   public onLikePost(post: Post): void {
     this.postLikeEvent.emit(post);
+  }
+
+  public onDeletePost(post: Post): void {
+    this.postDeleteEvent.emit(post);
   }
 }

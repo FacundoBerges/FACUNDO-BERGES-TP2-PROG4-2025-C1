@@ -12,15 +12,21 @@ import { provideRouter } from '@angular/router';
 
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { DialogService } from 'primeng/dynamicdialog';
 
 import { routes } from './app.routes';
 import { authTokenInterceptor } from '@auth/interceptors/auth-token.interceptor';
+import { authInterceptor } from '@auth/interceptors/auth.interceptor';
+import { ConfirmationService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
     provideExperimentalZonelessChangeDetection(),
-    provideHttpClient(withFetch(), withInterceptors([authTokenInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authTokenInterceptor, authInterceptor])
+    ),
     provideRouter(routes),
     providePrimeNG({
       ripple: true,
@@ -35,5 +41,7 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    DialogService,
+    ConfirmationService,
   ],
 };
