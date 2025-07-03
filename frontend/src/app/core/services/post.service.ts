@@ -14,7 +14,8 @@ export class PostService {
 
   public getPosts(
     sorting?: Sorting,
-    pagination?: Pagination
+    pagination?: Pagination,
+    authorId?: string
   ): Observable<Post[]> {
     let url = this.baseUrl;
 
@@ -30,6 +31,10 @@ export class PostService {
       const page = pagination.offset ? `offset=${pagination.offset}` : '';
       const limit = pagination.limit ? `&limit=${pagination.limit}` : '';
       url += `${url.includes('?') ? '&' : '?'}${page}${limit}`;
+    }
+
+    if (authorId) {
+      url += `${url.includes('?') ? '&' : '?'}authorId=${authorId}`;
     }
 
     console.log(`Fetching posts from: ${url}`);
