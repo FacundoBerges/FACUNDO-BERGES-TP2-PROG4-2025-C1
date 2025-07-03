@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 
 import { MenuItem } from 'primeng/api';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
@@ -17,6 +17,7 @@ import { AuthService } from '@auth/services/auth.service';
 })
 export class CommentItemComponent {
   public readonly authService = inject(AuthService);
+  public readonly onCommentEditEvent = output<Comment>();
   public comment = input.required<Comment>();
   public showOptions = computed(() => {
     if (!this.authService.currentUser) return false;
@@ -31,7 +32,11 @@ export class CommentItemComponent {
       items:
         this.authService.currentUser?.sub === this.comment().author._id
           ? [
-              { label: 'Editar', icon: 'pi pi-pencil' },
+              {
+                label: 'Editar',
+                icon: 'pi pi-pencil',
+                command: () => this.onCommentEditEvent.emit(this.comment()),
+              },
               { label: 'Eliminar', icon: 'pi pi-trash' },
             ]
           : [{ label: 'Eliminar', icon: 'pi pi-trash' }],
