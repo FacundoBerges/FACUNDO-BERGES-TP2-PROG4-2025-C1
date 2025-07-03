@@ -38,7 +38,9 @@ export class CommentsService {
 
     await postsService.updateCommentsCount(postId);
 
-    return newComment;
+    return newComment.populate([
+      { path: 'author', select: 'name surname username profilePictureUrl' },
+    ]);
   }
 
   async findAll(
@@ -74,6 +76,7 @@ export class CommentsService {
         { content: updateCommentDto.content },
         { new: true },
       )
+      .populate('author', 'name surname username profilePictureUrl')
       .select('-__v -isDeleted');
   }
 
