@@ -1,6 +1,11 @@
-<section>
+<section class="w-full max-w-3xl mx-auto px-4 py-6">
   <sn-post-item class="z-40 relative" [post]="post()!" [showIconOnly]="true" />
 
-  <sn-post-comments [comments]="comments()" />
-  <!-- (commentAdded)="onCommentAdded($event)" -->
+  @if(post()?._id)
+  {
+  <sn-post-comments [toAddComment]="commentToAdd()" [toUpdateComment]="commentToUpdate()" [postId]="post()?._id || ''"
+    (commentSubmitEvent)="onCommentSubmit($event)" (commentEditedEvent)="onCommentEdited($event)"
+    (commentAddedEvent)="commentToAdd.set(null)" (commentUpdatedEvent)="commentToUpdate.set(null)"></sn-post-comments>
+  }
+
 </section>

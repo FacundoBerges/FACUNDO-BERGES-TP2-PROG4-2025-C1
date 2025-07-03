@@ -4,5 +4,5 @@ export type {
   ProfileType,
   UserCredentials,
   UserRegistration,
-  UserProfile,
+  User,
 } from './user.interface';

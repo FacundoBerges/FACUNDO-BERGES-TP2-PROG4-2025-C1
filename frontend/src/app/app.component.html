@@ -1,20 +1,19 @@
-<!-- <header>
-  <nav>
-    <ul>
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/about">About</a></li>
-      <li><a routerLink="/contact">Contact</a></li>
-    </ul>
-  </nav>
-  <h1>My Angular App</h1>
-</header> -->
+<header class="z-40">
+  <sn-header />
+</header>
 
-<main class="h-full container mx-auto">
+
+<main class="h-full container mx-auto relative z-0">
   <router-outlet />
 </main>
+
+
+@if (loadingService.isLoading()) {
+<sn-loading class="z-50" />
+}
 
 <p-toast baseZIndex="5000" position="bottom-right" [style]="{'max-width': '86vw'}" />
 
 <!-- <footer>
-  <p>© 2023 My Angular App</p>
+  <p>© 2025 My Angular App</p>
 </footer> -->

@@ -1,0 +1,26 @@
+<div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+  <div>
+    <div class="flex justify-center items-center gap-2">
+      <h6 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+        <i class="pi pi-sort-amount-up"></i>
+        <strong>Ordenar publicaciones por:</strong>
+      </h6>
+    </div>
+
+    <p-select-button [options]="sortingOptions()" optionDisabled="disabled" optionLabel="label" optionValue="value"
+      allowEmpty="false" (onChange)="changeSortingOption($event)">
+      <ng-template let-option pTemplate="item">
+        <div class="flex items-center gap-2">
+          <i [class]="option.icon"></i>
+          <span>{{ option.label }}</span>
+        </div>
+      </ng-template>
+    </p-select-button>
+  </div>
+
+  <div>
+    <p-toggle-button [onLabel]="'Ascendente'" [offLabel]="'Descendente'" [onIcon]="'pi pi-sort-amount-up-alt'"
+      [offIcon]="'pi pi-sort-amount-down-alt'" [(ngModel)]="toggleChecked" (onChange)="changeSortingOrder()">
+    </p-toggle-button>
+  </div>
+</div>

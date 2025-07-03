@@ -38,7 +38,9 @@ export class CommentsService {
 
     await postsService.updateCommentsCount(postId);
 
-    return newComment;
+    return newComment.populate([
+      { path: 'author', select: 'name surname username profilePictureUrl' },
+    ]);
   }
 
   async findAll(
@@ -46,7 +48,7 @@ export class CommentsService {
     offset: number = 0,
     limit: number = 10,
     sortBy: SortOptions = 'createdAt',
-    orderBy: SortOrder = 'desc',
+    sortOrder: SortOrder = 'desc',
   ) {
     const postsService = await this.getPostsService();
     const postObjectId = await postsService.validateId(postId);
@@ -54,7 +56,7 @@ export class CommentsService {
     return await this.commentModel
       .find({ post: postObjectId, isDeleted: false })
       .populate('author', 'name surname username profilePictureUrl')
-      .sort({ [sortBy]: orderBy })
+      .sort({ [sortBy]: sortOrder })
       .skip(offset)
       .limit(limit)
       .select('-__v -isDeleted -post')
@@ -74,6 +76,7 @@ export class CommentsService {
         { content: updateCommentDto.content },
         { new: true },
       )
+      .populate('author', 'name surname username profilePictureUrl')
       .select('-__v -isDeleted');
   }
 

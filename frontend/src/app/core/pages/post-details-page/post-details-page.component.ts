@@ -1,7 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { Comment } from '@core/interfaces/comment';
-import { Post } from '@core/interfaces/post';
+import { MessageService } from 'primeng/api';
+
+import { Comment, Post } from '@core/interfaces/';
+import { CommentService } from '@core/services/comment.service';
 import { PostService } from '@core/services/post.service';
 import { PostItemComponent } from '@core/components/post/post-list/post-item/post-item.component';
 import { PostCommentsComponent } from '@core/components/post/post-comments/post-comments.component';
@@ -12,70 +16,103 @@ import { PostCommentsComponent } from '@core/components/post/post-comments/post-
   templateUrl: './post-details-page.component.html',
   styleUrl: './post-details-page.component.css',
 })
-export class PostDetailsPageComponent implements OnInit {
+export class PostDetailsPageComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly messageService = inject(MessageService);
+  private readonly commentService = inject(CommentService);
   private readonly postService = inject(PostService);
+  private timeoutId: ReturnType<typeof setTimeout> | null = null;
   public post = signal<Post | null>(null);
-  public comments = signal<Comment[]>([]);
+  public commentToAdd = signal<Comment | null>(null);
+  public commentToUpdate = signal<Comment | null>(null);
 
   ngOnInit(): void {
-    // const postId = this.postService.getPostIdFromRoute();
+    const postId = this.activatedRoute.snapshot.paramMap.get('id');
 
-    // if (postId) {
-    //   this.postService.loadPostDetails(postId);
-    // } else {
-    //   console.error('No post ID found in route');
-    // }
+    if (!postId) {
+      console.error('Post ID not found in route parameters');
+      return;
+    }
 
-    const fetchedComments: Comment[] = [
-      {
-        _id: '6854368fb4037ca91ff569af',
-        content: 'Comentario de prueba',
-        createdAt: new Date('2025-06-28T20:37:25.520Z'),
-        updatedAt: new Date('2025-06-28T20:37:25.520Z'),
-        author: {
-          _id: '6854368fb4037ca91ff569af',
-          name: 'Admin',
-          surname: 'Sistema',
-          username: 'adminuser',
-          profilePictureUrl: null,
+    this.postService.getPostById(postId).subscribe({
+      next: (post: Post) => {
+        this.post.set(post);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error fetching post:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo cargar el post.',
+        });
+        this.timeoutId = setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 3000);
+      },
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+    }
+  }
+
+  public onCommentSubmit(comment: string): void {
+    if (!comment) return;
+
+    const post = this.post();
+
+    if (!post) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo encontrar el post.',
+      });
+      return;
+    }
+
+    this.commentService.addComment(post._id, comment).subscribe({
+      next: (createdComment: Comment) => {
+        this.commentToAdd.set(createdComment);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Comentario agregado',
+          detail: 'Tu comentario ha sido enviado exitosamente.',
+        });
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error creating comment:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudo agregar el comentario.',
+        });
+      },
+    });
+  }
+
+  public onCommentEdited(editedComment: Comment): void {
+    this.commentService
+      .updateComment(editedComment._id, { content: editedComment.content })
+      .subscribe({
+        next: (updatedComment) => {
+          this.commentToUpdate.set(updatedComment);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Comentario editado',
+            detail: 'El comentario fue actualizado correctamente.',
+          });
         },
-      },
-      {
-        _id: '6854368fb4037ca91ff569af',
-        content: 'Otro comentario de prueba',
-        createdAt: new Date('2025-06-25T20:37:25.520Z'),
-        updatedAt: new Date('2025-06-29T20:37:25.520Z'),
-        author: {
-          _id: '6854368fb4037ca91ff569af',
-          name: 'Usuario',
-          surname: 'Prueba',
-          username: 'user123',
-          profilePictureUrl: null,
+        error: (error: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se pudo actualizar el comentario.',
+          });
         },
-      },
-    ];
-
-    const fetchedPost: Post = {
-      _id: '6860528592d405a5c4f26f4e',
-      title: 'Post de administrador',
-      description: 'Publicación de prueba para subir una imagen!',
-      imageUrl:
-        '/uploads/img/posts/1751143040088-4k-space-pictures-zp773pnlw9zp3jq7.jpg',
-      commentsCount: 0,
-      author: {
-        _id: '6854368fb4037ca91ff569af',
-        name: 'Admin',
-        surname: 'Sistema',
-        username: 'adminuser',
-        profilePictureUrl: null,
-      },
-      createdAt: '2025-06-28T20:37:25.520Z',
-      updatedAt: '2025-06-28T20:37:25.520Z',
-      likesCount: 0,
-      likes: [],
-    };
-    this.post.set(fetchedPost);
-    this.comments.set([...fetchedComments]);
-    console.log('fetchedComments', this.comments());
+      });
   }
 }

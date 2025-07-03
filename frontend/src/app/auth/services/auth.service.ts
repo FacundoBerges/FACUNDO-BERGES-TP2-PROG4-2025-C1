@@ -7,7 +7,7 @@ import {
   JWToken,
   UserCredentials,
   UserRegistration,
-  UserProfile,
+  User,
 } from '@auth/interfaces/';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class AuthService implements OnInit {
   private httpClient = inject(HttpClient);
   private baseUrl = `${environment.apiUrl}/auth`;
   private jwtToken = signal<string | null>(null);
-  private userProfile = signal<UserProfile | null>(null);
+  private userProfile = signal<User | null>(null);
 
   ngOnInit(): void {
     this.loadFromLocalStorage();
@@ -34,17 +34,15 @@ export class AuthService implements OnInit {
     localStorage.setItem('token', token);
   }
 
-  public loadUserProfile(): Observable<UserProfile> {
-    return this.httpClient
-      .post<UserProfile>(`${this.baseUrl}/authorize`, {})
-      .pipe(
-        tap((profile: UserProfile) => {
-          this.userProfile.set(profile);
-        })
-      );
+  public loadUserProfile(): Observable<User> {
+    return this.httpClient.post<User>(`${this.baseUrl}/authorize`, {}).pipe(
+      tap((profile: User) => {
+        this.userProfile.set(profile);
+      })
+    );
   }
 
-  public get currentUser(): UserProfile | null {
+  public get currentUser(): User | null {
     return this.userProfile();
   }
 

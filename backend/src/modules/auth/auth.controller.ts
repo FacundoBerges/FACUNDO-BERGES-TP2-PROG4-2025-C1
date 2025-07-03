@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Logger,
@@ -65,12 +64,5 @@ export class AuthController {
     const user = req['user'] as JwtPayload;
 
     return this.authService.refreshToken(user);
-  }
-
-  @Get('info')
-  findOwnProfile(@Req() req: Request) {
-    const user: JwtPayload = req['user'] as JwtPayload;
-
-    return this.authService.findOwnProfileData(user);
   }
 }

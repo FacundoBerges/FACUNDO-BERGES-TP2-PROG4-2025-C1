@@ -45,9 +45,15 @@ export class CommentsController {
     @Query('offset') offset?: number,
     @Query('limit') limit?: number,
     @Query('sortBy') sortBy?: SortOptions,
-    @Query('orderBy') orderBy?: SortOrder,
+    @Query('sortOrder') sortOrder?: SortOrder,
   ) {
-    return this.commentsService.findAll(postId, offset, limit, sortBy, orderBy);
+    return this.commentsService.findAll(
+      postId,
+      offset,
+      limit,
+      sortBy,
+      sortOrder,
+    );
   }
 
   @Patch(':id')

@@ -59,6 +59,9 @@ export class User {
 
   @Prop({ default: null, maxlength: 500 })
   bio?: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

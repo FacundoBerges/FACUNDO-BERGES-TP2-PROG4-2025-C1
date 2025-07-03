@@ -1,0 +1,10 @@
+<p-mega-menu [model]="items" class="w-full">
+  <ng-template pTemplate="end">
+    <div class="flex flex-row-reverse md:flex-row items-center gap-2">
+      <p-avatar [image]="authService.currentUser?.profilePictureUrl || '/assets/img/user-placeholder.png'"
+        shape="circle" size="large"></p-avatar>
+
+      <span class="text-lg font-semibold">{{ authService.currentUser?.username }}</span>
+    </div>
+  </ng-template>
+</p-mega-menu>

@@ -1,5 +1,6 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
@@ -9,13 +10,14 @@ import { MenuModule } from 'primeng/menu';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TooltipModule } from 'primeng/tooltip';
 
-import { Post } from '@core/interfaces/post';
 import { environment } from '@environments/environment';
 import { AuthService } from '@auth/services/auth.service';
+import { Post } from '@core/interfaces/post';
 
 @Component({
   selector: 'sn-post-item',
   imports: [
+    RouterLink,
     DatePipe,
     AnimateOnScrollModule,
     ButtonModule,
@@ -52,21 +54,22 @@ export class PostItemComponent {
           : [{ label: 'Eliminar', icon: 'pi pi-trash' }],
     },
   ]);
+  public postLikedByUser = computed(() =>
+    this.post().likes.some(
+      (likeAuthor) => likeAuthor._id === this.authService.currentUser?.sub
+    )
+  );
 
   public get postImageUrl(): string {
-    return this.post().imageUrl ? `${this.API_URL}${this.post().imageUrl}` : '';
+    return this.post()?.imageUrl
+      ? `${this.API_URL}${this.post().imageUrl}`
+      : '';
   }
 
   public get postAuthorImageUrl(): string {
-    return this.post().author.profilePictureUrl
+    return this.post()?.author.profilePictureUrl
       ? `${this.API_URL}${this.post().author.profilePictureUrl}`
       : './assets/img/user-placeholder.png';
-  }
-
-  public get isPostLikedByUser(): boolean {
-    return this.post().likes.some(
-      (like) => like._id === this.authService.currentUser?.sub
-    );
   }
 
   public get likesMessage(): string {
@@ -102,20 +105,12 @@ export class PostItemComponent {
   }
 
   public onPostLike(): void {
+    if (!this.authService.currentUser) {
+      console.warn('User not authenticated');
+      return;
+    }
+
     this.likeEvent.emit(this.post());
-
-    // this.post().likesCount += this.isPostLikedByUser ? -1 : 1;
-
-    // if (this.isPostLikedByUser) {
-    //   this.post().likes = this.post().likes.filter(
-    //     (like) => like._id !== this.authService.currentUser?.sub
-    //   );
-    // } else {
-    //   this.post().likes.push({
-    //     _id: this.authService.currentUser?.sub!,
-    //     username: this.authService.currentUser?.username,
-    //   });
-    // }
   }
 
   public onPostComment(): void {

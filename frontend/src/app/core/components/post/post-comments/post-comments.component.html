@@ -1,16 +1,29 @@
 <article pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000"
   class="post-comments m-4 p-4 pt-8 -mt-8 rounded-2xl bg-surface-300 shadow-lg">
-  <h2>Comentarios</h2>
-  @if (comments().length === 0) {
+  <h2 class="text-xl py-2">Comentarios</h2>
+
+  <sn-comment-form (submitCommentEvent)="onCommentSubmit($event)" />
+
+  @if (comments().length === 0 && !isLoading()) {
   <p>No hay comentarios para este post.</p>
   }
   @else {
   <ul class="list-none py-2">
     @for (comment of comments(); track comment._id) {
-    <li class="mb-2">
-      <sn-comment-item [comment]="comment" />
+    <li class="mb-4">
+      <sn-comment-item [comment]="comment" (onCommentEditEvent)="toggleEditModal(comment)" />
     </li>
     }
   </ul>
+  @if (hasMore()) {
+  <div class="flex justify-center my-4">
+    <button class="btn btn-primary" (click)="loadMoreComments()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Cargando...' : 'Cargar más comentarios' }}
+    </button>
+  </div>
+  }
   }
 </article>
+
+<sn-edit-dialog (updated)="onCommentEdition($event)" (closed)="editableComment.set(null)"
+  [visible]="editableComment() !== null" [comment]="editableComment()!" />
