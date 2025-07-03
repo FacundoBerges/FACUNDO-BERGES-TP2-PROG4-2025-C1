@@ -1,5 +1,6 @@
 import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 
 import { environment } from '@environments/environment';
@@ -14,7 +15,8 @@ import {
   providedIn: 'root',
 })
 export class AuthService implements OnInit {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
+  private readonly router = inject(Router);
   private baseUrl = `${environment.apiUrl}/auth`;
   private jwtToken = signal<string | null>(null);
   private userProfile = signal<User | null>(null);
@@ -96,9 +98,21 @@ export class AuthService implements OnInit {
       );
   }
 
+  public refreshToken(): Observable<JWToken> {
+    return this.httpClient.post<JWToken>(`${this.baseUrl}/refresh`, {}).pipe(
+      tap((response: JWToken) => {
+        this.saveToLocalStorage(response.accessToken);
+      }),
+      tap(() => {
+        this.loadUserProfile().subscribe();
+      })
+    );
+  }
+
   public logout(): void {
     localStorage.removeItem('token');
     this.jwtToken.set(null);
     this.userProfile.set(null);
+    this.router.navigate(['/auth', 'login']);
   }
 }
