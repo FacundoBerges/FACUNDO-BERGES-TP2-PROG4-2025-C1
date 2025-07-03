@@ -20,8 +20,12 @@
   <sn-post-filter (sortingChangeEvent)="onSortingChange($event)" />
 </section>
 
-<section class="mt-8 min-h-4">
+<section class="mt-8 min-h-4" (window:scroll)="onScroll()">
   <h2 class="text-2xl font-bold mb-4">Posts recientes</h2>
 
   <sn-post-list [posts]="posts()" (postLikeEvent)="onLikePost($event)" />
+
+  @if(!hasMore()){
+  <div class="text-center text-gray-500 my-4">No hay más publicaciones para mostrar.</div>
+  }
 </section>
