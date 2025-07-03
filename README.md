@@ -72,7 +72,7 @@ Deberá contar con los siguientes puntos:
 
 ---
 
-### Sprint #2 ❌
+### Sprint #2 ✅
 
 #### Frontend:
 
@@ -98,7 +98,7 @@ Deberá contar con los siguientes puntos:
 
 ---
 
-### Sprint #3 ❌
+### Sprint #3 ✅
 
 #### Frontend:
 
@@ -107,20 +107,20 @@ Deberá contar con los siguientes puntos:
     -   ✅ Los comentarios deben mostrarse ordenados, uno debajo del otro. En la primera carga debe llegar una cantidad de comentarios limitados, dónde sólo si el usuario presiona un botón “cargar más” se seguirán trayendo, sin dejar de mostrar los anteriores.
 -   ✅ Pantalla login y registro:
     -   ✅ Debe tomar el token que devuelve la petición indicada y guardarlo localmente en el navegador.
--   ❌ Página cargando:
-    -   ❌ Al iniciar la aplicación, debe mostrarse una pantalla de cargando y un spinner.
-    -   ❌ En este tiempo, debe validarse frente a la ruta autorizar si el token es válido. En caso de que lo sea, se redirige a la pantalla de publicaciones. En caso de que no lo sea, redirige al login.
--   ❌ A nivel aplicación:
-    -   ❌ Al iniciar sesión, iniciar un contador de 10 minutos. Al finalizar, deberá aparecer un modal avisando que quedan 5 minutos de sesión y preguntando al usuario si desea extender su sesión (ya que el token vence a los 15 minutos). En caso de que la respuesta sea afirmativa, refrescar el token.
-    -   ❌ Si una petición devuelve un error 401, redirigir al login para rehacer el token.
+-   ✅ Página cargando:
+    -   ✅ Al iniciar la aplicación, debe mostrarse una pantalla de cargando y un spinner.
+    -   ✅ En este tiempo, debe validarse frente a la ruta autorizar si el token es válido. En caso de que lo sea, se redirige a la pantalla de publicaciones. En caso de que no lo sea, redirige al login.
+-   ✅ A nivel aplicación:
+    -   ✅ Al iniciar sesión, iniciar un contador de 10 minutos. Al finalizar, deberá aparecer un modal avisando que quedan 5 minutos de sesión y preguntando al usuario si desea extender su sesión (ya que el token vence a los 15 minutos). En caso de que la respuesta sea afirmativa, refrescar el token.
+    -   ✅ Si una petición devuelve un error 401, redirigir al login para rehacer el token.
 
 #### Backend:
 
--   ❌ Módulo publicaciones - comentarios controller:
-    -   ❌ Debe permitir traer los comentarios de una publicación, agregar nuevos y modificarlos.
-    -   ❌ Por POST: agrega un comentario a una publicación junto con el usuario que lo realizó.
-    -   ❌ Por PUT: modifica cualquier dato del comentario. La imagen anterior no se borra ni se modifica. Agrega el campo modificado: true para marcar que el comentario se modificó.
-    -   ❌ Por GET: trae los comentarios de una publicación específica. Debe permitir paginar los resultados. Debe ordenar los resultados, los más recientes primero.
+-   ✅ Módulo publicaciones - comentarios controller:
+    -   ✅ Debe permitir traer los comentarios de una publicación, agregar nuevos y modificarlos.
+    -   ✅ Por POST: agrega un comentario a una publicación junto con el usuario que lo realizó.
+    -   ✅ Por PUT: modifica cualquier dato del comentario. La imagen anterior no se borra ni se modifica. Agrega el campo modificado: true para marcar que el comentario se modificó.
+    -   ✅ Por GET: trae los comentarios de una publicación específica. Debe permitir paginar los resultados. Debe ordenar los resultados, los más recientes primero.
 -   ✅ Módulo autenticación:
     -   ✅ Rutas Login y registro: debe generar un token JWT que valide quien es el usuario (uuid/correo/nombre de usuario) y su rol (usuario o administrador).
     -   ✅ El token debe ser devuelto en la respuesta.
@@ -134,8 +134,8 @@ Deberá contar con los siguientes puntos:
 
 #### Frontend:
 
--   ❌ Página publicación y página publicaciones:
-    -   ❌ Si un usuario con perfil de administrador se logueó, se deben habilitar los botones para dar de baja cualquier publicación. Esto hará que dejen de estar disponibles, tanto la publicación como sus comentarios.
+-   ✅ Página publicación y página publicaciones:
+    -   ✅ Si un usuario con perfil de administrador se logueó, se deben habilitar los botones para dar de baja cualquier publicación. Esto hará que dejen de estar disponibles, tanto la publicación como sus comentarios.
 -   ❌ Página dashboard/usuarios:
     -   ❌ Solo disponible para usuarios con perfil administrador.
     -   ❌ Debe permitir ver el listado de los usuarios.
@@ -158,6 +158,6 @@ Deberá contar con los siguientes puntos:
     -   ✅ Por POST: alta de un nuevo usuario. Se puede definir si su perfil es administrador o usuario.
     -   ✅ Por DELETE: permite deshabilitar a un usuario. Cuando dicho usuario quiera ingresar, deberá ser notificado que no está autorizado.
     -   ✅ Por POST: alta lógica, rehabilita a un usuario previamente deshabilitado, permitiéndole utilizar la aplicación.
--   ❌ Módulo publicaciones - Estadísticas controller.
-    -   ❌ Realizar todas las rutas necesarias por GET para que los gráficos funcionen.
-    -   ❌ Se debe validar que el token pertenezca a un administrador.
+-   ✅ Módulo publicaciones - Estadísticas controller.
+    -   ✅ Realizar todas las rutas necesarias por GET para que los gráficos funcionen.
+    -   ✅ Se debe validar que el token pertenezca a un administrador.
