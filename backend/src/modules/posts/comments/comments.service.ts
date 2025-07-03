@@ -46,7 +46,7 @@ export class CommentsService {
     offset: number = 0,
     limit: number = 10,
     sortBy: SortOptions = 'createdAt',
-    orderBy: SortOrder = 'desc',
+    sortOrder: SortOrder = 'desc',
   ) {
     const postsService = await this.getPostsService();
     const postObjectId = await postsService.validateId(postId);
@@ -54,7 +54,7 @@ export class CommentsService {
     return await this.commentModel
       .find({ post: postObjectId, isDeleted: false })
       .populate('author', 'name surname username profilePictureUrl')
-      .sort({ [sortBy]: orderBy })
+      .sort({ [sortBy]: sortOrder })
       .skip(offset)
       .limit(limit)
       .select('-__v -isDeleted -post')
