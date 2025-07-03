@@ -1,6 +1,6 @@
 <form class="add-comment" [formGroup]="commentForm" (submit)="onSubmit()">
   <p-floatlabel variant="in">
-    <textarea #descriptionTextArea formControlName="description" pTextarea id="description" rows="5" cols="30"
+    <textarea #descriptionTextArea formControlName="description" pTextarea id="description" rows="3" cols="30"
       [autoResize]="true" class="h-full" [maxlength]="500"></textarea>
 
     <label for="description">{{ formLabel() }}</label>
