@@ -4,16 +4,26 @@
 
   <sn-comment-form (submitCommentEvent)="onCommentSubmit($event)" />
 
-  @if (comments().length === 0) {
+  @if (comments().length === 0 && !isLoading()) {
   <p>No hay comentarios para este post.</p>
   }
   @else {
   <ul class="list-none py-2">
     @for (comment of comments(); track comment._id) {
     <li class="mb-4">
-      <sn-comment-item [comment]="comment" />
+      <sn-comment-item [comment]="comment" (onCommentEditEvent)="toggleEditModal(comment)" />
     </li>
     }
   </ul>
+  @if (hasMore()) {
+  <div class="flex justify-center my-4">
+    <button class="btn btn-primary" (click)="loadMoreComments()" [disabled]="isLoading()">
+      {{ isLoading() ? 'Cargando...' : 'Cargar más comentarios' }}
+    </button>
+  </div>
+  }
   }
 </article>
+
+<sn-edit-dialog (updated)="onCommentEdition($event)" (closed)="editableComment.set(null)"
+  [visible]="editableComment() !== null" [comment]="editableComment()!" />
