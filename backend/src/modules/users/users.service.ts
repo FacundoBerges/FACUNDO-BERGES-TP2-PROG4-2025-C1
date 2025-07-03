@@ -73,6 +73,7 @@ export class UsersService {
           { username: sanitizedEmailOrUsername },
         ],
       })
+      .select('-__v')
       .exec();
   }
 
