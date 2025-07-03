@@ -11,7 +11,10 @@
         "jwtoken",
         "likeado",
         "primeicons",
-        "progressspinner"
+        "progressspinner",
+        "selectbutton",
+        "suscription",
+        "togglebutton"
     ],
     "material-icon-theme.activeIconPack": "angular"
 }
