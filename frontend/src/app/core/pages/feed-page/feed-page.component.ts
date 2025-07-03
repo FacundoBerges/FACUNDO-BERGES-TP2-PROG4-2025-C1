@@ -8,9 +8,11 @@ import { SelectModule } from 'primeng/select';
 
 import { AuthService } from '@auth/services/auth.service';
 import { CreatePost, Post } from '@core/interfaces/post';
+import { Sorting } from '@core/interfaces/sorting';
 import { PostService } from '@core/services/post.service';
 import { PostListComponent } from '@core/components/post/post-list/post-list.component';
 import { PostFormComponent } from '@core/components/post/post-form/post-form.component';
+import { PostFilterComponent } from '@core/components/post/post-filter/post-filter.component';
 
 @Component({
   selector: 'sn-feed-page',
@@ -20,6 +22,7 @@ import { PostFormComponent } from '@core/components/post/post-form/post-form.com
     SelectModule,
     PostFormComponent,
     PostListComponent,
+    PostFilterComponent,
   ],
   templateUrl: './feed-page.component.html',
   styleUrl: './feed-page.component.css',
@@ -35,8 +38,8 @@ export class FeedPageComponent implements OnInit {
     //* This is just for testing purposes to simulate a logged-in user
     this.authService
       // .login({ emailOrUsername: 'juanperez', password: 'Password123' })
-      // .login({ emailOrUsername: 'pedrolopez123.-', password: 'Password321' })
-      .login({ emailOrUsername: 'adminuser', password: 'Admin123' })
+      .login({ emailOrUsername: 'pedrolopez123.-', password: 'Password321' })
+      // .login({ emailOrUsername: 'adminuser', password: 'Admin123' })
       .subscribe({
         next: () => {
           this.postService.getPosts().subscribe({
@@ -84,6 +87,32 @@ export class FeedPageComponent implements OnInit {
           detail:
             error.error.message ||
             'No se pudo crear el post. Inténtalo más tarde.',
+        });
+      },
+    });
+  }
+
+  public onSortingChange(sorting: Sorting): void {
+    this.postService.getPosts(sorting).subscribe({
+      next: (posts) => {
+        if (!posts || posts.length === 0) {
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Sin posts',
+            detail: 'No hay posts disponibles con el criterio de ordenamiento.',
+          });
+          return;
+        }
+
+        this.posts.set(posts);
+      },
+      error: (error) => {
+        console.error('Error loading sorted posts:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            'No se pudieron cargar los posts ordenados. Inténtalo más tarde.',
         });
       },
     });
