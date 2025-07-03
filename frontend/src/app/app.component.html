@@ -2,18 +2,13 @@
   <sn-header />
 </header>
 
-
 <main class="h-full container mx-auto relative z-0">
   <router-outlet />
 </main>
-
 
 @if (loadingService.isLoading()) {
 <sn-loading class="z-50" />
 }
 
 <p-toast baseZIndex="5000" position="bottom-right" [style]="{'max-width': '86vw'}" />
-
-<!-- <footer>
-  <p>© 2025 My Angular App</p>
-</footer> -->
+<p-confirm-dialog />
