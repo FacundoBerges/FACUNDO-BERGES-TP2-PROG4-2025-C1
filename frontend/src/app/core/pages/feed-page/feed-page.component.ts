@@ -7,8 +7,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { SelectModule } from 'primeng/select';
 
 import { AuthService } from '@auth/services/auth.service';
-import { CreatePost, Post } from '@core/interfaces/post';
-import { Sorting } from '@core/interfaces/sorting';
+import { CreatePost, Post, Sorting } from '@core/interfaces/';
 import { PostService } from '@core/services/post.service';
 import { PostListComponent } from '@core/components/post/post-list/post-list.component';
 import { PostFormComponent } from '@core/components/post/post-form/post-form.component';
@@ -119,20 +118,27 @@ export class FeedPageComponent implements OnInit {
   }
 
   public onLikePost(post: Post): void {
-    const isLike = !this.posts().some(
-      (p) =>
-        p._id === post._id &&
-        p.likes.map((p) => p._id).includes(this.authService.currentUser?.sub!)
+    const isLike = post.likes.some(
+      (likeAuthor) => likeAuthor._id === this.authService.currentUser?.sub
     );
 
-    console.log('Is like:', isLike);
+    this.postService.likePost(post._id, !isLike).subscribe({
+      next: (updatedPost) => {
+        this.posts.update((currentPosts) =>
+          currentPosts.map((post) =>
+            post._id === updatedPost._id
+              ? { ...updatedPost, likes: [...updatedPost.likes] }
+              : post
+          )
+        );
+        const liked = updatedPost.likes.some(
+          (likeAuthor) => likeAuthor._id === this.authService.currentUser?.sub
+        );
 
-    this.postService.likePost(post._id, isLike).subscribe({
-      next: () => {
         this.messageService.add({
           severity: 'success',
-          summary: isLike ? 'Post likeado' : 'Post deslikeado',
-          detail: isLike
+          summary: liked ? 'Post likeado' : 'Post deslikeado',
+          detail: liked
             ? 'Has dado like al post.'
             : 'Has quitado el like al post.',
         });
