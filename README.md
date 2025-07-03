@@ -76,15 +76,15 @@ Deberá contar con los siguientes puntos:
 
 #### Frontend:
 
--   ❌ Página publicaciones.
+-   ✅ Página publicaciones.
     -   ✅ Debe mostrar el listado de publicaciones, ordenado por fecha por defecto.
     -   ✅ Debe permitir cambiar el ordenamiento a por cantidad de me gusta
-    -   ❌ Debe traer una cantidad limitada de publicaciones, permitiendo paginarlas.
+    -   ✅ Debe traer una cantidad limitada de publicaciones, permitiendo paginarlas.
     -   ✅ Cada publicación debe ser un componente.
     -   ✅ Se debe poder dar y quitar me gusta de una publicación siempre que sea el caso .
 -   ✅ Componente Mi Perfil:
     -   ✅ Debe mostrar todos los datos del usuario, así como su foto de perfil.
-    -   ❌ Debe mostrar mis últimas 3 publicaciones y sus comentarios.
+    -   ✅ Debe mostrar mis últimas 3 publicaciones y sus comentarios.
 
 #### Backend:
 
