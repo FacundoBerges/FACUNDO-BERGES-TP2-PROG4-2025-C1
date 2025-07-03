@@ -1,0 +1,27 @@
+<p-dialog [visible]="visible()" [modal]="true" [style]="{ width: '25rem' }">
+  <ng-template #header>
+    <div class="inline-flex items-center justify-center gap-2">
+      <span class="font-bold whitespace-nowrap">Editar comentario</span>
+    </div>
+  </ng-template>
+
+  <span class="text-surface-500 dark:text-surface-400 block mb-8">
+    Edita el comentario seleccionado.
+  </span>
+
+  <div class="flex flex-col gap-4 mb-4">
+    <label for="content" class="font-semibold">Comentario</label>
+    <textarea #contentTextArea pInputTextarea name="content" id="content" class="flex-auto" [value]="editedContent()"
+      (input)="editedContent.set($any($event.target).value)" rows="3" autoResize="true" autocomplete="off"
+      [maxLength]="500"></textarea>
+
+    <div class="flex justify-end">
+      <small id="description-help">{{contentTextArea.value.length}}/500</small>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" [text]="true" severity="secondary" (click)="onCancel()" />
+    <p-button label="Guardar" [outlined]="true" severity="secondary" (click)="onSave()" />
+  </ng-template>
+</p-dialog>

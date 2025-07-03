@@ -1,5 +1,6 @@
 import { Component, computed, inject, input, output } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
@@ -16,6 +17,7 @@ import { Post } from '@core/interfaces/post';
 @Component({
   selector: 'sn-post-item',
   imports: [
+    RouterLink,
     DatePipe,
     AnimateOnScrollModule,
     ButtonModule,
@@ -59,11 +61,13 @@ export class PostItemComponent {
   );
 
   public get postImageUrl(): string {
-    return this.post().imageUrl ? `${this.API_URL}${this.post().imageUrl}` : '';
+    return this.post()?.imageUrl
+      ? `${this.API_URL}${this.post().imageUrl}`
+      : '';
   }
 
   public get postAuthorImageUrl(): string {
-    return this.post().author.profilePictureUrl
+    return this.post()?.author.profilePictureUrl
       ? `${this.API_URL}${this.post().author.profilePictureUrl}`
       : './assets/img/user-placeholder.png';
   }

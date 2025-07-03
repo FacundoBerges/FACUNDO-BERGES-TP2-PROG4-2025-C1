@@ -4,8 +4,9 @@
     <div class="flex col justify-between gap-1 w-full">
       <div class="user-info-container flex row align-items-center gap-2">
         <div class="flex items-center justify-center h-12 w-12 rounded-3xl overflow-hidden">
-          <img class="post-avatar aspect-square object-cover" [src]="postAuthorImageUrl"
-            [alt]="'Avatar de ' + post().author.name" />
+          <img class="post-avatar aspect-square object-cover"
+            [src]="postAuthorImageUrl ?? '/assets/img/user-placeholder.png'"
+            [alt]="'Avatar ' + post().author.name ? `de ${post().author.name}` : 'genérico'" />
         </div>
 
         <div>
@@ -51,12 +52,9 @@
       [label]="showIconOnly() ? `${post().likesCount}` : 'Like'" (click)="onPostLike()" [pTooltip]="likesMessage"
       tooltipPosition="top" showDelay="300" hideDelay="500" positionLeft="20"></p-button>
 
-    @if(showIconOnly()) {
-    <p-button icon="pi pi-comment" [label]="`${post().commentsCount}`" (click)="onPostComment()"></p-button>
-    }
-    @else {
-    <p-button icon="pi pi-comment" label="Comentar" (click)="onPostComment()" [pTooltip]="commentsMessage"
+    <p-button icon="pi pi-comment" [label]="showIconOnly() ? `${post().commentsCount}` : 'Comentar'"
+      [routerLink]="['/home', 'post', post()._id]" routerLinkActive="router-link-active" [pTooltip]="commentsMessage"
       tooltipPosition="top" showDelay="300" hideDelay="500"></p-button>
-    }
+
   </div>
 </article>
