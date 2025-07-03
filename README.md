@@ -102,9 +102,9 @@ Deberá contar con los siguientes puntos:
 
 #### Frontend:
 
--   ❌ Página publicación.
-    -   ❌ Debe permitir ver grande en la pantalla la publicación realizada, junto con sus respectivos comentarios.
-    -   ❌ Los comentarios deben mostrarse ordenados, uno debajo del otro. En la primera carga debe llegar una cantidad de comentarios limitados, dónde sólo si el usuario presiona un botón “cargar más” se seguirán trayendo, sin dejar de mostrar los anteriores.
+-   ✅ Página publicación.
+    -   ✅ Debe permitir ver grande en la pantalla la publicación realizada, junto con sus respectivos comentarios.
+    -   ✅ Los comentarios deben mostrarse ordenados, uno debajo del otro. En la primera carga debe llegar una cantidad de comentarios limitados, dónde sólo si el usuario presiona un botón “cargar más” se seguirán trayendo, sin dejar de mostrar los anteriores.
 -   ✅ Pantalla login y registro:
     -   ✅ Debe tomar el token que devuelve la petición indicada y guardarlo localmente en el navegador.
 -   ❌ Página cargando:
