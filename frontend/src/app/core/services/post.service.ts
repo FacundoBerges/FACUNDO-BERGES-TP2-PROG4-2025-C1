@@ -37,8 +37,6 @@ export class PostService {
       url += `${url.includes('?') ? '&' : '?'}authorId=${authorId}`;
     }
 
-    console.log(`Fetching posts from: ${url}`);
-
     return this.httpClient.get<Post[]>(url);
   }
 
