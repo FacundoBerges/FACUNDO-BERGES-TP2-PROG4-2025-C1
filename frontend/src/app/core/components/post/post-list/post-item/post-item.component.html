@@ -4,8 +4,7 @@
     <div class="flex col justify-between gap-1 w-full">
       <div class="user-info-container flex row align-items-center gap-2">
         <div class="flex items-center justify-center h-12 w-12 rounded-3xl overflow-hidden">
-          <img class="post-avatar aspect-square object-cover"
-            [src]="postAuthorImageUrl ?? '/assets/img/user-placeholder.png'"
+          <img class="post-avatar aspect-square object-cover" [src]="postAuthorImageUrl"
             [alt]="'Avatar ' + post().author.name ? `de ${post().author.name}` : 'genérico'" />
         </div>
 
