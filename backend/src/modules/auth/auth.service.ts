@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -16,6 +17,8 @@ import { UserLoginDataDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
@@ -55,6 +58,11 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('Usuario no encontrado');
 
+    if (!user.isActive)
+      throw new BadRequestException(
+        'Usuario inactivo, contacte al administrador',
+      );
+
     const isValidPassword = await this.usersService.validatePassword(
       user,
       userLoginDataDto.password,
@@ -72,7 +80,10 @@ export class AuthService {
   public async refreshToken(userData: JwtPayload): Promise<JwtResponseDto> {
     if (!userData) throw new UnauthorizedException('Usuario no autorizado.');
 
-    const token: string = await this.jwtService.signAsync({ ...userData });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { exp, iat, iss, ...loggedUser } = userData;
+
+    const token: string = await this.jwtService.signAsync({ ...loggedUser });
 
     return { accessToken: token };
   }
