@@ -1,18 +1,20 @@
 <form class="add-comment" [formGroup]="commentForm" (submit)="onSubmit()">
-  <p-floatlabel variant="in">
-    <textarea #descriptionTextArea formControlName="description" pTextarea id="description" rows="3" cols="30"
-      [autoResize]="true" class="h-full" [maxlength]="500"></textarea>
+  <div class="text-area-container w-full max-w-3xl mx-auto p-2">
+    <p-floatlabel variant="in">
+      <textarea #descriptionTextArea formControlName="description" pTextarea id="description" rows="3" cols="30"
+        [autoResize]="true" class="h-full w-full" [maxlength]="500"></textarea>
 
-    <label for="description">{{ formLabel() }}</label>
-  </p-floatlabel>
+      <label for="description">{{ formLabel() }}</label>
+    </p-floatlabel>
 
-  <div class="flex justify-end">
-    <small id="description-help">{{descriptionTextArea.value.length}}/500</small>
-  </div>
+    <div class="flex justify-end">
+      <small id="description-help">{{descriptionTextArea.value.length}}/500</small>
+    </div>
 
-  <div class="w-full p-2">
     @if (description?.invalid && (description?.dirty || description?.touched)) {
-    <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
+    <div class="w-full p-2">
+      <p-message severity="error" variant="simple" size="small">{{ getErrorMessage('description') }}</p-message>
+    </div>
     }
   </div>
 
