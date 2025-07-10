@@ -16,4 +16,5 @@ export interface JwtPayload {
   bio?: string;
   iat?: number;
   exp?: number;
+  iss?: string;
 }
