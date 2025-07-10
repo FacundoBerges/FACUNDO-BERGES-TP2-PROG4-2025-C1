@@ -1,0 +1,6 @@
+@if (! loadingService.isLoading()) {
+<sn-users-table [users]="users()" (updatedUserStatus)="onUpdatedUserStatus($event)" />
+}
+@else {
+<sn-loading />
+}
