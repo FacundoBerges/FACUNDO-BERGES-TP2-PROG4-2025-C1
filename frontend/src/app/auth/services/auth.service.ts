@@ -10,6 +10,7 @@ import {
   UserRegistration,
   User,
 } from '@auth/interfaces/';
+import { SessionTimerService } from './session-timer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,7 @@ import {
 export class AuthService implements OnInit {
   private readonly httpClient = inject(HttpClient);
   private readonly router = inject(Router);
+  private readonly sessionTimerService = inject(SessionTimerService);
   private baseUrl = `${environment.apiUrl}/auth`;
   private jwtToken = signal<string | null>(null);
   private userProfile = signal<User | null>(null);
@@ -37,6 +39,8 @@ export class AuthService implements OnInit {
   }
 
   public loadUserProfile(): Observable<User> {
+    this.loadFromLocalStorage();
+
     return this.httpClient.post<User>(`${this.baseUrl}/authorize`, {}).pipe(
       tap((profile: User) => {
         this.userProfile.set(profile);
@@ -61,6 +65,9 @@ export class AuthService implements OnInit {
         }),
         tap(() => {
           this.loadUserProfile().subscribe();
+        }),
+        tap(() => {
+          this.sessionTimerService.startSessionTimer();
         })
       );
   }
@@ -77,6 +84,9 @@ export class AuthService implements OnInit {
           }),
           tap(() => {
             this.loadUserProfile().subscribe();
+          }),
+          tap(() => {
+            this.sessionTimerService.startSessionTimer();
           })
         );
     }
@@ -105,6 +115,9 @@ export class AuthService implements OnInit {
       }),
       tap(() => {
         this.loadUserProfile().subscribe();
+      }),
+      tap(() => {
+        this.sessionTimerService.resetSessionTimer();
       })
     );
   }
@@ -113,6 +126,7 @@ export class AuthService implements OnInit {
     localStorage.removeItem('token');
     this.jwtToken.set(null);
     this.userProfile.set(null);
+    this.sessionTimerService.clear();
     this.router.navigate(['/auth', 'login']);
   }
 }

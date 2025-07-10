@@ -11,8 +11,6 @@ export class SessionTimerService {
   private expiredSubscription?: Subscription;
 
   public startSessionTimer(): void {
-    this.clear();
-
     this.warningSubscription = timer(10 * 60 * 1000).subscribe(() => {
       this.sessionWarning$.next();
 

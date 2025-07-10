@@ -2,17 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterOutlet } from '@angular/router';
 
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { DialogService } from 'primeng/dynamicdialog';
 
 import { AuthService } from '@auth/services/auth.service';
 import { SessionTimerService } from '@auth/services/session-timer.service';
 import { LoadingService } from '@shared/services/loading.service';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { LoadingComponent } from '@shared/components/loading/loading.component';
-import { SessionWarningDialogComponent } from '@shared/components/session-warning-dialog/session-warning-dialog.component';
 
 @Component({
   selector: 'sn-root',
@@ -28,7 +26,7 @@ import { SessionWarningDialogComponent } from '@shared/components/session-warnin
   providers: [MessageService],
 })
 export class AppComponent implements OnInit {
-  private readonly dialogService = inject(DialogService);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly authService = inject(AuthService);
   private readonly sessionTimerService = inject(SessionTimerService);
   private readonly router = inject(Router);
@@ -50,37 +48,33 @@ export class AppComponent implements OnInit {
       },
     });
 
-    this.sessionTimerService.startSessionTimer();
-
     this.sessionTimerService.sessionWarning.subscribe(() => {
-      const ref = this.dialogService.open(SessionWarningDialogComponent, {
-        header: 'Sesión a punto de expirar',
-        width: '25rem',
-        modal: true,
-        closable: false,
-        data: {
-          message: 'Tu sesión está a punto de expirar. ¿Deseas continuar?',
+      console.log('Session warning triggered');
+
+      this.confirmationService.confirm({
+        rejectIcon: 'pi pi-times',
+        acceptIcon: 'pi pi-check',
+        dismissableMask: true,
+        position: 'top',
+        header: 'Aviso de sesión',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Extender',
+        rejectLabel: 'Cancelar',
+        acceptButtonStyleClass: 'p-button-success',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => {
+          this.authService.refreshToken().subscribe();
         },
+        message: 'Tu sesión está por expirar. ¿Deseas extenderla?',
       });
+    });
 
-      ref.onClose.subscribe((result: boolean) => {
-        if (result) {
-          this.authService.refreshToken().subscribe({
-            next: () => {
-              this.sessionTimerService.resetSessionTimer();
-            },
-            error: (error: HttpErrorResponse) => {
-              console.error('Error refreshing token:', error);
-              this.authService.logout();
-            },
-          });
-        }
-      });
+    this.sessionTimerService.sessionExpired.subscribe(() => {
+      console.log('Session expired, logging out');
 
-      this.sessionTimerService.sessionExpired.subscribe(() => {
-        this.authService.logout();
-        this.loadingService.stopLoading();
-      });
+      this.confirmationService.close();
+      this.authService.logout();
+      this.loadingService.stopLoading();
     });
   }
 }
