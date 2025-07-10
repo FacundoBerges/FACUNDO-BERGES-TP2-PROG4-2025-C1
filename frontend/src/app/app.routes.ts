@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { adminGuard } from '@auth/guards/admin.guard';
 import { authGuard } from '@auth/guards/auth.guard';
 
 export const routes: Routes = [
@@ -34,6 +35,30 @@ export const routes: Routes = [
           {
             path: '**',
             redirectTo: '/home/feed',
+          },
+        ],
+      },
+      {
+        path: 'admin',
+        canActivateChild: [adminGuard],
+        children: [
+          {
+            path: 'users',
+            loadComponent: () =>
+              import(
+                '@core/pages/dashboard/users-page/users-page.component'
+              ).then((c) => c.UsersPageComponent),
+          },
+          {
+            path: 'stats',
+            loadComponent: () =>
+              import(
+                '@core/pages/dashboard/stats-page/stats-page.component'
+              ).then((c) => c.StatsPageComponent),
+          },
+          {
+            path: '**',
+            redirectTo: 'users',
           },
         ],
       },
