@@ -1,22 +1,22 @@
 {
-    "cSpell.words": [
-        "animateonscroll",
-        "confirmdialog",
-        "deslikeado",
-        "dynamicdialog",
-        "fileupload",
-        "floatlabel",
-        "inputgroup",
-        "inputgroupaddon",
-        "inputtext",
-        "jwtoken",
-        "likeado",
-        "megamenu",
-        "primeicons",
-        "progressspinner",
-        "selectbutton",
-        "suscription",
-        "togglebutton"
-    ],
-    "material-icon-theme.activeIconPack": "angular"
+  "cSpell.words": [
+    "animateonscroll",
+    "confirmdialog",
+    "deslikeado",
+    "dynamicdialog",
+    "fileupload",
+    "floatlabel",
+    "inputgroup",
+    "inputgroupaddon",
+    "inputtext",
+    "jwtoken",
+    "likeado",
+    "megamenu",
+    "primeicons",
+    "progressspinner",
+    "selectbutton",
+    "suscription",
+    "togglebutton"
+  ],
+  "material-icon-theme.activeIconPack": "angular"
 }

@@ -1,13 +1,13 @@
 {
-    "cSpell.words": [
-        "bazel",
-        "libpeerconnection",
-        "mongodb",
-        "originalname",
-        "paginación",
-        "pids",
-        "testem",
-        "virtuals"
-    ],
-    "material-icon-theme.activeIconPack": "nest"
+  "cSpell.words": [
+    "bazel",
+    "libpeerconnection",
+    "mongodb",
+    "originalname",
+    "paginación",
+    "pids",
+    "testem",
+    "virtuals"
+  ],
+  "material-icon-theme.activeIconPack": "nest"
 }
