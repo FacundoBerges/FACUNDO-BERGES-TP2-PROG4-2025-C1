@@ -81,7 +81,7 @@ Deberá contar con los siguientes puntos:
     -   ✅ Debe permitir cambiar el ordenamiento a por cantidad de me gusta
     -   ✅ Debe traer una cantidad limitada de publicaciones, permitiendo paginarlas.
     -   ✅ Cada publicación debe ser un componente.
-    -   ✅ Se debe poder dar y quitar me gusta de una publicación siempre que sea el caso .
+    -   ✅ Se debe poder dar y quitar me gusta de una publicación siempre que sea el caso.
 -   ✅ Componente Mi Perfil:
     -   ✅ Debe mostrar todos los datos del usuario, así como su foto de perfil.
     -   ✅ Debe mostrar mis últimas 3 publicaciones y sus comentarios.
@@ -92,7 +92,7 @@ Deberá contar con los siguientes puntos:
     -   ✅ Debe permitir dar de alta, listar y dar de baja publicaciones (baja lógica).
     -   ✅ Por POST: debe guardar una publicación relacionada a un usuario. Título, descripción, url de la imagen si es que tiene. La imagen debe ser guardada.
     -   ✅ Por DELETE: baja lógica, solo realizada por el usuario que la creó o un administrador.
-    -   ✅ Por GET: debe permitir listar las últimas publicaciones. Debe poder recibir un parámetro para cambiar el ordenamiento: por fecha/ por cantidad de me gusta. Debe poder filtrar los posteos de un usuario particular. Debe poder recibir un parámetro offset y limit para paginar los resultados.
+    -   ✅ Por GET: debe permitir listar las últimas publicaciones. Debe poder recibir un parámetro para cambiar el ordenamiento: por fecha/cantidad de 'me gusta'. Debe poder filtrar los posteos de un usuario particular. Debe poder recibir un parámetro offset y limit para paginar los resultados.
     -   ✅ Por POST: debe permitir que un usuario le dé me gusta a la publicación que elija. Un usuario puede darle un solo me gusta a cada publicación.
     -   ✅ Por DELETE: debe permitir eliminar un me gusta de una publicación, solo si el usuario previamente lo había realizado.
 
@@ -137,9 +137,9 @@ Deberá contar con los siguientes puntos:
 -   ✅ Página publicación y página publicaciones:
     -   ✅ Si un usuario con perfil de administrador se logueó, se deben habilitar los botones para dar de baja cualquier publicación. Esto hará que dejen de estar disponibles, tanto la publicación como sus comentarios.
 -   ❌ Página dashboard/usuarios:
-    -   ❌ Solo disponible para usuarios con perfil administrador.
-    -   ❌ Debe permitir ver el listado de los usuarios.
-    -   ❌ Debe permitir realizar las acciones de alta y baja lógica como corresponda.
+    -   ✅ Solo disponible para usuarios con perfil administrador.
+    -   ✅ Debe permitir ver el listado de los usuarios.
+    -   ✅ Debe permitir realizar las acciones de alta y baja lógica como corresponda.
     -   ❌ Debe poseer un formulario de registro para nuevos usuarios.
 -   ❌ Página dashboard/estadísticas:
     -   ❌ Se deben crear gráficos que representen las siguientes estadísticas:
