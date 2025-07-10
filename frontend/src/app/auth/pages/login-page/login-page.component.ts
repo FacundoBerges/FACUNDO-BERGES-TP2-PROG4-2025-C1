@@ -61,7 +61,7 @@ export class LoginPageComponent implements OnDestroy {
         });
         this.timeoutRef = setTimeout(() => {
           this.router.navigate(['/home/feed']);
-        }, 1000);
+        }, 500);
       },
       error: (error: HttpErrorResponse) => {
         this.messageService.add({
