@@ -1,37 +1,39 @@
-<p-table [value]="users()" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
-  [rowsPerPageOptions]="[5, 10, 20]">
-  <ng-template #header>
-    <tr>
-      <th>Avatar</th>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Email</th>
-      <th>Usuario</th>
-      <th>Fecha de nacimiento</th>
-      <th>Perfil</th>
-      <th>Fecha de registro</th>
-      <th>Estado</th>
-    </tr>
-  </ng-template>
+<div class="table-container max-w-7xl mx-auto p-4">
+  <p-table [value]="users()" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }"
+    [rowsPerPageOptions]="[5, 10, 20]">
+    <ng-template #header>
+      <tr>
+        <th>Avatar</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Email</th>
+        <th>Usuario</th>
+        <th>Fecha de nacimiento</th>
+        <th>Perfil</th>
+        <th>Fecha de registro</th>
+        <th>Estado</th>
+      </tr>
+    </ng-template>
 
-  <ng-template #body let-user>
-    <tr>
-      <td>
-        <div class="image-container flex items-center justify-center h-12 w-12 rounded-3xl overflow-hidden">
-          <img alt="Profile Image" [src]="getUserAvatarUrl(user)" class="aspect-square object-cover">
-        </div>
-      </td>
-      <td>{{user.name}}</td>
-      <td>{{user.surname}}</td>
-      <td>{{user.email}}</td>
-      <td>{{user.username}}</td>
-      <td>{{user.birthday | date: 'dd/MM/yyyy'}}</td>
-      <td>{{user.profile}}</td>
-      <td>{{user.createdAt | date: 'short'}}</td>
-      <td class="w-36">
-        <p-togglebutton [(ngModel)]="user.isActive" onLabel="Habilitado" offLabel="Deshabilitado" styleClass="w-24"
-          (onChange)="onToggleUserStatus(user)" />
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+    <ng-template #body let-user>
+      <tr>
+        <td>
+          <div class="image-container flex items-center justify-center h-12 w-12 rounded-3xl overflow-hidden">
+            <img alt="Profile Image" [src]="getUserAvatarUrl(user)" class="aspect-square object-cover">
+          </div>
+        </td>
+        <td>{{user.name}}</td>
+        <td>{{user.surname}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.birthday | date: 'dd/MM/yyyy'}}</td>
+        <td>{{user.profile}}</td>
+        <td>{{user.createdAt | date: 'short'}}</td>
+        <td>
+          <p-togglebutton [(ngModel)]="user.isActive" onLabel="Habilitado" offLabel="Deshabilitado" styleClass="w-36"
+            (onChange)="onToggleUserStatus(user)" />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
