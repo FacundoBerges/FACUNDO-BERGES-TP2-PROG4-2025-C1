@@ -15,12 +15,17 @@ export class LoadingService implements OnDestroy {
   }
 
   public startLoading(): void {
+    if (this.setTimeoutId) {
+      clearTimeout(this.setTimeoutId);
+      this.setTimeoutId = null;
+    }
+
     this.isLoading.set(true);
   }
 
   public stopLoading(): void {
     this.setTimeoutId = setTimeout(() => {
       this.isLoading.set(false);
-    }, 1000);
+    }, 500);
   }
 }
